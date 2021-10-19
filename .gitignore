@@ -1,3 +1,15 @@
+# Exclude compiled .js files
+*.js
+*.js.map
+dist/
+
+# Exclude dependencies
+node_modules/
+
+# Exclude secrets
+serviceAccountKey.json
+src/secrets.json
+
 # Logs
 logs
 *.log

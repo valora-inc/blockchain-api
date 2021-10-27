@@ -72,6 +72,15 @@ export interface TokenTransactionArgs {
   localCurrencyCode: string
 }
 
+export interface TokenTransactionV2Args {
+  // Address to fetch transactions from.
+  address: string
+  // Filter all the transactions in given tokens. If not present, no filtering is done.
+  tokens?: [string]
+  // If present, every TokenAmount will contain the field localAmount with the estimated amount in given currency
+  localCurrencyCode?: string
+}
+
 export interface ExchangeRate {
   rate: number
 }
@@ -206,6 +215,73 @@ export const typeDefs = gql`
     cursor: String!
   }
 
+  """
+  A modified copy of the models of above. Except the new one support multiple tokens (using address instead of code to identify the currency)
+  """
+  type TokenAmount {
+    value: Decimal!
+    tokenAddress: Address!
+    localAmount: LocalMoneyAmount
+  }
+
+  enum TokenTransactionTypeV2 {
+    EXCHANGE
+    RECEIVED
+    SENT
+    ESCROW_SENT
+    ESCROW_RECEIVED
+    PAY_REQUEST
+  }
+
+  type FeeV2 {
+    type: FeeType!
+    amount: TokenAmount!
+  }
+
+  interface TokenTransactionMetadata {
+    title: String
+    subtitle: String
+    image: String
+    comment: String
+  }
+
+  interface TokenTransactionV2 {
+    type: TokenTransactionTypeV2!
+    timestamp: Timestamp!
+    block: String!
+    transactionHash: String!
+    fees: [FeeV2]
+    metadata: TokenTransactionMetadata
+  }
+
+  type TokenTransferV2 implements TokenTransactionV2 {
+    type: TokenTransactionTypeV2!
+    timestamp: Timestamp!
+    block: String!
+    amount: TokenAmount!
+    address: Address!
+    valoraAccount: Address!
+    tokenAddress: Address!
+    transactionHash: String!
+    fees: [FeeV2]
+    metadata: TokenTransactionMetadata
+  }
+
+  type TokenExchangeV2 implements TokenTransactionV2 {
+    type: TokenTransactionTypeV2!
+    timestamp: Timestamp!
+    block: String!
+    inAmount: TokenAmount!
+    outAmount: TokenAmount!
+    transactionHash: String!
+    fees: [FeeV2]
+    metadata: TokenTransactionMetadata
+  }
+
+  type TokenTransactionsV2 {
+    tokens: [TokenTransactionV2]!
+  }
+
   type PageInfo {
     hasPreviousPage: Boolean!
     hasNextPage: Boolean!
@@ -214,6 +290,12 @@ export const typeDefs = gql`
   }
 
   type Query {
+    tokenTransactionsV2(
+      address: Address!
+      tokens: [Address]
+      localCurrencyCode: String
+    ): TokenTransactionsV2
+
     tokenTransactions(
       address: Address!
       token: Token
@@ -241,6 +323,14 @@ interface Context {
 
 export const resolvers = {
   Query: {
+    tokenTransactionsV2: async (_source: any, args: TokenTransactionV2Args, context: Context) => {
+      // TODO
+
+      return {
+        tokens: []
+      }
+    },
+    // Deprecated
     tokenTransactions: async (_source: any, args: TokenTransactionArgs, context: Context) => {
       const { dataSources } = context
       context.localCurrencyCode = args.localCurrencyCode

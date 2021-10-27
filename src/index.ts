@@ -1,6 +1,7 @@
 import express from 'express'
 import promBundle from 'express-prom-bundle'
 import { server as apolloServer } from './apolloServer'
+import { initDatabase } from './database/db'
 import knownAddressesCache from './helpers/KnownAddressesCache'
 import { logger } from './logger'
 
@@ -39,4 +40,14 @@ apolloServer.applyMiddleware({ app, path: GRAPHQL_PATH })
 app.listen(PORT, INTERFACE, () => {
   logger.info(`🚀 GraphQL accessible @ http://${INTERFACE}:${PORT}${apolloServer.graphqlPath}`)
   logger.info('[Celo] Starting Server')
+})
+
+
+// TODO: REMOVE BEFORE MERGING
+console.log('TEST')
+initDatabase({
+  host: 'localhost',
+  database: 'postgres',
+  user: 'postgres',
+  password: 'pass',
 })

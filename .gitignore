@@ -114,3 +114,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Postgres folder for docker image
+postgres_data/

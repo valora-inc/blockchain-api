@@ -29,7 +29,7 @@ export class Input {
     try {
       return coder.decodeParameters(abi, this.data)
     } catch (e) {
-      logger.debug(`Error decoding input: ${e.message}`)
+      logger.debug(`Error decoding input: ${(e as Error).message}`)
       return
     }
   }

@@ -18,5 +18,6 @@
     "target": "es2017",
     "lib": ["es7", "es2017"]
   },
-  "include": ["src/**/*", "index.d.ts"]
+  "include": ["src/**/*", "index.d.ts"],
+  "exclude": ["node_modules"]
 }

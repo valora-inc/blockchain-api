@@ -191,7 +191,7 @@ export class BlockscoutAPI extends RESTDataSource {
           logger.error({
             type: 'ERROR_MAPPING_TO_EVENT',
             transaction: JSON.stringify(transaction),
-            error: e?.message,
+            error: (e as Error)?.message,
           })
         }
       })

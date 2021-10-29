@@ -2,7 +2,11 @@ import dotenv from 'dotenv'
 import { logger } from './logger'
 
 // Load environment variables from .env file
-dotenv.config()
+if (process.env.JEST_WORKER_ID) {
+  dotenv.config({ path: './jest.env' })
+} else {
+  dotenv.config()
+}
 
 export function getFirebaseAdminCreds(admin: any) {
   if (DEPLOY_ENV === 'local') {

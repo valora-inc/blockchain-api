@@ -228,8 +228,8 @@ export const typeDefs = gql`
     EXCHANGE
     RECEIVED
     SENT
-    ESCROW_SENT
-    ESCROW_RECEIVED
+    INVITE_SENT
+    INVITE_RECEIVED
     PAY_REQUEST
   }
 
@@ -238,11 +238,20 @@ export const typeDefs = gql`
     amount: TokenAmount!
   }
 
-  interface TokenTransactionMetadata {
+  interface TokenTransferMetadata {
     title: String
     subtitle: String
     image: String
     comment: String
+  }
+
+  """
+  TODO: Add more fields once we understand what useful information we can serve
+  """
+  interface TokenExchangeMetadata {
+    title: String
+    subtitle: String
+    exchangeName: String
   }
 
   interface TokenTransactionV2 {
@@ -251,7 +260,6 @@ export const typeDefs = gql`
     block: String!
     transactionHash: String!
     fees: [FeeV2]
-    metadata: TokenTransactionMetadata
   }
 
   type TokenTransferV2 implements TokenTransactionV2 {
@@ -260,11 +268,9 @@ export const typeDefs = gql`
     block: String!
     amount: TokenAmount!
     address: Address!
-    valoraAccount: Address!
-    tokenAddress: Address!
     transactionHash: String!
     fees: [FeeV2]
-    metadata: TokenTransactionMetadata
+    metadata: TokenTransferMetadata
   }
 
   type TokenExchangeV2 implements TokenTransactionV2 {
@@ -275,7 +281,7 @@ export const typeDefs = gql`
     outAmount: TokenAmount!
     transactionHash: String!
     fees: [FeeV2]
-    metadata: TokenTransactionMetadata
+    metadata: TokenExchangeMetadata
   }
 
   type TokenTransactionsV2 {

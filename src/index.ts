@@ -15,7 +15,6 @@ const PORT: number = Number(process.env.PORT) || 8080
 const INTERFACE: string = process.env.INTERFACE || '0.0.0.0'
 
 async function main() {
-
   const app = express()
 
   app.use(metricsMiddleware)
@@ -35,22 +34,25 @@ async function main() {
 
   // TODO(sbw): load EXCHANGE_RATES_API_ACCESS_KEY async (e.g., from a secrets
   // management service).
-  const exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: EXCHANGE_RATES_API_ACCESS_KEY })
+  const exchangeRateAPI = new ExchangeRateAPI({
+    exchangeRatesAPIAccessKey: EXCHANGE_RATES_API_ACCESS_KEY,
+  })
   const currencyConversionAPI = new CurrencyConversionAPI({ exchangeRateAPI })
-  const apolloServer = initApolloServer({currencyConversionAPI})
+  const apolloServer = initApolloServer({ currencyConversionAPI })
   apolloServer.applyMiddleware({ app, path: GRAPHQL_PATH })
 
   app.listen(PORT, INTERFACE, () => {
-    logger.info(`🚀 GraphQL accessible @ http://${INTERFACE}:${PORT}${apolloServer.graphqlPath}`)
+    logger.info(
+      `🚀 GraphQL accessible @ http://${INTERFACE}:${PORT}${apolloServer.graphqlPath}`,
+    )
     logger.info('[Celo] Starting Server')
   })
 }
 
-main()
-  .catch(err => {
-    logger.error({
-      type: 'STARTUP',
-      error: err.message
-    })
-    process.exit(1)
+main().catch((err) => {
+  logger.error({
+    type: 'STARTUP',
+    error: err.message,
   })
+  process.exit(1)
+})

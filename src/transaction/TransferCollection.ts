@@ -31,7 +31,10 @@ export class TransferCollection {
     return index > -1 ? this.transfers[index] : undefined
   }
 
-  findLastIndex<T>(array: T[], predicate: (value: T, index: number, obj: T[]) => boolean): number {
+  findLastIndex<T>(
+    array: T[],
+    predicate: (value: T, index: number, obj: T[]) => boolean,
+  ): number {
     let l = array.length
 
     while (l--) {

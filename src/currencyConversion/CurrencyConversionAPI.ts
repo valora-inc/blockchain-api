@@ -1,7 +1,14 @@
 import { DataSource, DataSourceConfig } from 'apollo-datasource'
 import BigNumber from 'bignumber.js'
 import { CurrencyConversionArgs, MoneyAmount } from '../schema'
-import { CGLD, CUSD, stablePairs, supportedPairs, supportedStableTokens, USD } from './consts'
+import {
+  CGLD,
+  CUSD,
+  stablePairs,
+  supportedPairs,
+  supportedStableTokens,
+  USD,
+} from './consts'
 import ExchangeRateAPI from './ExchangeRateAPI'
 import GoldExchangeRateAPI from './GoldExchangeRateAPI'
 
@@ -12,7 +19,7 @@ export default class CurrencyConversionAPI<TContext = any> extends DataSource {
   exchangeRateAPI: ExchangeRateAPI
   goldExchangeRateAPI = new GoldExchangeRateAPI()
 
-  constructor({ exchangeRateAPI }: { exchangeRateAPI: ExchangeRateAPI}) {
+  constructor({ exchangeRateAPI }: { exchangeRateAPI: ExchangeRateAPI }) {
     super()
     this.exchangeRateAPI = exchangeRateAPI
   }
@@ -37,7 +44,12 @@ export default class CurrencyConversionAPI<TContext = any> extends DataSource {
       const prevCode = steps[i - 1]
       const code = steps[i]
       ratesPromises.push(
-        this.getSupportedExchangeRate(prevCode, code, timestamp, impliedExchangeRates)
+        this.getSupportedExchangeRate(
+          prevCode,
+          code,
+          timestamp,
+          impliedExchangeRates,
+        ),
       )
     }
 
@@ -56,7 +68,10 @@ export default class CurrencyConversionAPI<TContext = any> extends DataSource {
       return []
     } else if (fromCode === CGLD || toCode === CGLD) {
       // cGLD -> X (where X !== celoStableToken)
-      if (fromCode === CGLD && !this.enumContains(supportedStableTokens, toCode.toUpperCase())) {
+      if (
+        fromCode === CGLD &&
+        !this.enumContains(supportedStableTokens, toCode.toUpperCase())
+      ) {
         // TODO, we could optimize this and use the cGLD/cEUR rate for instance
         // but it would only be supported from the date when we started storing it
         return [CGLD, CUSD, ...insertIf(toCode !== USD, USD), toCode]
@@ -77,7 +92,12 @@ export default class CurrencyConversionAPI<TContext = any> extends DataSource {
         this.getCurrency(fromCode) !== toCode
       ) {
         if (this.enumContains(supportedStableTokens, toCode.toUpperCase())) {
-          return [fromCode, this.getCurrency(fromCode), this.getCurrency(toCode), toCode]
+          return [
+            fromCode,
+            this.getCurrency(fromCode),
+            this.getCurrency(toCode),
+            toCode,
+          ]
         }
         return [fromCode, this.getCurrency(fromCode), toCode]
       }
@@ -104,7 +124,7 @@ export default class CurrencyConversionAPI<TContext = any> extends DataSource {
     fromCode: string,
     toCode: string,
     timestamp?: number,
-    impliedExchangeRates?: MoneyAmount['impliedExchangeRates']
+    impliedExchangeRates?: MoneyAmount['impliedExchangeRates'],
   ): BigNumber | Promise<BigNumber> {
     const pair = `${fromCode}/${toCode}`
     if (impliedExchangeRates && impliedExchangeRates[pair]) {

@@ -9,7 +9,11 @@ export interface DataSources {
   currencyConversionAPI: CurrencyConversionAPI
 }
 
-export function initApolloServer({currencyConversionAPI} : { currencyConversionAPI: CurrencyConversionAPI }) {
+export function initApolloServer({
+  currencyConversionAPI,
+}: {
+  currencyConversionAPI: CurrencyConversionAPI
+}) {
   return new ApolloServer({
     typeDefs,
     resolvers,
@@ -23,7 +27,7 @@ export function initApolloServer({currencyConversionAPI} : { currencyConversionA
       logger.error({
         type: 'UNHANDLED_ERROR',
         error: error?.message,
-    })
+      })
       return error
     },
   })

@@ -12,7 +12,9 @@ export class TokenReceived extends TransactionType {
   }
 
   getEvent(transaction: Transaction) {
-    const transfer = transaction.transfers.getTransferTo(this.context.userAddress)
+    const transfer = transaction.transfers.getTransferTo(
+      this.context.userAddress,
+    )
 
     if (!transfer) {
       throw new Error('Transfer to the user not found.')
@@ -23,7 +25,7 @@ export class TokenReceived extends TransactionType {
       transfer,
       EventTypes.RECEIVED,
       transfer.fromAddressHash,
-      transfer.fromAccountHash
+      transfer.fromAccountHash,
     )
   }
 

@@ -7,10 +7,12 @@ import GoldExchangeRateAPI from './GoldExchangeRateAPI'
 jest.mock('./ExchangeRateAPI')
 jest.mock('./GoldExchangeRateAPI')
 
-const mockDefaultGetExchangeRate = ExchangeRateAPI.prototype.getExchangeRate as jest.Mock
+const mockDefaultGetExchangeRate = ExchangeRateAPI.prototype
+  .getExchangeRate as jest.Mock
 mockDefaultGetExchangeRate.mockResolvedValue(new BigNumber(20))
 
-const mockGoldGetExchangeRate = GoldExchangeRateAPI.prototype.getExchangeRate as jest.Mock
+const mockGoldGetExchangeRate = GoldExchangeRateAPI.prototype
+  .getExchangeRate as jest.Mock
 mockGoldGetExchangeRate.mockResolvedValue(new BigNumber(10))
 
 describe('CurrencyConversionAPI', () => {
@@ -18,9 +20,14 @@ describe('CurrencyConversionAPI', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    const exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
-    currencyConversionAPI = new CurrencyConversionAPI({exchangeRateAPI})
-    currencyConversionAPI.initialize({ context: {}, cache: new InMemoryLRUCache() })
+    const exchangeRateAPI = new ExchangeRateAPI({
+      exchangeRatesAPIAccessKey: 'FOO',
+    })
+    currencyConversionAPI = new CurrencyConversionAPI({ exchangeRateAPI })
+    currencyConversionAPI.initialize({
+      context: {},
+      cache: new InMemoryLRUCache(),
+    })
   })
 
   it('should retrieve rate for cGLD/cUSD', async () => {

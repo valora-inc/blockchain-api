@@ -30,7 +30,9 @@ describe('ExchangeRateAPI', () => {
   })
 
   it('should retrieve exchange rates for given currency', async () => {
-    const result = await exchangeRateAPI.getExchangeRate({ currencyCode: 'MXN' })
+    const result = await exchangeRateAPI.getExchangeRate({
+      currencyCode: 'MXN',
+    })
     expect(result).toEqual(new BigNumber(20))
     expect(fetchMock).toHaveBeenCalledTimes(1)
   })
@@ -40,7 +42,7 @@ describe('ExchangeRateAPI', () => {
       exchangeRateAPI.getExchangeRate({
         sourceCurrencyCode: 'USD',
         currencyCode: 'ABC',
-      })
+      }),
     ).rejects.toThrow('No matching data for USD/ABC')
     expect(fetchMock).toHaveBeenCalledTimes(1)
   })
@@ -61,7 +63,9 @@ describe('ExchangeRateAPI', () => {
       const cache = new InMemoryLRUCache()
       const now = Date.now()
 
-      exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
+      exchangeRateAPI = new ExchangeRateAPI({
+        exchangeRatesAPIAccessKey: 'FOO',
+      })
       exchangeRateAPI.initialize({ context: {}, cache })
       const result1 = await exchangeRateAPI.getExchangeRate({
         currencyCode: 'MXN',
@@ -73,7 +77,9 @@ describe('ExchangeRateAPI', () => {
       // Advance date to +12 hours - 1 millisecond
       Date.now = jest.fn(() => now + (12 * 3600 * 1000 - 1))
 
-      exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
+      exchangeRateAPI = new ExchangeRateAPI({
+        exchangeRatesAPIAccessKey: 'FOO',
+      })
       exchangeRateAPI.initialize({ context: {}, cache })
       const result2 = await exchangeRateAPI.getExchangeRate({
         currencyCode: 'MXN',
@@ -85,7 +91,9 @@ describe('ExchangeRateAPI', () => {
       // Advance date to +12 hours + 1 millisecond
       Date.now = jest.fn(() => now + (12 * 3600 * 1000 + 1))
 
-      exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
+      exchangeRateAPI = new ExchangeRateAPI({
+        exchangeRatesAPIAccessKey: 'FOO',
+      })
       exchangeRateAPI.initialize({ context: {}, cache })
       const result3 = await exchangeRateAPI.getExchangeRate({
         currencyCode: 'MXN',
@@ -99,7 +107,9 @@ describe('ExchangeRateAPI', () => {
       const cache = new InMemoryLRUCache()
       const now = Date.now() - 24 * 3600 * 1000
 
-      exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
+      exchangeRateAPI = new ExchangeRateAPI({
+        exchangeRatesAPIAccessKey: 'FOO',
+      })
       exchangeRateAPI.initialize({ context: {}, cache })
       const result1 = await exchangeRateAPI.getExchangeRate({
         currencyCode: 'MXN',
@@ -111,7 +121,9 @@ describe('ExchangeRateAPI', () => {
       // Advance date to +12 hours - 1 millisecond
       Date.now = jest.fn(() => now + (12 * 3600 * 1000 - 1))
 
-      exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
+      exchangeRateAPI = new ExchangeRateAPI({
+        exchangeRatesAPIAccessKey: 'FOO',
+      })
       exchangeRateAPI.initialize({ context: {}, cache })
       const result2 = await exchangeRateAPI.getExchangeRate({
         currencyCode: 'MXN',
@@ -123,7 +135,9 @@ describe('ExchangeRateAPI', () => {
       // Advance date to +12 hours + 1 millisecond
       Date.now = jest.fn(() => now + (12 * 3600 * 1000 + 1))
 
-      exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
+      exchangeRateAPI = new ExchangeRateAPI({
+        exchangeRatesAPIAccessKey: 'FOO',
+      })
       exchangeRateAPI.initialize({ context: {}, cache })
       const result3 = await exchangeRateAPI.getExchangeRate({
         currencyCode: 'MXN',
@@ -135,7 +149,9 @@ describe('ExchangeRateAPI', () => {
       // Advance date to +10 years
       Date.now = jest.fn(() => now + 10 * 365 * 24 * 3600 * 1000)
 
-      exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
+      exchangeRateAPI = new ExchangeRateAPI({
+        exchangeRatesAPIAccessKey: 'FOO',
+      })
       exchangeRateAPI.initialize({ context: {}, cache })
       const result4 = await exchangeRateAPI.getExchangeRate({
         currencyCode: 'MXN',

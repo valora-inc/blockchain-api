@@ -13,15 +13,13 @@ export class ApiMetrics {
 
     this.rawTokenTransactionsDuration = new Histogram({
       name: 'query_raw_token_transactions_ms',
-      help:
-        'Measure of the execution duration (ms) of the getRawTokenTransactions method which fetches data from blockscout.',
+      help: 'Measure of the execution duration (ms) of the getRawTokenTransactions method which fetches data from blockscout.',
       buckets: [0.1, 5, 15, 50, 100, 500],
     })
 
     this.queryExchangeRateDuration = new Histogram({
       name: 'query_exchange_rate_ms',
-      help:
-        'Measure of the execution duration (ms) of the queryExchangeRate method which fetches exchange rates for Valora.',
+      help: 'Measure of the execution duration (ms) of the queryExchangeRate method which fetches exchange rates for Valora.',
       buckets: [0.1, 5, 15, 50, 100, 500],
     })
   }

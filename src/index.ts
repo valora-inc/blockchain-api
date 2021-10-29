@@ -5,7 +5,7 @@ import CurrencyConversionAPI from './currencyConversion/CurrencyConversionAPI'
 import ExchangeRateAPI from './currencyConversion/ExchangeRateAPI'
 import knownAddressesCache from './helpers/KnownAddressesCache'
 import { logger } from './logger'
-import { EXCHANGE_RATES_API_ACCESS_KEY } from './config'
+import { loadSecret } from '@valora/secrets-loader'
 
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
@@ -15,6 +15,18 @@ const PORT: number = Number(process.env.PORT) || 8080
 const INTERFACE: string = process.env.INTERFACE || '0.0.0.0'
 
 async function main() {
+  //
+  // Load secrets from Secrets Manager and inject into process.env.
+  //
+  const secretNames = process.env.SECRET_NAMES?.split(',') ?? []
+  for (const secretName of secretNames) {
+    Object.assign(process.env, await loadSecret(secretName))
+  }
+
+  if (!process.env.EXCHANGE_RATES_API_ACCESS_KEY) {
+    throw new Error('Missing required EXCHANGE_RATES_API_ACCESS_KEY')
+  }
+
   const app = express()
 
   app.use(metricsMiddleware)
@@ -32,10 +44,8 @@ async function main() {
 
   knownAddressesCache.startListening()
 
-  // TODO(sbw): load EXCHANGE_RATES_API_ACCESS_KEY async (e.g., from a secrets
-  // management service).
   const exchangeRateAPI = new ExchangeRateAPI({
-    exchangeRatesAPIAccessKey: EXCHANGE_RATES_API_ACCESS_KEY,
+    exchangeRatesAPIAccessKey: process.env.EXCHANGE_RATES_API_ACCESS_KEY,
   })
   const currencyConversionAPI = new CurrencyConversionAPI({ exchangeRateAPI })
   const apolloServer = initApolloServer({ currencyConversionAPI })

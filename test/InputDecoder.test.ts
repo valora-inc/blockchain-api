@@ -14,7 +14,11 @@ const input = coder.encodeFunctionCall(
       { type: 'string', name: 'comment' },
     ],
   },
-  ['0x423043cca38e75d7913504fedfd1dd4539cc55b3', '1000000000000000000', utf8.encode(comment)]
+  [
+    '0x423043cca38e75d7913504fedfd1dd4539cc55b3',
+    '1000000000000000000',
+    utf8.encode(comment),
+  ],
 )
 
 const savedInput =
@@ -36,12 +40,18 @@ const contractAddresses = {
 describe('Blockchain API Utils', () => {
   describe('format-comment-string', () => {
     it('should decode comment correctly', () => {
-      const decoder = new InputDecoder(contractAddresses, Input.fromString(input))
+      const decoder = new InputDecoder(
+        contractAddresses,
+        Input.fromString(input),
+      )
       const decoded = decoder.getTransactionComment()
       expect(decoded).toEqual(comment)
     })
     it('should return empty on too short input', () => {
-      const decoder = new InputDecoder(contractAddresses, Input.fromString('0x10'))
+      const decoder = new InputDecoder(
+        contractAddresses,
+        Input.fromString('0x10'),
+      )
       const decoded = decoder.getTransactionComment()
       expect(decoded).toEqual('')
     })
@@ -50,14 +60,17 @@ describe('Blockchain API Utils', () => {
         contractAddresses,
         Input.fromString(
           '0x095ea7b30000000000000000000000000000000000000000000000000000000000000' +
-            'abe0000000000000000000000000000000000000000000000000214e8348c4f0000'
-        )
+            'abe0000000000000000000000000000000000000000000000000214e8348c4f0000',
+        ),
       )
       const decoded = decoder.getTransactionComment()
       expect(decoded).toEqual('')
     })
     it('should return empty on malformed input', () => {
-      const decoder = new InputDecoder(contractAddresses, Input.fromString(input.slice(0, 80)))
+      const decoder = new InputDecoder(
+        contractAddresses,
+        Input.fromString(input.slice(0, 80)),
+      )
       const decoded = decoder.getTransactionComment()
       expect(decoded).toEqual('')
     })

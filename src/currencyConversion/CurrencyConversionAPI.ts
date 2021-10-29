@@ -9,8 +9,13 @@ function insertIf<T>(condition: boolean, element: T) {
   return condition ? [element] : []
 }
 export default class CurrencyConversionAPI<TContext = any> extends DataSource {
-  exchangeRateAPI = new ExchangeRateAPI()
+  exchangeRateAPI: ExchangeRateAPI
   goldExchangeRateAPI = new GoldExchangeRateAPI()
+
+  constructor({ exchangeRateAPI }: { exchangeRateAPI: ExchangeRateAPI}) {
+    super()
+    this.exchangeRateAPI = exchangeRateAPI
+  }
 
   initialize(config: DataSourceConfig<TContext>): void {
     this.exchangeRateAPI.initialize(config)

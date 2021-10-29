@@ -18,7 +18,8 @@ describe('CurrencyConversionAPI', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    currencyConversionAPI = new CurrencyConversionAPI()
+    const exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
+    currencyConversionAPI = new CurrencyConversionAPI({exchangeRateAPI})
     currencyConversionAPI.initialize({ context: {}, cache: new InMemoryLRUCache() })
   })
 

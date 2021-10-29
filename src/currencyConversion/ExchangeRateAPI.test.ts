@@ -24,7 +24,7 @@ describe('ExchangeRateAPI', () => {
   let exchangeRateAPI: ExchangeRateAPI
 
   beforeEach(() => {
-    exchangeRateAPI = new ExchangeRateAPI()
+    exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
     exchangeRateAPI.initialize({ context: {}, cache: new InMemoryLRUCache() })
     jest.clearAllMocks()
   })
@@ -61,7 +61,7 @@ describe('ExchangeRateAPI', () => {
       const cache = new InMemoryLRUCache()
       const now = Date.now()
 
-      exchangeRateAPI = new ExchangeRateAPI()
+      exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
       exchangeRateAPI.initialize({ context: {}, cache })
       const result1 = await exchangeRateAPI.getExchangeRate({
         currencyCode: 'MXN',
@@ -73,7 +73,7 @@ describe('ExchangeRateAPI', () => {
       // Advance date to +12 hours - 1 millisecond
       Date.now = jest.fn(() => now + (12 * 3600 * 1000 - 1))
 
-      exchangeRateAPI = new ExchangeRateAPI()
+      exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
       exchangeRateAPI.initialize({ context: {}, cache })
       const result2 = await exchangeRateAPI.getExchangeRate({
         currencyCode: 'MXN',
@@ -85,7 +85,7 @@ describe('ExchangeRateAPI', () => {
       // Advance date to +12 hours + 1 millisecond
       Date.now = jest.fn(() => now + (12 * 3600 * 1000 + 1))
 
-      exchangeRateAPI = new ExchangeRateAPI()
+      exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
       exchangeRateAPI.initialize({ context: {}, cache })
       const result3 = await exchangeRateAPI.getExchangeRate({
         currencyCode: 'MXN',
@@ -99,7 +99,7 @@ describe('ExchangeRateAPI', () => {
       const cache = new InMemoryLRUCache()
       const now = Date.now() - 24 * 3600 * 1000
 
-      exchangeRateAPI = new ExchangeRateAPI()
+      exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
       exchangeRateAPI.initialize({ context: {}, cache })
       const result1 = await exchangeRateAPI.getExchangeRate({
         currencyCode: 'MXN',
@@ -111,7 +111,7 @@ describe('ExchangeRateAPI', () => {
       // Advance date to +12 hours - 1 millisecond
       Date.now = jest.fn(() => now + (12 * 3600 * 1000 - 1))
 
-      exchangeRateAPI = new ExchangeRateAPI()
+      exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
       exchangeRateAPI.initialize({ context: {}, cache })
       const result2 = await exchangeRateAPI.getExchangeRate({
         currencyCode: 'MXN',
@@ -123,7 +123,7 @@ describe('ExchangeRateAPI', () => {
       // Advance date to +12 hours + 1 millisecond
       Date.now = jest.fn(() => now + (12 * 3600 * 1000 + 1))
 
-      exchangeRateAPI = new ExchangeRateAPI()
+      exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
       exchangeRateAPI.initialize({ context: {}, cache })
       const result3 = await exchangeRateAPI.getExchangeRate({
         currencyCode: 'MXN',
@@ -135,7 +135,7 @@ describe('ExchangeRateAPI', () => {
       // Advance date to +10 years
       Date.now = jest.fn(() => now + 10 * 365 * 24 * 3600 * 1000)
 
-      exchangeRateAPI = new ExchangeRateAPI()
+      exchangeRateAPI = new ExchangeRateAPI({ exchangeRatesAPIAccessKey: 'FOO' })
       exchangeRateAPI.initialize({ context: {}, cache })
       const result4 = await exchangeRateAPI.getExchangeRate({
         currencyCode: 'MXN',

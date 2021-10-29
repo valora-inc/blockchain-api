@@ -6,7 +6,10 @@ import { Contracts } from '../utils'
 
 export class EscrowReceived extends TransactionType {
   matches(transaction: Transaction): boolean {
-    return this.isEscrowReceivedToEOA(transaction) || this.isEscrowReceivedToMTW(transaction)
+    return (
+      this.isEscrowReceivedToEOA(transaction) ||
+      this.isEscrowReceivedToMTW(transaction)
+    )
   }
 
   getEvent(transaction: Transaction) {
@@ -21,7 +24,7 @@ export class EscrowReceived extends TransactionType {
       transfer,
       EventTypes.ESCROW_RECEIVED,
       transfer.fromAddressHash,
-      transfer.fromAccountHash
+      transfer.fromAccountHash,
     )
   }
 
@@ -37,9 +40,11 @@ export class EscrowReceived extends TransactionType {
   }
 
   isEscrowReceivedToMTW(transaction: Transaction): boolean {
-    const transferToAcccount = transaction.transfers.getTransferFrom(Contracts.Escrow)!
+    const transferToAcccount = transaction.transfers.getTransferFrom(
+      Contracts.Escrow,
+    )!
     const transfertoWallet = transaction.transfers.getTransferFrom(
-      transferToAcccount?.toAddressHash
+      transferToAcccount?.toAddressHash,
     )
     return (
       transaction.transfers.length === 2 &&

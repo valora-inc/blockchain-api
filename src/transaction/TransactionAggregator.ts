@@ -7,10 +7,12 @@ import { ClassifiedTransaction } from './TransactionClassifier'
  * transaction of another type.
  */
 export class TransactionAggregator {
-  static aggregate(transactions: ClassifiedTransaction[]): ClassifiedTransaction[] {
+  static aggregate(
+    transactions: ClassifiedTransaction[],
+  ): ClassifiedTransaction[] {
     const aggregatedTransactions = transactions.reduce(
       TransactionAggregator.aggregateContractCallFees,
-      []
+      [],
     )
 
     return aggregatedTransactions.filter((t) => t)
@@ -20,12 +22,16 @@ export class TransactionAggregator {
     accumulator: ClassifiedTransaction[],
     currentTransaction: ClassifiedTransaction,
     currentIndex: number,
-    array: ClassifiedTransaction[]
+    array: ClassifiedTransaction[],
   ): ClassifiedTransaction[] {
     if (currentTransaction.type.isAggregatable() && accumulator.length > 0) {
-      const transactionFees = currentTransaction.type.getFees(currentTransaction.transaction)
+      const transactionFees = currentTransaction.type.getFees(
+        currentTransaction.transaction,
+      )
 
-      transactionFees.forEach((fee) => accumulator[accumulator.length - 1].transaction.addFee(fee))
+      transactionFees.forEach((fee) =>
+        accumulator[accumulator.length - 1].transaction.addFee(fee),
+      )
     } else {
       accumulator.push(currentTransaction)
     }

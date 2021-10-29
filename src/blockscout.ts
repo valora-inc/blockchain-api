@@ -100,23 +100,31 @@ export class BlockscoutAPI extends RESTDataSource {
       variables: { address },
     })
 
-    const transactions = response.data.transferTxs.edges.map(({ node }: any) => {
-      const { celoTransfer, ...partialTransferTx } = node
-      const celoTransfers = node.celoTransfer.edges.map((edge: any) => edge.node)
+    const transactions = response.data.transferTxs.edges.map(
+      ({ node }: any) => {
+        const { celoTransfer, ...partialTransferTx } = node
+        const celoTransfers = node.celoTransfer.edges.map(
+          (edge: any) => edge.node,
+        )
 
-      const transferCollection = new TransferCollection(celoTransfers)
-      const transfersNavigator = new TransfersNavigator(
-        contractAddresses,
-        FAUCET_ADDRESS,
-        transferCollection
-      )
-      const inputDecoder = new InputDecoder(
-        contractAddresses,
-        Input.fromString(partialTransferTx.input)
-      )
+        const transferCollection = new TransferCollection(celoTransfers)
+        const transfersNavigator = new TransfersNavigator(
+          contractAddresses,
+          FAUCET_ADDRESS,
+          transferCollection,
+        )
+        const inputDecoder = new InputDecoder(
+          contractAddresses,
+          Input.fromString(partialTransferTx.input),
+        )
 
-      return new Transaction(partialTransferTx, transfersNavigator, inputDecoder)
-    })
+        return new Transaction(
+          partialTransferTx,
+          transfersNavigator,
+          inputDecoder,
+        )
+      },
+    )
 
     // Record time at end of execution
     const t1 = performance.now()
@@ -178,10 +186,12 @@ export class BlockscoutAPI extends RESTDataSource {
     ])
 
     const classifiedTransactions = rawTransactions.map((transaction) =>
-      transactionClassifier.classify(transaction)
+      transactionClassifier.classify(transaction),
     )
 
-    const aggregatedTransactions = TransactionAggregator.aggregate(classifiedTransactions)
+    const aggregatedTransactions = TransactionAggregator.aggregate(
+      classifiedTransactions,
+    )
 
     const events: any[] = aggregatedTransactions
       .map(({ transaction, type }) => {

@@ -13,7 +13,7 @@ interface ExchangeRateObject {
 // Binary search in sorted array
 function findClosestRate(
   rates: ExchangeRateObject[],
-  timestamp: number
+  timestamp: number,
 ): ExchangeRateObject | undefined {
   let lo = 0
   let hi = rates.length - 1
@@ -36,7 +36,9 @@ function findClosestRate(
     return loRate || hiRate
   }
 
-  return loRate.timestamp - timestamp < timestamp - hiRate.timestamp ? loRate : hiRate
+  return loRate.timestamp - timestamp < timestamp - hiRate.timestamp
+    ? loRate
+    : hiRate
 }
 
 export default class GoldExchangeRateAPI<TContext = any> extends DataSource {
@@ -53,7 +55,10 @@ export default class GoldExchangeRateAPI<TContext = any> extends DataSource {
     sourceCurrencyCode,
     currencyCode,
     timestamp,
-  }: Omit<CurrencyConversionArgs, 'impliedCeloToCUSDExchangeRate'>): Promise<BigNumber> {
+  }: Omit<
+    CurrencyConversionArgs,
+    'impliedCeloToCUSDExchangeRate'
+  >): Promise<BigNumber> {
     const date = timestamp ? new Date(timestamp) : new Date()
 
     const pair = `${sourceCurrencyCode || CUSD}/${currencyCode}`

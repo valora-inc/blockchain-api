@@ -11,3 +11,5 @@ env_variables:
   # Unused
   VERIFICATION_REWARDS_ADDRESS: '0x00000000000000000000000000000000000verif'
   WEB3_PROVIDER_URL: 'https://forno.celo.org'
+  # Comma separated list of Secrets to load.
+  SECRET_NAMES: 'projects/1027349420744/secrets/blockchain-api/versions/latest'

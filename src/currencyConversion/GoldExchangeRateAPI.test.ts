@@ -56,7 +56,10 @@ describe('GoldExchangeRateAPI', () => {
 
   beforeEach(() => {
     goldExchangeRateAPI = new GoldExchangeRateAPI()
-    goldExchangeRateAPI.initialize({ context: {}, cache: new InMemoryLRUCache() })
+    goldExchangeRateAPI.initialize({
+      context: {},
+      cache: new InMemoryLRUCache(),
+    })
     jest.clearAllMocks()
   })
 
@@ -89,7 +92,7 @@ describe('GoldExchangeRateAPI', () => {
         sourceCurrencyCode: 'cUSD',
         currencyCode: 'ABC',
         timestamp: 1575294235653,
-      })
+      }),
     ).rejects.toThrow('No matching data for cUSD/ABC')
     expect(mockOnce).toHaveBeenCalledTimes(1)
   })

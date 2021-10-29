@@ -1,6 +1,6 @@
 import { RESTDataSource } from 'apollo-datasource-rest'
 import BigNumber from 'bignumber.js'
-import { EXCHANGE_RATES_API, EXCHANGE_RATES_API_ACCESS_KEY } from '../config'
+import { EXCHANGE_RATES_API } from '../config'
 import { metrics } from '../metrics'
 import { CurrencyConversionArgs } from '../schema'
 import { formatDateString } from '../utils'
@@ -17,8 +17,15 @@ interface ExchangeRateApiResult {
 const MIN_TTL = 12 * 3600 // 12 hours
 
 export default class ExchangeRateAPI extends RESTDataSource {
-  constructor() {
+  exchangeRatesAPIAccessKey: string
+
+  constructor({
+    exchangeRatesAPIAccessKey,
+  }: {
+    exchangeRatesAPIAccessKey: string
+  }) {
     super()
+    this.exchangeRatesAPIAccessKey = exchangeRatesAPIAccessKey
     this.baseURL = EXCHANGE_RATES_API
   }
 
@@ -32,18 +39,26 @@ export default class ExchangeRateAPI extends RESTDataSource {
     }
 
     const date = timestamp ? new Date(timestamp) : new Date()
-    const fetchedRate = await this.queryExchangeRate(sourceCurrencyCode || USD, currencyCode, date)
+    const fetchedRate = await this.queryExchangeRate(
+      sourceCurrencyCode || USD,
+      currencyCode,
+      date,
+    )
 
     return new BigNumber(fetchedRate)
   }
 
-  private async queryExchangeRate(sourceCurrencyCode: string, currencyCode: string, date: Date) {
+  private async queryExchangeRate(
+    sourceCurrencyCode: string,
+    currencyCode: string,
+    date: Date,
+  ) {
     // Record time at beginning of execution
     const t0 = performance.now()
     const pair = `${sourceCurrencyCode}/${currencyCode}`
     const path = `/historical`
     const params = {
-      access_key: EXCHANGE_RATES_API_ACCESS_KEY,
+      access_key: this.exchangeRatesAPIAccessKey,
       date: formatDateString(date),
       source: sourceCurrencyCode,
     }

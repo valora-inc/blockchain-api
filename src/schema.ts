@@ -337,10 +337,16 @@ export const resolvers = {
       }
     },
     // Deprecated
-    tokenTransactions: async (_source: any, args: TokenTransactionArgs, context: Context) => {
+    tokenTransactions: async (
+      _source: any,
+      args: TokenTransactionArgs,
+      context: Context,
+    ) => {
       const { dataSources } = context
       context.localCurrencyCode = args.localCurrencyCode
-      const transactions = await dataSources.blockscoutAPI.getTokenTransactions(args)
+      const transactions = await dataSources.blockscoutAPI.getTokenTransactions(
+        args,
+      )
 
       return {
         edges: transactions.map((tx) => ({
@@ -358,7 +364,7 @@ export const resolvers = {
     currencyConversion: async (
       _source: any,
       args: CurrencyConversionArgs,
-      { dataSources }: Context
+      { dataSources }: Context,
     ) => {
       const rate = await dataSources.currencyConversionAPI.getExchangeRate({
         ...args,
@@ -388,7 +394,11 @@ export const resolvers = {
     },
   },
   MoneyAmount: {
-    localAmount: async (moneyAmount: MoneyAmount, args: any, context: Context) => {
+    localAmount: async (
+      moneyAmount: MoneyAmount,
+      args: any,
+      context: Context,
+    ) => {
       const { dataSources, localCurrencyCode } = context
       const rate = await dataSources.currencyConversionAPI.getExchangeRate({
         sourceCurrencyCode: moneyAmount.currencyCode,

@@ -32,7 +32,7 @@ export class RegisterAccountDekContractCall extends TransactionType {
         type: FeeType.ONE_TIME_ENCRYPTION_FEE,
         value: transaction.fees.reduce(
           (accumulator, fee) => accumulator.plus(fee.value),
-          new BigNumber(0)
+          new BigNumber(0),
         ),
         currencyCode: transaction.fees[0].currencyCode,
       },

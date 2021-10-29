@@ -1,5 +1,5 @@
 {
-  "name": "@valor/blockchain-api",
+  "name": "@valora/blockchain-api",
   "description": "A cloud service that stores and serves data about blockchain activity",
   "version": "0.0.1",
   "private": true,

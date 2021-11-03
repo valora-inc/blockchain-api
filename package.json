@@ -37,7 +37,7 @@
     "express-prom-bundle": "^6.3.4",
     "firebase-admin": "^10.0.0",
     "graphql": "^15.7.2",
-    "prom-client": "^13.1.0",
+    "prom-client": "^14.0.1",
     "utf8": "^3.0.0",
     "web3": "1.6.0",
     "web3-eth-abi": "1.6.0"

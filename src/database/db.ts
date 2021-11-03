@@ -8,11 +8,13 @@ interface DBConnectionArgs {
   password: string
 }
 
-export async function initDatabase(connectionArgs: DBConnectionArgs): Promise<Knex> {
+export async function initDatabase(
+  connectionArgs: DBConnectionArgs,
+): Promise<Knex> {
   logger.info('Connecting database')
   const knexDb = knex({
     client: 'pg',
-    connection: connectionArgs
+    connection: connectionArgs,
   })
 
   // Checking connection
@@ -20,7 +22,9 @@ export async function initDatabase(connectionArgs: DBConnectionArgs): Promise<Kn
     await knexDb.raw('select 1')
     logger.info('Database connected successfully')
   } catch (e) {
-    logger.error(`Database couldn't be initialized successfully ${(e as Error)?.message}`)
+    logger.error(
+      `Database couldn't be initialized successfully ${(e as Error)?.message}`,
+    )
     throw e
   }
 

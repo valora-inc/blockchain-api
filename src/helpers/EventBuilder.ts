@@ -13,7 +13,7 @@ export class EventBuilder {
     eventType: string,
     address: string,
     account?: string,
-    fees?: Fee[]
+    fees?: Fee[],
   ) {
     const hash = transaction.transactionHash
     const block = transaction.blockNumber
@@ -43,7 +43,9 @@ export class EventBuilder {
       },
       defaultName: name,
       defaultImage: imageUrl,
-      ...(fees && { fees: EventBuilder.formatFees(fees, transaction.timestamp) }),
+      ...(fees && {
+        fees: EventBuilder.formatFees(fees, transaction.timestamp),
+      }),
     }
   }
 
@@ -59,32 +61,34 @@ export class EventBuilder {
     inTransfer: BlockscoutCeloTransfer,
     outTransfer: BlockscoutCeloTransfer,
     tokens: string[],
-    fees?: Fee[]
+    fees?: Fee[],
   ) {
     const token = this.chooseTokenToShowInExchange(
       [inTransfer.token, outTransfer.token].filter((transferToken) =>
-        tokens.includes(transferToken)
-      )
+        tokens.includes(transferToken),
+      ),
     )
     const hash = transaction.transactionHash
     const block = transaction.blockNumber
     const timestamp = transaction.timestamp
 
     // Find the transfer related to the queried token
-    const tokenTransfer = [inTransfer, outTransfer].find((event) => event!.token === token)
+    const tokenTransfer = [inTransfer, outTransfer].find(
+      (event) => event!.token === token,
+    )
     if (!tokenTransfer) {
       return undefined
     }
     const impliedExchangeRates: MoneyAmount['impliedExchangeRates'] = {}
     if (inTransfer!.token === CGLD && outTransfer!.token === CUSD) {
-      impliedExchangeRates['cGLD/cUSD'] = new BigNumber(outTransfer!.value).dividedBy(
-        inTransfer!.value
-      )
+      impliedExchangeRates['cGLD/cUSD'] = new BigNumber(
+        outTransfer!.value,
+      ).dividedBy(inTransfer!.value)
     }
     if (outTransfer!.token === CGLD && inTransfer!.token === CUSD) {
-      impliedExchangeRates['cGLD/cUSD'] = new BigNumber(inTransfer!.value).dividedBy(
-        outTransfer!.value
-      )
+      impliedExchangeRates['cGLD/cUSD'] = new BigNumber(
+        inTransfer!.value,
+      ).dividedBy(outTransfer!.value)
     }
 
     return {
@@ -103,18 +107,24 @@ export class EventBuilder {
         impliedExchangeRates,
       },
       makerAmount: {
-        value: new BigNumber(inTransfer!.value).dividedBy(WEI_PER_GOLD).toString(),
+        value: new BigNumber(inTransfer!.value)
+          .dividedBy(WEI_PER_GOLD)
+          .toString(),
         currencyCode: inTransfer!.token,
         timestamp,
         impliedExchangeRates,
       },
       takerAmount: {
-        value: new BigNumber(outTransfer!.value).dividedBy(WEI_PER_GOLD).toString(),
+        value: new BigNumber(outTransfer!.value)
+          .dividedBy(WEI_PER_GOLD)
+          .toString(),
         currencyCode: outTransfer!.token,
         timestamp,
         impliedExchangeRates,
       },
-      ...(fees && { fees: EventBuilder.formatFees(fees, transaction.timestamp) }),
+      ...(fees && {
+        fees: EventBuilder.formatFees(fees, transaction.timestamp),
+      }),
     }
   }
 

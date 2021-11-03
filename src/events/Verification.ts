@@ -25,7 +25,7 @@ export class Verification extends TransactionType {
       EventTypes.VERIFICATION_FEE,
       transfer.toAddressHash,
       transfer.toAccountHash,
-      transaction.fees
+      transaction.fees,
     )
   }
 

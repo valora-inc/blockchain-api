@@ -33,7 +33,7 @@ export class ExchangeTokenToCelo extends TransactionType {
       inTransfer,
       outTransfer,
       this.context.tokens,
-      transaction.fees
+      transaction.fees,
     )
   }
 

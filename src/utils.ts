@@ -9,11 +9,14 @@ export const WEI_PER_GOLD = Math.pow(10, 18)
 export function randomTimestamp() {
   const start = new Date(2018, 0, 1)
   const end = new Date()
-  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
+  return new Date(
+    start.getTime() + Math.random() * (end.getTime() - start.getTime()),
+  )
 }
 
 export function randomAddr() {
-  const charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const charSet =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   let randomString = '0x'
   let randomPoz
   for (let i = 0; i < 40; i++) {
@@ -56,12 +59,24 @@ export async function getContractAddresses(): Promise<ContractAddresses> {
   try {
     const kit = await getContractKit()
     contractAddresses = {
-      Attestations: (await kit.registry.addressFor(CeloContract.Attestations)).toLowerCase(),
-      Escrow: (await kit.registry.addressFor(CeloContract.Escrow)).toLowerCase(),
-      Exchange: (await kit.registry.addressFor(CeloContract.Exchange)).toLowerCase(),
-      ExchangeEUR: (await kit.registry.addressFor(CeloContract.ExchangeEUR)).toLowerCase(),
-      Governance: (await kit.registry.addressFor(CeloContract.Governance)).toLowerCase(),
-      Reserve: (await kit.registry.addressFor(CeloContract.Reserve)).toLowerCase(),
+      Attestations: (
+        await kit.registry.addressFor(CeloContract.Attestations)
+      ).toLowerCase(),
+      Escrow: (
+        await kit.registry.addressFor(CeloContract.Escrow)
+      ).toLowerCase(),
+      Exchange: (
+        await kit.registry.addressFor(CeloContract.Exchange)
+      ).toLowerCase(),
+      ExchangeEUR: (
+        await kit.registry.addressFor(CeloContract.ExchangeEUR)
+      ).toLowerCase(),
+      Governance: (
+        await kit.registry.addressFor(CeloContract.Governance)
+      ).toLowerCase(),
+      Reserve: (
+        await kit.registry.addressFor(CeloContract.Reserve)
+      ).toLowerCase(),
     }
     logger.info({
       type: 'FETCHED_CONTRACT_ADDRESSES',
@@ -90,7 +105,9 @@ export async function getContractKit(): Promise<ContractKit> {
       contractKit = newKitFromWeb3(web3)
       return contractKit
     } else {
-      throw new Error('Missing web3 provider URL, will not be able to fetch contract addresses.')
+      throw new Error(
+        'Missing web3 provider URL, will not be able to fetch contract addresses.',
+      )
     }
   } catch (e) {
     logger.error({

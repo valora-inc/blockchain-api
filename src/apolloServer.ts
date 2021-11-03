@@ -9,20 +9,26 @@ export interface DataSources {
   currencyConversionAPI: CurrencyConversionAPI
 }
 
-export const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  dataSources: () => {
-    return {
-      blockscoutAPI: new BlockscoutAPI(),
-      currencyConversionAPI: new CurrencyConversionAPI(),
-    }
-  },
-  formatError: (error) => {
-    logger.error({
-      type: 'UNHANDLED_ERROR',
-      error: error?.message,
-    })
-    return error
-  },
-})
+export function initApolloServer({
+  currencyConversionAPI,
+}: {
+  currencyConversionAPI: CurrencyConversionAPI
+}) {
+  return new ApolloServer({
+    typeDefs,
+    resolvers,
+    dataSources: () => {
+      return {
+        blockscoutAPI: new BlockscoutAPI(),
+        currencyConversionAPI: currencyConversionAPI,
+      }
+    },
+    formatError: (error) => {
+      logger.error({
+        type: 'UNHANDLED_ERROR',
+        error: error?.message,
+      })
+      return error
+    },
+  })
+}

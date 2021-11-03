@@ -5,7 +5,10 @@ import { TransactionType } from '../transaction/TransactionType'
 
 export class Faucet extends TransactionType {
   matches(transaction: Transaction): boolean {
-    return transaction.transfers.length === 1 && transaction.transfers.containsFaucetTransfer()
+    return (
+      transaction.transfers.length === 1 &&
+      transaction.transfers.containsFaucetTransfer()
+    )
   }
 
   getEvent(transaction: Transaction) {
@@ -20,7 +23,7 @@ export class Faucet extends TransactionType {
       transfer,
       EventTypes.FAUCET,
       transfer.fromAddressHash,
-      transfer.fromAccountHash
+      transfer.fromAccountHash,
     )
   }
 

@@ -49,7 +49,7 @@ export class Transaction {
   constructor(
     blockscoutTx: BlockscoutTransferTx,
     transfersNavigator: TransfersNavigator,
-    inputDecoder: InputDecoder
+    inputDecoder: InputDecoder,
   ) {
     this.blockscoutTx = blockscoutTx
     this.transfersNavigator = transfersNavigator
@@ -60,7 +60,9 @@ export class Transaction {
 
   addFee(newFee: Fee): void {
     const feeTypes = this.fees.map((fee) => fee.type)
-    const existingFeeTypeIndex = feeTypes.findIndex((type) => type === newFee.type)
+    const existingFeeTypeIndex = feeTypes.findIndex(
+      (type) => type === newFee.type,
+    )
 
     if (existingFeeTypeIndex !== -1) {
       const existingFee = this.fees[existingFeeTypeIndex]
@@ -99,14 +101,18 @@ export class Transaction {
       totalFee = totalFee.plus(new BigNumber(fee.value))
     })
 
-    const gasFee = new BigNumber(this.blockscoutTx.gasUsed).multipliedBy(this.blockscoutTx.gasPrice)
+    const gasFee = new BigNumber(this.blockscoutTx.gasUsed).multipliedBy(
+      this.blockscoutTx.gasPrice,
+    )
     const gatewayFee = new BigNumber(this.blockscoutTx.gatewayFee || 0)
     const expectedTotalFee = gasFee.plus(gatewayFee)
 
     // Make sure our assertion is correct
     if (!totalFee.isEqualTo(expectedTotalFee)) {
       // If this is raised, something is wrong with our assertion
-      throw new Error(`Fee transfers don't add up for tx ${this.blockscoutTx.transactionHash}`)
+      throw new Error(
+        `Fee transfers don't add up for tx ${this.blockscoutTx.transactionHash}`,
+      )
     }
   }
 
@@ -122,8 +128,12 @@ export class Transaction {
 
     this.transactionFees.push({
       type: FeeType.SECURITY_FEE,
-      value: new BigNumber(this.blockscoutTx.gasPrice).multipliedBy(this.blockscoutTx.gasUsed),
-      currencyCode: this.isCeloTransaction() ? CGLD : this.blockscoutTx.feeToken,
+      value: new BigNumber(this.blockscoutTx.gasPrice).multipliedBy(
+        this.blockscoutTx.gasUsed,
+      ),
+      currencyCode: this.isCeloTransaction()
+        ? CGLD
+        : this.blockscoutTx.feeToken,
     })
   }
 
@@ -133,13 +143,17 @@ export class Transaction {
     // but it's value is also recorded in gatewayFee
     if (!this.isCeloTransaction()) {
       // it's the last transfer on the list
-      this.transfersNavigator.popTransferTo(this.blockscoutTx.gatewayFeeRecipient)
+      this.transfersNavigator.popTransferTo(
+        this.blockscoutTx.gatewayFeeRecipient,
+      )
     }
 
     this.transactionFees.push({
       type: FeeType.GATEWAY_FEE,
       value: new BigNumber(this.blockscoutTx.gatewayFee),
-      currencyCode: this.isCeloTransaction() ? CGLD : this.blockscoutTx.feeToken,
+      currencyCode: this.isCeloTransaction()
+        ? CGLD
+        : this.blockscoutTx.feeToken,
     })
   }
 }

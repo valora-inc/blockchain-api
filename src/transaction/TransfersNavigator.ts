@@ -16,7 +16,7 @@ export class TransfersNavigator {
   constructor(
     contractAddresses: ContractAddresses,
     faucetAddress: string,
-    transferCollection: TransferCollection
+    transferCollection: TransferCollection,
   ) {
     this.contractAddresses = contractAddresses
     this.faucetAddress = faucetAddress
@@ -47,7 +47,8 @@ export class TransfersNavigator {
   }
 
   containsTransferTo(recipientAddress: Contracts | string): boolean {
-    const contractAddress = this.contractAddresses[recipientAddress as Contracts]
+    const contractAddress =
+      this.contractAddresses[recipientAddress as Contracts]
     const recipient = contractAddress ? contractAddress : recipientAddress
 
     return this.getTransferTo(recipient) !== undefined
@@ -65,23 +66,28 @@ export class TransfersNavigator {
     return this.getTransferTo(MINTED_TOKEN_ADDRESS)
   }
 
-  getTransferFrom(senderAddress: Contracts | string): BlockscoutCeloTransfer | undefined {
+  getTransferFrom(
+    senderAddress: Contracts | string,
+  ): BlockscoutCeloTransfer | undefined {
     const contractAddress = this.contractAddresses[senderAddress as Contracts]
     const sender = contractAddress ? contractAddress : senderAddress
 
     return this.transferCollection.get(
       (transfer: BlockscoutCeloTransfer): boolean =>
-        transfer.fromAddressHash.toLowerCase() === sender
+        transfer.fromAddressHash.toLowerCase() === sender,
     )
   }
 
-  getTransferTo(recipientAddress: Contracts | string): BlockscoutCeloTransfer | undefined {
-    const contractAddress = this.contractAddresses[recipientAddress as Contracts]
+  getTransferTo(
+    recipientAddress: Contracts | string,
+  ): BlockscoutCeloTransfer | undefined {
+    const contractAddress =
+      this.contractAddresses[recipientAddress as Contracts]
     const recipient = contractAddress ? contractAddress : recipientAddress
 
     return this.transferCollection.get(
       (transfer: BlockscoutCeloTransfer): boolean =>
-        transfer.toAddressHash.toLowerCase() === recipient
+        transfer.toAddressHash.toLowerCase() === recipient,
     )
   }
 
@@ -89,13 +95,16 @@ export class TransfersNavigator {
     return this.transferCollection.pop()
   }
 
-  popTransferTo(recipientAddress: Contracts | string): BlockscoutCeloTransfer | undefined {
-    const contractAddress = this.contractAddresses[recipientAddress as Contracts]
+  popTransferTo(
+    recipientAddress: Contracts | string,
+  ): BlockscoutCeloTransfer | undefined {
+    const contractAddress =
+      this.contractAddresses[recipientAddress as Contracts]
     const recipient = contractAddress ? contractAddress : recipientAddress
 
     return this.transferCollection.popWhich(
       (transfer: BlockscoutCeloTransfer): boolean =>
-        transfer.toAddressHash.toLowerCase() === recipient
+        transfer.toAddressHash.toLowerCase() === recipient,
     )
   }
 }

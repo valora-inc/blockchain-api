@@ -1,5 +1,9 @@
 import * as admin from 'firebase-admin'
-import { FIREBASE_DB, FIREBASE_PROJECT_ID, getFirebaseAdminCreds } from './config'
+import {
+  FIREBASE_DB,
+  FIREBASE_PROJECT_ID,
+  getFirebaseAdminCreds,
+} from './config'
 import { logger } from './logger'
 
 /**

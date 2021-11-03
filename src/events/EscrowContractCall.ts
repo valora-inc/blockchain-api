@@ -4,7 +4,10 @@ import { Contracts } from '../utils'
 
 export class EscrowContractCall extends TransactionType {
   matches(transaction: Transaction): boolean {
-    return transaction.transfers.isEmpty() && transaction.input.hasContractCallTo(Contracts.Escrow)
+    return (
+      transaction.transfers.isEmpty() &&
+      transaction.input.hasContractCallTo(Contracts.Escrow)
+    )
   }
 
   getEvent(transaction: Transaction) {

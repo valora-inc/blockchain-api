@@ -9,12 +9,22 @@ interface DBConnectionArgs {
 }
 
 export async function initDatabase(connectionArgs: DBConnectionArgs): Promise<Knex> {
+  logger.info('Connecting database')
   const knexDb = knex({
     client: 'pg',
-    connection: connectionArgs,
+    connection: connectionArgs
   })
 
-  logger.info('Running Migrations')
+  // Checking connection
+  try {
+    await knexDb.raw('select 1')
+    logger.info('Database connected successfully')
+  } catch (e) {
+    logger.error(`Database couldn't be initialized successfully ${(e as Error)?.message}`)
+    throw e
+  }
+
+  logger.info('Running migrations')
 
   await knexDb.migrate.latest({
     directory: './dist/database/migrations',

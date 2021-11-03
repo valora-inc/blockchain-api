@@ -6,6 +6,7 @@ import ExchangeRateAPI from './currencyConversion/ExchangeRateAPI'
 import knownAddressesCache from './helpers/KnownAddressesCache'
 import { logger } from './logger'
 import { loadSecret } from '@valora/secrets-loader'
+import { initDatabase } from './database/db'
 
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
@@ -15,6 +16,19 @@ const PORT: number = Number(process.env.PORT) || 8080
 const INTERFACE: string = process.env.INTERFACE || '0.0.0.0'
 
 async function main() {
+
+  if (process.env.DB_SECRET) {
+    const dbCredentials = await loadSecret(process.env.DB_SECRET)
+    await initDatabase({
+      host: dbCredentials.HOST,
+      database: dbCredentials.DATABASE,
+      user: dbCredentials.USER,
+      password: dbCredentials.PASSWORD
+    })
+  } else {
+    throw new Error('Missing required DB_SECRET')
+  }
+  
   //
   // Load secrets from Secrets Manager and inject into process.env.
   //

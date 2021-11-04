@@ -3,7 +3,9 @@ import { BlockscoutAPI } from './blockscout'
 import CurrencyConversionAPI from './currencyConversion/CurrencyConversionAPI'
 import { logger } from './logger'
 import { resolvers } from './resolvers'
-import typeDefs from './schema'
+import { readFileSync } from 'fs';
+
+const typeDefs = readFileSync('src/schema.graphql', 'utf-8');
 
 export interface DataSources {
   blockscoutAPI: BlockscoutAPI
@@ -17,7 +19,7 @@ export function initApolloServer({
 }) {
 
   return new ApolloServer({
-    typeDefs: typeDefs,
+    typeDefs,
     resolvers,
     dataSources: () => {
       return {

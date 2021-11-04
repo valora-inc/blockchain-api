@@ -2,7 +2,8 @@ import { ApolloServer } from 'apollo-server-express'
 import { BlockscoutAPI } from './blockscout'
 import CurrencyConversionAPI from './currencyConversion/CurrencyConversionAPI'
 import { logger } from './logger'
-import { resolvers, typeDefs } from './schema'
+import { resolvers } from './resolvers'
+import typeDefs from './schema'
 
 export interface DataSources {
   blockscoutAPI: BlockscoutAPI
@@ -14,8 +15,9 @@ export function initApolloServer({
 }: {
   currencyConversionAPI: CurrencyConversionAPI
 }) {
+
   return new ApolloServer({
-    typeDefs,
+    typeDefs: typeDefs,
     resolvers,
     dataSources: () => {
       return {

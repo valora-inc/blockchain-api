@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { FeeType } from '../schema'
+import { FeeType } from '../resolvers'
 import { Fee, Transaction } from '../transaction/Transaction'
 import { TransactionType } from '../transaction/TransactionType'
 

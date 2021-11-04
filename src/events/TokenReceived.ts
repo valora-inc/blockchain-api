@@ -1,5 +1,5 @@
 import { EventBuilder } from '../helpers/EventBuilder'
-import { EventTypes } from '../schema'
+import { EventTypes } from '../resolvers'
 import { Transaction } from '../transaction/Transaction'
 import { TransactionType } from '../transaction/TransactionType'
 

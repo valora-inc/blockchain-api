@@ -67,6 +67,7 @@ async function main() {
   })
   const currencyConversionAPI = new CurrencyConversionAPI({ exchangeRateAPI })
   const apolloServer = initApolloServer({ currencyConversionAPI })
+  await apolloServer.start()
   apolloServer.applyMiddleware({ app, path: GRAPHQL_PATH })
 
   app.listen(PORT, INTERFACE, () => {

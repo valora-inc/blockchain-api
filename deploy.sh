@@ -23,6 +23,7 @@ echo "Starting blockchain api deployment."
 
 echo 'Deploying to gcloud'
 gcloud --project ${PROJECT} app deploy -q "app.${NETWORK}.yaml"
+gcloud --project ${PROJECT} app deploy -q cron.yaml
 
 echo 'Hitting service url to trigger update'
 # This seems to be necessary to ensure get App Engine starts the service

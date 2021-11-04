@@ -6,6 +6,7 @@ import ExchangeRateAPI from './currencyConversion/ExchangeRateAPI'
 import knownAddressesCache from './helpers/KnownAddressesCache'
 import { logger } from './logger'
 import { loadSecret } from '@valora/secrets-loader'
+import { updatePrices } from './cron'
 
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
@@ -34,6 +35,23 @@ async function main() {
   app.get('/robots.txt', (_req, res) => {
     res.type('text/plain')
     res.send('User-agent: *\nDisallow: /')
+  })
+
+  app.get('/cron/update-prices', async (req, res) => {
+    // App Engine sets this header if and only if the request is from a cron.
+    if (!req.headers['x-appengine-cron']) {
+      logger.warn('Request does not contain header x-appengine-cron')
+      res.status(401).send()
+      return
+    }
+
+    try {
+      await updatePrices()
+      res.status(204).send()
+    } catch (error) {
+      logger.error(error)
+      res.status(500).send()
+    }
   })
 
   app.head('/', (_req, res) => {

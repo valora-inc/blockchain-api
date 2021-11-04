@@ -1,0 +1,4 @@
+cron:
+  - description: 'Update prices'
+    url: /cron/update-prices
+    schedule: every 10 minutes

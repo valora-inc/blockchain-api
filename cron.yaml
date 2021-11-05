@@ -1,4 +1,5 @@
 cron:
   - description: 'Update prices'
     url: /cron/update-prices
+    target: blockchain-api
     schedule: every 10 minutes

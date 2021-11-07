@@ -8,10 +8,57 @@ Install dependencies:
 yarn
 ```
 
-Copy the example .env file and check if there are any values you want to complete.
+## Testing
+
+Unit tests, linting, and formatting:
+
 ```
-cp .env.example .env
+yarn test
 ```
+
+End-to-end tests:
+
+```
+yarn e2e
+```
+
+## Running locally
+
+You can run with the [Firebase emulator](#emulator) or a real
+[Firebase account](#account). Copy the corresponding example config
+file.
+
+For the emulator:
+
+```
+# Check if there are any values you need to complete
+cp emuluator.env .env
+```
+
+or for the account:
+
+```
+# Check if there are any values you need to complete
+cp example.env .env
+```
+
+After completing your `.env`, build and start:
+
+```
+yarn start:dev  # Uses tsc-watch to watch the folder and rebuild as needed
+```
+
+## Firebase
+
+### Emulator
+
+Start the emulator before running blockchain-api:
+
+```
+yarn firebase:emulate
+```
+
+### Account
 
 You also need a service account for the Firebase connection. You can create one from the GCP IAM console following these steps (ignore all except the last one if you already have one):
 
@@ -25,14 +72,6 @@ You also need a service account for the Firebase connection. You can create one 
 - Go to the `Keys` tab.
 - `Add key` -> `Create new key` -> `JSON` -> `Create`
 - You will be prompted to download the service account key. Rename it to `serviceAccountKey.json` and put it in the root of the repo.
-
-## Running locally
-
-Build and start:
-
-```
-yarn start:dev  # Uses tsc-watch to watch the folder and rebuild as needed
-```
 
 ## Deploying to App Engine
 

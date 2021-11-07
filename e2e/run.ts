@@ -14,6 +14,7 @@ async function main() {
     FAUCET_ADDRESS: '0x456f41406B32c45D59E539e4BBA3D7898c3584dA',
     VERIFICATION_REWARDS_ADDRESS: '0xb4fdaf5f3cd313654aa357299ada901b1d2dd3b5',
     WEB3_PROVIDER_URL: 'https://alfajores-forno.celo-testnet.org',
+    EXCHANGE_RATES_API_ACCESS_KEY: 'does.not.matter.com',
   }
 
   const subprocess: ChildProcess = spawn('node', ['dist/index.js'], {
@@ -52,6 +53,9 @@ async function main() {
       })
     }
   }
+
+  // NOTE: if we add more tests we might need to set a valid
+  // EXCHANGE_RATES_API_ACCESS_KEY above.
 }
 
 main()

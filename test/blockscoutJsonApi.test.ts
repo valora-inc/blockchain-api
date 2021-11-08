@@ -56,7 +56,7 @@ describe('BlockscoutJsonAPI', () => {
     mockDataSourceGet.mockClear()
   })
 
-  it('should get dollar transactions and label them properly', async () => {
+  it('should return the right fields for each token balance', async () => {
     const result = await blockscoutJsonAPI.fetchUserBalances(
       '0x0000000000000000000000000000000000007E57',
     )

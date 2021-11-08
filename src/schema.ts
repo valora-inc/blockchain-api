@@ -147,7 +147,6 @@ export default `type ExchangeRate {
   interface TokenExchangeMetadata {
     title: String
     subtitle: String
-    exchangeName: String
   }
 
   interface TokenTransactionV2 {

@@ -190,6 +190,17 @@ export default `type ExchangeRate {
     lastCursor: String
   }
 
+  type UserBalance {
+    tokenAddress: String!
+    balance: String!
+    decimals: Decimal!
+    symbol: String!
+  }
+
+  type UserBalances {
+    balances: [UserBalance]!
+  }
+
   type Query {
     tokenTransactionsV2(
       address: Address!
@@ -214,4 +225,8 @@ export default `type ExchangeRate {
       currencyCode: String!
       timestamp: Timestamp
     ): ExchangeRate
+
+    userBalances(
+      address: Address!
+    ): UserBalances
   }`

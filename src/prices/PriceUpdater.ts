@@ -11,6 +11,8 @@ export async function updatePrices(db: Knex) {
 
   const fetchTime = new Date()
   const prices = await manager.calculatecUSDPrices()
+  
+  logger.info(`REACH HERE? ${JSON.stringify(prices)}`)
   for (const [token, price] of Object.entries(prices)) {
     db('historical_token_prices')
       .insert({

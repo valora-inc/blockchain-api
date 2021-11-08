@@ -40,7 +40,7 @@ export async function initOnMemoryDatabase(): Promise<Knex> {
     useNullAsDefault: true,
   })
 
-  checkAndMigrate(db)
+  await checkAndMigrate(db)
 
   return db
 }

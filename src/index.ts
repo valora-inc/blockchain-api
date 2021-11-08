@@ -29,12 +29,24 @@ async function main() {
     throw new Error('Missing required EXCHANGE_RATES_API_ACCESS_KEY')
   }
 
-  await initDatabase({
-    host: process.env.BLOCKCHAIN_DB_HOST ?? 'localhost',
-    database: process.env.BLOCKCHAIN_DB_DATABASE ?? 'postgres',
-    user: process.env.BLOCKCHAIN_DB_USER ?? 'postgres',
-    password: process.env.BLOCKCHAIN_DB_PASS ?? 'pass',
-  })
+  if (!process.env.BLOCKCHAIN_DB_HOST || !process.env.BLOCKCHAIN_DB_DATABASE ||
+    !process.env.BLOCKCHAIN_DB_USER || !process.env.BLOCKCHAIN_DB_PASS) {
+      throw new Error("Blockchain database secrets couldn't be obtained")
+      // Uncomment these lines to work locally.
+      // await initDatabase({
+      //   host: 'localhost',
+      //   database: 'postgres',
+      //   user: 'postgres',
+      //   password: 'pass',
+      // })
+  } else {
+    await initDatabase({
+      host: process.env.BLOCKCHAIN_DB_HOST,
+      database: process.env.BLOCKCHAIN_DB_DATABASE,
+      user: process.env.BLOCKCHAIN_DB_USER,
+      password: process.env.BLOCKCHAIN_DB_PASS,
+    })
+  }
 
   const app = express()
 

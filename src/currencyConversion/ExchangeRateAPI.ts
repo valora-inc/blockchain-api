@@ -2,7 +2,7 @@ import { RESTDataSource } from 'apollo-datasource-rest'
 import BigNumber from 'bignumber.js'
 import { EXCHANGE_RATES_API } from '../config'
 import { metrics } from '../metrics'
-import { CurrencyConversionArgs } from '../schema'
+import { CurrencyConversionArgs } from '../resolvers'
 import { formatDateString } from '../utils'
 import { USD } from './consts'
 const { performance } = require('perf_hooks')

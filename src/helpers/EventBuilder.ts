@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import { BlockscoutCeloTransfer } from '../blockscout'
 import { CGLD, CUSD } from '../currencyConversion/consts'
-import { EventTypes, Fee as FormattedFee, MoneyAmount } from '../schema'
+import { EventTypes, Fee as FormattedFee, MoneyAmount } from '../resolvers'
 import { Fee, Transaction } from '../transaction/Transaction'
 import { WEI_PER_GOLD } from '../utils'
 import knownAddressesCache from './KnownAddressesCache'

@@ -18,7 +18,9 @@ export class BlockscoutJsonAPI extends RESTDataSource {
   }
 
   async fetchUserBalances(address: string): Promise<UserTokenBalance[]> {
-    const response = await this.get(`?module=account&action=tokenlist&address=${address}`)
+    const response = await this.get(
+      `?module=account&action=tokenlist&address=${address}`,
+    )
     return response.result.map((row: BlockscoutTokenBalance) => ({
       tokenAddress: row.contractAddress,
       balance: row.balance,

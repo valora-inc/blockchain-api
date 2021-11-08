@@ -172,7 +172,9 @@ export const resolvers = {
       args: { address: string },
       { dataSources }: Context,
     ): Promise<UserTokenBalances> => {
-      const balances = await dataSources.blockscoutJsonAPI.fetchUserBalances(args.address)
+      const balances = await dataSources.blockscoutJsonAPI.fetchUserBalances(
+        args.address,
+      )
       return { balances }
     },
   },

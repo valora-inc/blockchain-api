@@ -2,7 +2,7 @@ const axios = require('axios')
 import { spawn, spawnSync, ChildProcess } from 'child_process'
 
 const debug = false
-const postgresContainerName = "blockchain-api-db-e2e"
+const postgresContainerName = 'blockchain-api-db-e2e'
 
 async function main() {
   process.on('SIGINT', () => process.exit(1))
@@ -23,7 +23,7 @@ async function main() {
     BLOCKCHAIN_DB_HOST: 'localhost',
     BLOCKCHAIN_DB_USER: 'postgres',
     BLOCKCHAIN_DB_DATABASE: 'blockchain-api',
-    BLOCKCHAIN_DB_PASS: 'pass'
+    BLOCKCHAIN_DB_PASS: 'pass',
   }
 
   const subprocess: ChildProcess = spawn('node', ['dist/index.js'], {
@@ -69,14 +69,20 @@ async function main() {
 }
 
 function setUpDatabase() {
-  docker(['run',
-    '--name', postgresContainerName,
+  docker([
+    'run',
+    '--name',
+    postgresContainerName,
     '--rm',
     '-d',
-    '-p', '5432:5432',
-    '-e', `POSTGRES_DB=blockchain-api`,
-    '-e', `POSTGRES_PASSWORD=pass`,
-    'postgres'])
+    '-p',
+    '5432:5432',
+    '-e',
+    `POSTGRES_DB=blockchain-api`,
+    '-e',
+    `POSTGRES_PASSWORD=pass`,
+    'postgres',
+  ])
 }
 
 function cleanDatabase() {
@@ -103,8 +109,8 @@ function docker(args?: any, options?: any) {
     ...options,
     env: {
       ...process.env,
-      ...options.env
-    }
+      ...options.env,
+    },
   }
   return run('docker', args, options)
 }

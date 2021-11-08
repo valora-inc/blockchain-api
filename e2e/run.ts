@@ -1,9 +1,14 @@
 const axios = require('axios')
-import { spawn, ChildProcess } from 'child_process'
+import { spawn, spawnSync, ChildProcess } from 'child_process'
+
+const debug = false
+const postgresContainerName = 'blockchain-api-db-e2e'
 
 async function main() {
   process.on('SIGINT', () => process.exit(1))
   process.on('SIGTERM', () => process.exit(1))
+
+  setUpDatabase()
 
   const env = {
     DEPLOY_ENV: 'e2e',
@@ -15,6 +20,10 @@ async function main() {
     VERIFICATION_REWARDS_ADDRESS: '0xb4fdaf5f3cd313654aa357299ada901b1d2dd3b5',
     WEB3_PROVIDER_URL: 'https://alfajores-forno.celo-testnet.org',
     EXCHANGE_RATES_API_ACCESS_KEY: 'does.not.matter.com',
+    BLOCKCHAIN_DB_HOST: 'localhost',
+    BLOCKCHAIN_DB_USER: 'postgres',
+    BLOCKCHAIN_DB_DATABASE: 'blockchain-api',
+    BLOCKCHAIN_DB_PASS: 'pass',
   }
 
   const subprocess: ChildProcess = spawn('node', ['dist/index.js'], {
@@ -26,6 +35,7 @@ async function main() {
   })
 
   process.on('exit', () => {
+    cleanDatabase()
     subprocess.kill()
   })
 
@@ -56,6 +66,53 @@ async function main() {
 
   // NOTE: if we add more tests we might need to set a valid
   // EXCHANGE_RATES_API_ACCESS_KEY above.
+}
+
+function setUpDatabase() {
+  docker([
+    'run',
+    '--name',
+    postgresContainerName,
+    '--rm',
+    '-d',
+    '-p',
+    '5432:5432',
+    '-e',
+    `POSTGRES_DB=blockchain-api`,
+    '-e',
+    `POSTGRES_PASSWORD=pass`,
+    'postgres',
+  ])
+}
+
+function cleanDatabase() {
+  docker(['rm', '-f', postgresContainerName])
+}
+
+function run(command?: any, args?: any, options?: any) {
+  options = options || {}
+  if (debug) console.info(`${command} \\\n  ${args.join(' \\\n  ')}`)
+  const result = spawnSync(command, args, options)
+  if (result.error) {
+    throw result.error
+  } else if (result.status) {
+    throw new Error(`${command} failed: ${result.status}`)
+  } else if (result.signal) {
+    throw new Error(`${command} exited from signal: ${result.signal}`)
+  }
+  return result
+}
+
+function docker(args?: any, options?: any) {
+  options = options || {}
+  options = {
+    ...options,
+    env: {
+      ...process.env,
+      ...options.env,
+    },
+  }
+  return run('docker', args, options)
 }
 
 main()

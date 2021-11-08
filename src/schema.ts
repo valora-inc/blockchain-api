@@ -1,99 +1,4 @@
-import { gql } from 'apollo-server-express'
-import BigNumber from 'bignumber.js'
-import { DataSources } from './apolloServer'
-import { USD } from './currencyConversion/consts'
-
-export enum EventTypes {
-  EXCHANGE = 'EXCHANGE',
-  RECEIVED = 'RECEIVED',
-  SENT = 'SENT',
-  FAUCET = 'FAUCET',
-  VERIFICATION_FEE = 'VERIFICATION_FEE',
-  ESCROW_SENT = 'ESCROW_SENT',
-  ESCROW_RECEIVED = 'ESCROW_RECEIVED',
-  CONTRACT_CALL = 'CONTRACT_CALL',
-}
-
-export enum FeeType {
-  SECURITY_FEE = 'SECURITY_FEE',
-  GATEWAY_FEE = 'GATEWAY_FEE',
-  ONE_TIME_ENCRYPTION_FEE = 'ONE_TIME_ENCRYPTION_FEE',
-  INVITATION_FEE = 'INVITATION_FEE',
-}
-
-export interface Fee {
-  type: FeeType
-  amount: MoneyAmount
-}
-
-export interface ExchangeEvent {
-  type: EventTypes
-  timestamp: number
-  block: number
-  outValue: number
-  outSymbol: string
-  inValue: number
-  inSymbol: string
-  hash: string
-  fees: Fee[]
-}
-
-export interface TransferEvent {
-  type: EventTypes
-  timestamp: number
-  block: number
-  value: number
-  address: string
-  account: string
-  comment: string
-  symbol: string
-  hash: string
-  fees: Fee[]
-}
-
-export type EventInterface = ExchangeEvent | TransferEvent
-
-export interface EventArgs {
-  // Query params as defined by Blockscout's API
-  address: string
-  sort?: 'asc' | 'desc'
-  startblock?: number
-  endblock?: number
-  page?: number
-  offset?: number
-}
-
-export type Token = 'cUSD' | 'cGLD' | 'cEUR'
-
-export interface TokenTransactionArgs {
-  address: string
-  token: Token | null
-  tokens?: Token[]
-  localCurrencyCode: string
-}
-
-export interface ExchangeRate {
-  rate: number
-}
-
-export interface CurrencyConversionArgs {
-  sourceCurrencyCode?: string
-  currencyCode: string
-  timestamp?: number
-  impliedExchangeRates?: MoneyAmount['impliedExchangeRates']
-}
-
-export interface MoneyAmount {
-  value: BigNumber.Value
-  currencyCode: string
-  // Implied exchange rate (based on exact amount exchanged) which overwrites
-  // the estimate in firebase (based on a constant exchange amount)
-  impliedExchangeRates?: { [key: string]: BigNumber.Value }
-  timestamp: number
-}
-
-export const typeDefs = gql`
-  type ExchangeRate {
+export default `type ExchangeRate {
     rate: Decimal!
   }
 
@@ -206,6 +111,78 @@ export const typeDefs = gql`
     cursor: String!
   }
 
+  """
+  A modified copy of the models of above. Except the new one support multiple tokens (using address instead of code to identify the currency)
+  """
+  type TokenAmount {
+    value: Decimal!
+    tokenAddress: Address!
+    localAmount: LocalMoneyAmount
+  }
+
+  enum TokenTransactionTypeV2 {
+    EXCHANGE
+    RECEIVED
+    SENT
+    INVITE_SENT
+    INVITE_RECEIVED
+    PAY_REQUEST
+  }
+
+  type FeeV2 {
+    type: FeeType!
+    amount: TokenAmount!
+  }
+
+  interface TokenTransferMetadata {
+    title: String
+    subtitle: String
+    image: String
+    comment: String
+  }
+
+  """
+  TODO: Add more fields once we understand what useful information we can serve
+  """
+  interface TokenExchangeMetadata {
+    title: String
+    subtitle: String
+  }
+
+  interface TokenTransactionV2 {
+    type: TokenTransactionTypeV2!
+    timestamp: Timestamp!
+    block: String!
+    transactionHash: String!
+    fees: [FeeV2]
+  }
+
+  type TokenTransferV2 implements TokenTransactionV2 {
+    type: TokenTransactionTypeV2!
+    timestamp: Timestamp!
+    block: String!
+    amount: TokenAmount!
+    address: Address!
+    transactionHash: String!
+    fees: [FeeV2]
+    metadata: TokenTransferMetadata
+  }
+
+  type TokenExchangeV2 implements TokenTransactionV2 {
+    type: TokenTransactionTypeV2!
+    timestamp: Timestamp!
+    block: String!
+    inAmount: TokenAmount!
+    outAmount: TokenAmount!
+    transactionHash: String!
+    fees: [FeeV2]
+    metadata: TokenExchangeMetadata
+  }
+
+  type TokenTransactionsV2 {
+    tokens: [TokenTransactionV2]!
+  }
+
   type PageInfo {
     hasPreviousPage: Boolean!
     hasNextPage: Boolean!
@@ -214,6 +191,12 @@ export const typeDefs = gql`
   }
 
   type Query {
+    tokenTransactionsV2(
+      address: Address!
+      tokens: [Address]
+      localCurrencyCode: String
+    ): TokenTransactionsV2
+
     tokenTransactions(
       address: Address!
       token: Token
@@ -231,90 +214,4 @@ export const typeDefs = gql`
       currencyCode: String!
       timestamp: Timestamp
     ): ExchangeRate
-  }
-`
-
-interface Context {
-  dataSources: DataSources
-  localCurrencyCode?: string
-}
-
-export const resolvers = {
-  Query: {
-    tokenTransactions: async (
-      _source: any,
-      args: TokenTransactionArgs,
-      context: Context,
-    ) => {
-      const { dataSources } = context
-      context.localCurrencyCode = args.localCurrencyCode
-      const transactions = await dataSources.blockscoutAPI.getTokenTransactions(
-        args,
-      )
-
-      return {
-        edges: transactions.map((tx) => ({
-          node: tx,
-          cursor: 'TODO',
-        })),
-        pageInfo: {
-          hasPreviousPage: false,
-          hasNextPage: false,
-          firstCursor: 'TODO',
-          lastCursor: 'TODO',
-        },
-      }
-    },
-    currencyConversion: async (
-      _source: any,
-      args: CurrencyConversionArgs,
-      { dataSources }: Context,
-    ) => {
-      const rate = await dataSources.currencyConversionAPI.getExchangeRate({
-        ...args,
-        // This field is optional for legacy reasons. Remove default value after Valora 1.16 is
-        // released and most users update.
-        sourceCurrencyCode: args.sourceCurrencyCode ?? USD,
-      })
-      return { rate: rate.toNumber() }
-    },
-  },
-  TokenTransaction: {
-    __resolveType(obj: EventInterface, context: any, info: any) {
-      if (obj.type === EventTypes.EXCHANGE) {
-        return 'TokenExchange'
-      }
-      if (
-        obj.type === EventTypes.RECEIVED ||
-        obj.type === EventTypes.ESCROW_RECEIVED ||
-        obj.type === EventTypes.ESCROW_SENT ||
-        obj.type === EventTypes.SENT ||
-        obj.type === EventTypes.FAUCET ||
-        obj.type === EventTypes.VERIFICATION_FEE
-      ) {
-        return 'TokenTransfer'
-      }
-      return null
-    },
-  },
-  MoneyAmount: {
-    localAmount: async (
-      moneyAmount: MoneyAmount,
-      args: any,
-      context: Context,
-    ) => {
-      const { dataSources, localCurrencyCode } = context
-      const rate = await dataSources.currencyConversionAPI.getExchangeRate({
-        sourceCurrencyCode: moneyAmount.currencyCode,
-        currencyCode: localCurrencyCode || 'USD',
-        timestamp: moneyAmount.timestamp,
-        impliedExchangeRates: moneyAmount.impliedExchangeRates,
-      })
-      return {
-        value: new BigNumber(moneyAmount.value).multipliedBy(rate).toString(),
-        currencyCode: localCurrencyCode || 'USD',
-        exchangeRate: rate.toString(),
-      }
-    },
-  },
-}
+  }`

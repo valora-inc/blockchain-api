@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js'
 import { BlockscoutTransferTx } from '../blockscout'
 import { CGLD } from '../currencyConversion/consts'
 import { InputDecoder } from '../helpers/InputDecoder'
-import { FeeType } from '../schema'
+import { FeeType } from '../resolvers'
 import { Contracts } from '../utils'
 import { TransfersNavigator } from './TransfersNavigator'
 

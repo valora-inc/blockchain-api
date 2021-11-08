@@ -11,5 +11,4 @@ env_variables:
   VERIFICATION_REWARDS_ADDRESS: '0xb4fdaf5f3cd313654aa357299ada901b1d2dd3b5'
   WEB3_PROVIDER_URL: 'https://alfajores-forno.celo-testnet.org'
   # Comma separated list of Secrets to load.
-  SECRET_NAMES: 'projects/1067724576910/secrets/blockchain-api/versions/latest'
-  DB_SECRET: 'projects/1067724576910/secrets/blockchain-api-db/versions/latest'
+  SECRET_NAMES: 'projects/1067724576910/secrets/blockchain-api/versions/latest,projects/1067724576910/secrets/blockchain-api-db/versions/latest'

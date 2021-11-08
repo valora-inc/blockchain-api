@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
     // Using string to convert to big number
     table.string('price').notNullable()
 
-    table.index(['comparedToken', 'token', 'at'])
+    table.index(['base_token', 'token', 'at'])
   })
 }
 

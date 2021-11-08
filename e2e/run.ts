@@ -91,7 +91,7 @@ function cleanDatabase() {
 
 function run(command?: any, args?: any, options?: any) {
   options = options || {}
-  if (debug) console.log(`${command} \\\n  ${args.join(' \\\n  ')}`)
+  if (debug) console.info(`${command} \\\n  ${args.join(' \\\n  ')}`)
   const result = spawnSync(command, args, options)
   if (result.error) {
     throw result.error

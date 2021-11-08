@@ -8,18 +8,9 @@ interface DBConnectionArgs {
   password: string
 }
 
-export async function initDatabase(
-  connectionArgs: DBConnectionArgs,
-): Promise<Knex> {
-  logger.info('Connecting database')
-  const knexDb = knex({
-    client: 'pg',
-    connection: connectionArgs,
-  })
-
-  // Checking connection
+async function checkAndMigrate(db: Knex) {
   try {
-    await knexDb.raw('select 1')
+    await db.raw('select 1')
     logger.info('Database connected successfully')
   } catch (e) {
     logger.error(
@@ -30,12 +21,40 @@ export async function initDatabase(
 
   logger.info('Running migrations')
 
-  await knexDb.migrate.latest({
+  await db.migrate.latest({
     directory: './dist/database/migrations',
     loadExtensions: ['.js'],
   })
 
   logger.info('Database initialized successfully')
+}
+
+// Used to test
+export async function initOnMemoryDatabase(): Promise<Knex> {
+  logger.info('HERE')
+  const db = knex({
+    client: 'sqlite3',
+    connection: {
+      filename: ':memory:',
+    },
+    useNullAsDefault: true,
+  })
+
+  checkAndMigrate(db)
+
+  return db
+}
+
+export async function initDatabase(
+  connectionArgs: DBConnectionArgs,
+): Promise<Knex> {
+  logger.info('Connecting database')
+  const knexDb = knex({
+    client: 'pg',
+    connection: connectionArgs,
+  })
+
+  await checkAndMigrate(knexDb)
 
   return knexDb
 }

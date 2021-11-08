@@ -15,9 +15,8 @@ export function initApolloServer({
 }: {
   currencyConversionAPI: CurrencyConversionAPI
 }) {
-
   return new ApolloServer({
-    typeDefs: typeDefs,
+    typeDefs,
     resolvers,
     dataSources: () => {
       return {

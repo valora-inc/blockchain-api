@@ -38,12 +38,7 @@ async function main() {
     throw new Error("Blockchain database secrets couldn't be obtained")
   }
 
-  const db = await initDatabase({
-    host: process.env.BLOCKCHAIN_DB_HOST,
-    database: process.env.BLOCKCHAIN_DB_DATABASE,
-    user: process.env.BLOCKCHAIN_DB_USER,
-    password: process.env.BLOCKCHAIN_DB_PASS,
-  })
+  const db = await initDatabase()
 
   const app = express()
 

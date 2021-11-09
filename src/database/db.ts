@@ -1,13 +1,6 @@
 import { Knex, knex } from 'knex'
 import { logger } from '../logger'
 
-interface DBConnectionArgs {
-  host: string
-  database: string
-  user: string
-  password: string
-}
-
 async function checkAndMigrate(db: Knex) {
   try {
     await db.raw('select 1')
@@ -29,32 +22,39 @@ async function checkAndMigrate(db: Knex) {
   logger.info('Database initialized successfully')
 }
 
-// Used to test
-export async function initOnMemoryDatabase(): Promise<Knex> {
-  logger.info('HERE')
-  const db = knex({
+function createInMemoryDatabase(): Knex {
+  logger.info('Connecting on memory database')
+  return knex({
     client: 'sqlite3',
     connection: {
       filename: ':memory:',
     },
     useNullAsDefault: true,
   })
+}
+
+function createDatabaseFromEnvVars(): Knex {
+  logger.info('Connecting database')
+  return knex({
+    client: 'pg',
+    connection: {
+      host: process.env.BLOCKCHAIN_DB_HOST,
+      database: process.env.BLOCKCHAIN_DB_DATABASE,
+      user: process.env.BLOCKCHAIN_DB_USER,
+      password: process.env.BLOCKCHAIN_DB_PASS,
+    },
+  })
+}
+
+export async function initDatabase() {
+  let db: Knex
+  if (process.env.NODE_ENV === 'test') {
+    db = createInMemoryDatabase()
+  } else {
+    db = createDatabaseFromEnvVars()
+  }
 
   await checkAndMigrate(db)
 
   return db
-}
-
-export async function initDatabase(
-  connectionArgs: DBConnectionArgs,
-): Promise<Knex> {
-  logger.info('Connecting database')
-  const knexDb = knex({
-    client: 'pg',
-    connection: connectionArgs,
-  })
-
-  await checkAndMigrate(knexDb)
-
-  return knexDb
 }

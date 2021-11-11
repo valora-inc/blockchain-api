@@ -1,4 +1,4 @@
-import { Any } from '../src/legacy-events/Any'
+import { Any } from '../src/legacyEvents/Any'
 import { metrics } from '../src/metrics'
 
 jest.mock('../src/metrics')

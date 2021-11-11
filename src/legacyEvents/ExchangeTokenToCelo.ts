@@ -1,6 +1,6 @@
 import { LegacyEventBuilder } from '../helpers/LegacyEventBuilder'
-import { LegacyTransaction } from '../legacy-transaction/LegacyTransaction'
-import { LegacyTransactionType } from '../legacy-transaction/LegacyTransactionType'
+import { LegacyTransaction } from '../legacyTransaction/LegacyTransaction'
+import { LegacyTransactionType } from '../legacyTransaction/LegacyTransactionType'
 import { Contracts } from '../utils'
 
 export class ExchangeTokenToCelo extends LegacyTransactionType {

@@ -1,28 +1,29 @@
 import { LegacyEventBuilder } from '../helpers/LegacyEventBuilder'
 import { LegacyEventTypes } from '../resolvers'
-import { LegacyTransaction } from '../legacy-transaction/LegacyTransaction'
-import { LegacyTransactionType } from '../legacy-transaction/LegacyTransactionType'
-import { Contracts } from '../utils'
+import { LegacyTransaction } from '../legacyTransaction/LegacyTransaction'
+import { LegacyTransactionType } from '../legacyTransaction/LegacyTransactionType'
 
-export class EscrowSent extends LegacyTransactionType {
+export class TokenSent extends LegacyTransactionType {
   matches(transaction: LegacyTransaction): boolean {
     return (
       transaction.transfers.length === 1 &&
-      transaction.transfers.containsTransferTo(Contracts.Escrow)
+      transaction.transfers.containsTransferFrom(this.context.userAddress)
     )
   }
 
   getEvent(transaction: LegacyTransaction) {
-    const transfer = transaction.transfers.getTransferTo(Contracts.Escrow)
+    const transfer = transaction.transfers.getTransferFrom(
+      this.context.userAddress,
+    )
 
     if (!transfer) {
-      throw new Error('Transfer to Escrow not found.')
+      throw new Error('Transfer from the user not found.')
     }
 
     return LegacyEventBuilder.transferEvent(
       transaction,
       transfer,
-      LegacyEventTypes.ESCROW_SENT,
+      LegacyEventTypes.SENT,
       transfer.toAddressHash,
       transfer.toAccountHash,
       transaction.fees,

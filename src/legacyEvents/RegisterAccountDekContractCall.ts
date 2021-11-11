@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { FeeType } from '../resolvers'
-import { Fee, LegacyTransaction } from '../legacy-transaction/LegacyTransaction'
-import { LegacyTransactionType } from '../legacy-transaction/LegacyTransactionType'
+import { Fee, LegacyTransaction } from '../legacyTransaction/LegacyTransaction'
+import { LegacyTransactionType } from '../legacyTransaction/LegacyTransactionType'
 
 export class RegisterAccountDekContractCall extends LegacyTransactionType {
   matches(transaction: LegacyTransaction): boolean {

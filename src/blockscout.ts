@@ -13,20 +13,20 @@ import {
   TokenReceived,
   TokenSent,
   Verification,
-} from './legacy-events'
-import { EscrowContractCall } from './legacy-events/EscrowContractCall'
-import { ExchangeContractCall } from './legacy-events/ExchangeContractCall'
-import { RegisterAccountDekContractCall } from './legacy-events/RegisterAccountDekContractCall'
+} from './legacyEvents'
+import { EscrowContractCall } from './legacyEvents/EscrowContractCall'
+import { ExchangeContractCall } from './legacyEvents/ExchangeContractCall'
+import { RegisterAccountDekContractCall } from './legacyEvents/RegisterAccountDekContractCall'
 import { Input } from './helpers/Input'
 import { InputDecoder } from './helpers/InputDecoder'
 import { logger } from './logger'
 import { metrics } from './metrics'
 import { TokenTransactionArgs } from './resolvers'
-import { LegacyTransaction } from './legacy-transaction/LegacyTransaction'
-import { LegacyTransactionAggregator } from './legacy-transaction/LegacyTransactionAggregator'
-import { LegacyTransactionClassifier } from './legacy-transaction/LegacyTransactionClassifier'
-import { LegacyTransferCollection } from './legacy-transaction/LegacyTransferCollection'
-import { LegacyTransfersNavigator } from './legacy-transaction/LegacyTransfersNavigator'
+import { LegacyTransaction } from './legacyTransaction/LegacyTransaction'
+import { LegacyTransactionAggregator } from './legacyTransaction/LegacyTransactionAggregator'
+import { LegacyTransactionClassifier } from './legacyTransaction/LegacyTransactionClassifier'
+import { LegacyTransferCollection } from './legacyTransaction/LegacyTransferCollection'
+import { LegacyTransfersNavigator } from './legacyTransaction/LegacyTransfersNavigator'
 import { ContractAddresses, getContractAddresses } from './utils'
 export interface BlockscoutTransferTx {
   blockNumber: number

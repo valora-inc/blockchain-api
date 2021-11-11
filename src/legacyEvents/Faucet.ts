@@ -1,29 +1,27 @@
 import { LegacyEventBuilder } from '../helpers/LegacyEventBuilder'
 import { LegacyEventTypes } from '../resolvers'
-import { LegacyTransaction } from '../legacy-transaction/LegacyTransaction'
-import { LegacyTransactionType } from '../legacy-transaction/LegacyTransactionType'
+import { LegacyTransaction } from '../legacyTransaction/LegacyTransaction'
+import { LegacyTransactionType } from '../legacyTransaction/LegacyTransactionType'
 
-export class TokenReceived extends LegacyTransactionType {
+export class Faucet extends LegacyTransactionType {
   matches(transaction: LegacyTransaction): boolean {
     return (
       transaction.transfers.length === 1 &&
-      transaction.transfers.containsTransferTo(this.context.userAddress)
+      transaction.transfers.containsFaucetTransfer()
     )
   }
 
   getEvent(transaction: LegacyTransaction) {
-    const transfer = transaction.transfers.getTransferTo(
-      this.context.userAddress,
-    )
+    const transfer = transaction.transfers.getFaucetTransfer()
 
     if (!transfer) {
-      throw new Error('Transfer to the user not found.')
+      throw new Error('Transfer from faucet not found.')
     }
 
     return LegacyEventBuilder.transferEvent(
       transaction,
       transfer,
-      LegacyEventTypes.RECEIVED,
+      LegacyEventTypes.FAUCET,
       transfer.fromAddressHash,
       transfer.fromAccountHash,
     )

@@ -1,6 +1,6 @@
 import { metrics } from '../metrics'
-import { LegacyTransaction } from '../legacy-transaction/LegacyTransaction'
-import { LegacyTransactionType } from '../legacy-transaction/LegacyTransactionType'
+import { LegacyTransaction } from '../legacyTransaction/LegacyTransaction'
+import { LegacyTransactionType } from '../legacyTransaction/LegacyTransactionType'
 
 export class Any extends LegacyTransactionType {
   matches(transaction: LegacyTransaction): boolean {

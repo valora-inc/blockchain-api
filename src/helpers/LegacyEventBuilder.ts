@@ -6,7 +6,7 @@ import {
   Fee as FormattedFee,
   MoneyAmount,
 } from '../resolvers'
-import { Fee, LegacyTransaction } from '../legacy-transaction/LegacyTransaction'
+import { Fee, LegacyTransaction } from '../legacyTransaction/LegacyTransaction'
 import { WEI_PER_GOLD } from '../utils'
 import knownAddressesCache from './KnownAddressesCache'
 

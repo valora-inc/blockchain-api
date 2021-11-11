@@ -1,7 +1,7 @@
 import { LegacyEventBuilder } from '../helpers/LegacyEventBuilder'
 import { LegacyEventTypes } from '../resolvers'
-import { LegacyTransaction } from '../legacy-transaction/LegacyTransaction'
-import { LegacyTransactionType } from '../legacy-transaction/LegacyTransactionType'
+import { LegacyTransaction } from '../legacyTransaction/LegacyTransaction'
+import { LegacyTransactionType } from '../legacyTransaction/LegacyTransactionType'
 import { Contracts } from '../utils'
 
 export class Verification extends LegacyTransactionType {

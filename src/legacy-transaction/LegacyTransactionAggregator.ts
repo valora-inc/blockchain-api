@@ -1,4 +1,4 @@
-import { ClassifiedTransaction } from './TransactionClassifier'
+import { LegacyClassifiedTransaction } from './LegacyTransactionClassifier'
 
 /**
  * Aggregates transactions based on their type, summing up fees, grouping them into one
@@ -6,12 +6,12 @@ import { ClassifiedTransaction } from './TransactionClassifier'
  * Starting with the first transaction adds fees for contract calls to the previous
  * transaction of another type.
  */
-export class TransactionAggregator {
+export class LegacyTransactionAggregator {
   static aggregate(
-    transactions: ClassifiedTransaction[],
-  ): ClassifiedTransaction[] {
+    transactions: LegacyClassifiedTransaction[],
+  ): LegacyClassifiedTransaction[] {
     const aggregatedTransactions = transactions.reduce(
-      TransactionAggregator.aggregateContractCallFees,
+      LegacyTransactionAggregator.aggregateContractCallFees,
       [],
     )
 
@@ -19,11 +19,11 @@ export class TransactionAggregator {
   }
 
   static aggregateContractCallFees(
-    accumulator: ClassifiedTransaction[],
-    currentTransaction: ClassifiedTransaction,
+    accumulator: LegacyClassifiedTransaction[],
+    currentTransaction: LegacyClassifiedTransaction,
     currentIndex: number,
-    array: ClassifiedTransaction[],
-  ): ClassifiedTransaction[] {
+    array: LegacyClassifiedTransaction[],
+  ): LegacyClassifiedTransaction[] {
     if (currentTransaction.type.isAggregatable() && accumulator.length > 0) {
       const transactionFees = currentTransaction.type.getFees(
         currentTransaction.transaction,

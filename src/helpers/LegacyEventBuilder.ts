@@ -1,14 +1,18 @@
 import { BigNumber } from 'bignumber.js'
 import { BlockscoutCeloTransfer } from '../blockscout'
 import { CGLD, CUSD } from '../currencyConversion/consts'
-import { EventTypes, Fee as FormattedFee, MoneyAmount } from '../resolvers'
-import { Fee, Transaction } from '../transaction/Transaction'
+import {
+  LegacyEventTypes,
+  Fee as FormattedFee,
+  MoneyAmount,
+} from '../resolvers'
+import { Fee, LegacyTransaction } from '../legacy-transaction/LegacyTransaction'
 import { WEI_PER_GOLD } from '../utils'
 import knownAddressesCache from './KnownAddressesCache'
 
-export class EventBuilder {
+export class LegacyEventBuilder {
   static transferEvent(
-    transaction: Transaction,
+    transaction: LegacyTransaction,
     transfer: BlockscoutCeloTransfer,
     eventType: string,
     address: string,
@@ -44,7 +48,7 @@ export class EventBuilder {
       defaultName: name,
       defaultImage: imageUrl,
       ...(fees && {
-        fees: EventBuilder.formatFees(fees, transaction.timestamp),
+        fees: LegacyEventBuilder.formatFees(fees, transaction.timestamp),
       }),
     }
   }
@@ -57,7 +61,7 @@ export class EventBuilder {
   }
 
   static exchangeEvent(
-    transaction: Transaction,
+    transaction: LegacyTransaction,
     inTransfer: BlockscoutCeloTransfer,
     outTransfer: BlockscoutCeloTransfer,
     tokens: string[],
@@ -92,7 +96,7 @@ export class EventBuilder {
     }
 
     return {
-      type: EventTypes.EXCHANGE,
+      type: LegacyEventTypes.EXCHANGE,
       timestamp,
       block,
       hash,
@@ -123,7 +127,7 @@ export class EventBuilder {
         impliedExchangeRates,
       },
       ...(fees && {
-        fees: EventBuilder.formatFees(fees, transaction.timestamp),
+        fees: LegacyEventBuilder.formatFees(fees, transaction.timestamp),
       }),
     }
   }

@@ -1,13 +1,13 @@
 import { BlockscoutCeloTransfer } from '../blockscout'
 import { ContractAddresses, Contracts } from '../utils'
-import { TransferCollection } from './TransferCollection'
+import { LegacyTransferCollection } from './LegacyTransferCollection'
 
 const MINTED_TOKEN_ADDRESS = '0x0000000000000000000000000000000000000000'
 
-export class TransfersNavigator {
+export class LegacyTransfersNavigator {
   private contractAddresses: ContractAddresses
   private faucetAddress: string
-  private transferCollection: TransferCollection
+  private transferCollection: LegacyTransferCollection
 
   get length(): number {
     return this.transferCollection.length
@@ -16,7 +16,7 @@ export class TransfersNavigator {
   constructor(
     contractAddresses: ContractAddresses,
     faucetAddress: string,
-    transferCollection: TransferCollection,
+    transferCollection: LegacyTransferCollection,
   ) {
     this.contractAddresses = contractAddresses
     this.faucetAddress = faucetAddress

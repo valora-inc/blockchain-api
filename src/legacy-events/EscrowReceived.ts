@@ -1,28 +1,28 @@
-import { EventBuilder } from '../helpers/EventBuilder'
-import { EventTypes } from '../resolvers'
-import { Transaction } from '../transaction/Transaction'
-import { TransactionType } from '../transaction/TransactionType'
+import { LegacyEventBuilder } from '../helpers/LegacyEventBuilder'
+import { LegacyEventTypes } from '../resolvers'
+import { LegacyTransaction } from '../legacy-transaction/LegacyTransaction'
+import { LegacyTransactionType } from '../legacy-transaction/LegacyTransactionType'
 import { Contracts } from '../utils'
 
-export class EscrowReceived extends TransactionType {
-  matches(transaction: Transaction): boolean {
+export class EscrowReceived extends LegacyTransactionType {
+  matches(transaction: LegacyTransaction): boolean {
     return (
       this.isEscrowReceivedToEOA(transaction) ||
       this.isEscrowReceivedToMTW(transaction)
     )
   }
 
-  getEvent(transaction: Transaction) {
+  getEvent(transaction: LegacyTransaction) {
     const transfer = transaction.transfers.getTransferFrom(Contracts.Escrow)
 
     if (!transfer) {
       throw new Error('Transfer from Escrow not found.')
     }
 
-    return EventBuilder.transferEvent(
+    return LegacyEventBuilder.transferEvent(
       transaction,
       transfer,
-      EventTypes.ESCROW_RECEIVED,
+      LegacyEventTypes.ESCROW_RECEIVED,
       transfer.fromAddressHash,
       transfer.fromAccountHash,
     )
@@ -32,14 +32,14 @@ export class EscrowReceived extends TransactionType {
     return false
   }
 
-  isEscrowReceivedToEOA(transaction: Transaction): boolean {
+  isEscrowReceivedToEOA(transaction: LegacyTransaction): boolean {
     return (
       transaction.transfers.length === 1 &&
       transaction.transfers.containsTransferFrom(Contracts.Escrow)
     )
   }
 
-  isEscrowReceivedToMTW(transaction: Transaction): boolean {
+  isEscrowReceivedToMTW(transaction: LegacyTransaction): boolean {
     const transferToAcccount = transaction.transfers.getTransferFrom(
       Contracts.Escrow,
     )!

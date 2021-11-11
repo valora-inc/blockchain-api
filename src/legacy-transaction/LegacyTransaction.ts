@@ -4,7 +4,7 @@ import { CGLD } from '../currencyConversion/consts'
 import { InputDecoder } from '../helpers/InputDecoder'
 import { FeeType } from '../resolvers'
 import { Contracts } from '../utils'
-import { TransfersNavigator } from './TransfersNavigator'
+import { LegacyTransfersNavigator } from './LegacyTransfersNavigator'
 
 export interface Fee {
   type: FeeType
@@ -12,7 +12,7 @@ export interface Fee {
   currencyCode: string
 }
 
-export class Transaction {
+export class LegacyTransaction {
   get transactionHash(): string {
     return this.blockscoutTx.transactionHash
   }
@@ -29,7 +29,7 @@ export class Transaction {
     return this.input.getTransactionComment()
   }
 
-  get transfers(): TransfersNavigator {
+  get transfers(): LegacyTransfersNavigator {
     return this.transfersNavigator
   }
 
@@ -42,13 +42,13 @@ export class Transaction {
   }
 
   private blockscoutTx: BlockscoutTransferTx
-  private transfersNavigator: TransfersNavigator
+  private transfersNavigator: LegacyTransfersNavigator
   private transactionFees: Fee[] = []
   private inputDecoder: InputDecoder
 
   constructor(
     blockscoutTx: BlockscoutTransferTx,
-    transfersNavigator: TransfersNavigator,
+    transfersNavigator: LegacyTransfersNavigator,
     inputDecoder: InputDecoder,
   ) {
     this.blockscoutTx = blockscoutTx

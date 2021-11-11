@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js'
 import { DataSources } from './apolloServer'
 import { USD } from './currencyConversion/consts'
 
-export enum EventTypes {
+export enum LegacyEventTypes {
   EXCHANGE = 'EXCHANGE',
   RECEIVED = 'RECEIVED',
   SENT = 'SENT',
@@ -25,8 +25,8 @@ export interface Fee {
   amount: MoneyAmount
 }
 
-export interface ExchangeEvent {
-  type: EventTypes
+export interface LegacyExchangeEvent {
+  type: LegacyEventTypes
   timestamp: number
   block: number
   outValue: number
@@ -37,8 +37,8 @@ export interface ExchangeEvent {
   fees: Fee[]
 }
 
-export interface TransferEvent {
-  type: EventTypes
+export interface LegacyTransferEvent {
+  type: LegacyEventTypes
   timestamp: number
   block: number
   value: number
@@ -50,7 +50,7 @@ export interface TransferEvent {
   fees: Fee[]
 }
 
-export type EventInterface = ExchangeEvent | TransferEvent
+export type LegacyEventInterface = LegacyExchangeEvent | LegacyTransferEvent
 
 export interface EventArgs {
   // Query params as defined by Blockscout's API
@@ -179,17 +179,17 @@ export const resolvers = {
     },
   },
   TokenTransaction: {
-    __resolveType(obj: EventInterface, context: any, info: any) {
-      if (obj.type === EventTypes.EXCHANGE) {
+    __resolveType(obj: LegacyEventInterface, context: any, info: any) {
+      if (obj.type === LegacyEventTypes.EXCHANGE) {
         return 'TokenExchange'
       }
       if (
-        obj.type === EventTypes.RECEIVED ||
-        obj.type === EventTypes.ESCROW_RECEIVED ||
-        obj.type === EventTypes.ESCROW_SENT ||
-        obj.type === EventTypes.SENT ||
-        obj.type === EventTypes.FAUCET ||
-        obj.type === EventTypes.VERIFICATION_FEE
+        obj.type === LegacyEventTypes.RECEIVED ||
+        obj.type === LegacyEventTypes.ESCROW_RECEIVED ||
+        obj.type === LegacyEventTypes.ESCROW_SENT ||
+        obj.type === LegacyEventTypes.SENT ||
+        obj.type === LegacyEventTypes.FAUCET ||
+        obj.type === LegacyEventTypes.VERIFICATION_FEE
       ) {
         return 'TokenTransfer'
       }

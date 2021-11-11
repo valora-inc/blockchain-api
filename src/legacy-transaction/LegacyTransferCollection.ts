@@ -2,7 +2,7 @@ import { BlockscoutCeloTransfer } from '../blockscout'
 
 export type TransferFilter = (transfer: BlockscoutCeloTransfer) => boolean
 
-export class TransferCollection {
+export class LegacyTransferCollection {
   private transfers: BlockscoutCeloTransfer[] = []
 
   get length(): number {

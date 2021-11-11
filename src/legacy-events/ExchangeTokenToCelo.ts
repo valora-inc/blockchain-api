@@ -1,10 +1,10 @@
-import { EventBuilder } from '../helpers/EventBuilder'
-import { Transaction } from '../transaction/Transaction'
-import { TransactionType } from '../transaction/TransactionType'
+import { LegacyEventBuilder } from '../helpers/LegacyEventBuilder'
+import { LegacyTransaction } from '../legacy-transaction/LegacyTransaction'
+import { LegacyTransactionType } from '../legacy-transaction/LegacyTransactionType'
 import { Contracts } from '../utils'
 
-export class ExchangeTokenToCelo extends TransactionType {
-  matches(transaction: Transaction): boolean {
+export class ExchangeTokenToCelo extends LegacyTransactionType {
+  matches(transaction: LegacyTransaction): boolean {
     return (
       transaction.transfers.length === 3 &&
       transaction.transfers.containsTransferFrom(Contracts.Reserve) &&
@@ -14,7 +14,7 @@ export class ExchangeTokenToCelo extends TransactionType {
     )
   }
 
-  getEvent(transaction: Transaction) {
+  getEvent(transaction: LegacyTransaction) {
     const inTransfer =
       transaction.transfers.getTransferTo(Contracts.Exchange) ??
       transaction.transfers.getTransferTo(Contracts.ExchangeEUR)
@@ -28,7 +28,7 @@ export class ExchangeTokenToCelo extends TransactionType {
       throw new Error('Transfer from Reserve not found.')
     }
 
-    return EventBuilder.exchangeEvent(
+    return LegacyEventBuilder.exchangeEvent(
       transaction,
       inTransfer,
       outTransfer,

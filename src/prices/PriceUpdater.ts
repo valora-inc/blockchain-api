@@ -1,12 +1,23 @@
 import { Knex } from 'knex'
 import { logger } from '../logger'
 
-import { createNewManager, getConfigForEnv } from '@valora/exchanges'
+import { createNewManager, configs } from '@valora/exchanges'
 
 export async function updatePrices(db: Knex) {
   logger.debug('Updating prices')
 
-  const config = getConfigForEnv(process.env.EXCHANGES_ENV ?? 'test')
+  if (!process.env.EXCHANGES_ENV) {
+    logger.error('EXCHANGES_ENV is missing, skipping prices update')
+    return
+  }
+
+  const config = configs[process.env.EXCHANGES_ENV]
+
+  if (!config) {
+    logger.error(`Couldn't obtain exchanges config, skipping prices update`)
+    return
+  }
+
   const manager = createNewManager(config)
   const cUSDAddress = config.tokenAddresses.cUSD
 

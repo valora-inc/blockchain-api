@@ -11,11 +11,13 @@ const mockDate = 1487076708000
 const tableName = 'historical_token_prices'
 
 jest.mock('@valora/exchanges', () => ({
-  getConfigForEnv: (env: string) => ({
-    tokenAddresses: {
-      cUSD: mockcUSDAddress,
+  configs: {
+    test: {
+      tokenAddresses: {
+        cUSD: 'cUSD',
+      },
     },
-  }),
+  },
   createNewManager: (config: Config) => ({
     calculatecUSDPrices: () => mockCalculatePrices(),
   }),
@@ -24,6 +26,7 @@ jest.mock('@valora/exchanges', () => ({
 describe('PricesUpdater#updatePrices', () => {
   let db: Knex
   let dateNowSpy: any
+  const OLD_ENV = process.env
 
   beforeEach(async () => {
     jest.clearAllMocks()
@@ -41,9 +44,12 @@ describe('PricesUpdater#updatePrices', () => {
   afterEach(async () => {
     await db.destroy()
     dateNowSpy.mockRestore()
+    process.env = OLD_ENV
   })
 
   it('should store token prices', async () => {
+    process.env.EXCHANGES_ENV = 'test'
+
     await updatePrices(db)
 
     expect(await db(tableName)).toHaveLength(3)

@@ -55,7 +55,7 @@ export class BlockscoutAPI extends RESTDataSource {
 
   constructor() {
     super()
-    this.baseURL = BLOCKSCOUT_API
+    this.baseURL = `${BLOCKSCOUT_API}/graphql`
   }
 
   async getRawTokenTransactions(address: string): Promise<Transaction[]> {

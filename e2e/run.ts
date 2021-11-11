@@ -14,7 +14,7 @@ async function main() {
     DEPLOY_ENV: 'e2e',
     FIREBASE_PROJECT_ID: 'e2e',
     EXCHANGE_RATES_API: 'https://apilayer.net/api',
-    BLOCKSCOUT_API: 'https://alfajores-blockscout.celo-testnet.org/graphql',
+    BLOCKSCOUT_API: 'https://alfajores-blockscout.celo-testnet.org',
     FIREBASE_DB: 'https://does.not.matter.com',
     FAUCET_ADDRESS: '0x456f41406B32c45D59E539e4BBA3D7898c3584dA',
     VERIFICATION_REWARDS_ADDRESS: '0xb4fdaf5f3cd313654aa357299ada901b1d2dd3b5',

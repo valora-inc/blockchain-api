@@ -84,6 +84,17 @@ export interface ExchangeRate {
   rate: number
 }
 
+export interface UserTokenBalance {
+  tokenAddress: string
+  balance: string
+  decimals: string
+  symbol: string
+}
+
+export interface UserTokenBalances {
+  balances: UserTokenBalance[]
+}
+
 export interface CurrencyConversionArgs {
   sourceCurrencyCode?: string
   currencyCode: string
@@ -155,6 +166,16 @@ export const resolvers = {
         sourceCurrencyCode: args.sourceCurrencyCode ?? USD,
       })
       return { rate: rate.toNumber() }
+    },
+    userBalances: async (
+      _source: any,
+      args: { address: string },
+      { dataSources }: Context,
+    ): Promise<UserTokenBalances> => {
+      const balances = await dataSources.blockscoutJsonAPI.fetchUserBalances(
+        args.address,
+      )
+      return { balances }
     },
   },
   TokenTransaction: {

@@ -47,7 +47,7 @@
     "prom-client": "^14.0.1",
     "utf8": "^3.0.0",
     "web3": "1.6.0",
-    "web3-eth-abi": "1.6.0"
+    "web3-eth-abi": "1.6.1"
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "^3.3.0",

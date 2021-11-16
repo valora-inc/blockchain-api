@@ -1,4 +1,4 @@
-import { updatePrices } from '../../src/prices/PriceUpdater'
+import { updatePrices } from '../../src/prices/PricesUpdater'
 import { initDatabase } from '../../src/database/db'
 import { Knex } from 'knex'
 import { Config } from '@valora/exchanges'
@@ -39,6 +39,7 @@ describe('PricesUpdater#updatePrices', () => {
     dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => mockDate)
 
     db = await initDatabase()
+    process.env.EXCHANGES_ENV = 'test'
   })
 
   afterEach(async () => {
@@ -48,8 +49,6 @@ describe('PricesUpdater#updatePrices', () => {
   })
 
   it('should store token prices', async () => {
-    process.env.EXCHANGES_ENV = 'test'
-
     await updatePrices(db)
 
     expect(await db(tableName)).toHaveLength(3)

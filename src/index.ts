@@ -7,7 +7,7 @@ import knownAddressesCache from './helpers/KnownAddressesCache'
 import { logger } from './logger'
 import { loadSecret } from '@valora/secrets-loader'
 import { initDatabase } from './database/db'
-import { updatePrices } from './prices/PriceUpdater'
+import { updatePrices } from './prices/PricesUpdater'
 
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 

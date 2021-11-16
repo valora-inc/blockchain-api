@@ -16,17 +16,7 @@ interface ExchangeRateApiResult {
 // ttl in seconds!
 const MIN_TTL = 12 * 3600 // 12 hours
 
-export interface ExchangeRateAPIArgs {
-  sourceCurrencyCode: string,
-  currencyCode: string, 
-  timestamp: number
-}
-
-export interface ExchangeRateAPIInterface {
-  getExchangeRate(arg: ExchangeRateAPIArgs): Promise<BigNumber>
-}
-
-export default class ExchangeRateAPI extends RESTDataSource implements ExchangeRateAPIInterface {
+export default class ExchangeRateAPI extends RESTDataSource {
   exchangeRatesAPIAccessKey: string
 
   constructor({

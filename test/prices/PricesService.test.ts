@@ -1,8 +1,6 @@
 import PricesService from '../../src/prices/PricesService'
 import { initDatabase } from '../../src/database/db'
 import { Knex } from 'knex'
-import { ExchangeRateAPIArgs } from '../../src/currencyConversion/ExchangeRateAPI'
-
 
 const tableName = 'historical_token_prices'
 
@@ -14,7 +12,7 @@ const localCurrency = 'USD'
 const mockGetExchangeRate = jest.fn()
 
 const mockExchangeAPI = {
-    getExchangeRate: (args: ExchangeRateAPIArgs) => mockGetExchangeRate(args)
+  getExchangeRate: (args: any) => mockGetExchangeRate(args),
 }
 
 jest.mock('@valora/exchanges', () => ({
@@ -36,6 +34,7 @@ describe('PricesService', () => {
     jest.clearAllMocks()
     db = await initDatabase()
     process.env.EXCHANGES_ENV = 'test'
+    // @ts-ignore
     priceService = new PricesService(db, mockExchangeAPI)
     mockGetExchangeRate.mockReturnValue(1)
   })
@@ -46,7 +45,6 @@ describe('PricesService', () => {
   })
 
   it('should return expected price', async () => {
-    
     await db(tableName).insert({
       base_token: mockcUSDAddress,
       token: token,
@@ -54,16 +52,16 @@ describe('PricesService', () => {
       at: new Date(mockDate).toISOString(),
     })
     await db(tableName).insert({
-        base_token: mockcUSDAddress,
-        token: token,
-        price: '60000',
-        at: new Date(mockDate + 10000).toISOString(), // 10 seconds after
+      base_token: mockcUSDAddress,
+      token: token,
+      price: '60000',
+      at: new Date(mockDate + 10000).toISOString(), // 10 seconds after
     })
     await db(tableName).insert({
-        base_token: mockcUSDAddress,
-        token: token,
-        price: '62000',
-        at: new Date(mockDate + 20000).toISOString(), // 20 seconds after
+      base_token: mockcUSDAddress,
+      token: token,
+      price: '62000',
+      at: new Date(mockDate + 20000).toISOString(), // 20 seconds after
     })
     await db(tableName).insert({
       base_token: mockcUSDAddress,
@@ -71,7 +69,7 @@ describe('PricesService', () => {
       price: '58000',
       at: new Date(mockDate + 30000).toISOString(), // 30 seconds after
     })
-    
+
     await expectQuery(5000, '62000')
     await expectQuery(7500, '61000')
     await expectQuery(10000, '60000')
@@ -83,20 +81,30 @@ describe('PricesService', () => {
     expect.assertions(1)
     try {
       await expectQuery(5000, '62000')
-    } catch(e) {
-      expect((e as Error)?.message).toEqual(expect.stringContaining("Couldn't find entries in the db to calculate cUSD prices"))
+    } catch (e) {
+      expect((e as Error)?.message).toEqual(
+        expect.stringContaining(
+          "Couldn't find entries in the db to calculate cUSD prices",
+        ),
+      )
     }
   })
 
   async function expectQuery(dateOffset: number, expectedValue: string) {
     const queryDate = new Date(mockDate + dateOffset)
-    const price = await priceService.getTokenToLocalCurrencyPrice(token, localCurrency, queryDate)
+    const price = await priceService.getTokenToLocalCurrencyPrice(
+      token,
+      localCurrency,
+      queryDate,
+    )
     expect(price.toString()).toBe(expectedValue)
 
-    expect(mockGetExchangeRate).toHaveBeenCalledWith(expect.objectContaining({
+    expect(mockGetExchangeRate).toHaveBeenCalledWith(
+      expect.objectContaining({
         sourceCurrencyCode: mockcUSDAddress,
         currencyCode: localCurrency,
-        timestamp: queryDate.getTime()
-    }))
+        timestamp: queryDate.getTime(),
+      }),
+    )
   }
 })

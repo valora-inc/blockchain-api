@@ -18,12 +18,13 @@ export default class PricesService {
   }
 
   /**
-   * It returns an estimated price in given local currency of given token.
+   * It returns an estimated price in given local currency of given token at given date.
    * To do it, it uses this route: token -> cUSD -> localCurrency
    *
    * @param token token address - e.g. '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73'
    * @param localCurrency local currency code - e.g. 'USD'
    * @param date
+   * @throws An error if the price can't be calculated
    */
   async getTokenToLocalCurrencyPrice(
     token: string,
@@ -88,7 +89,7 @@ export default class PricesService {
     const nextTimestamp = new Date(nextPriceRow.at).getTime()
     const nextPrice = new BigNumber(nextPriceRow.price)
 
-    if (nextTimestamp - prevTimestamp === 0) {
+    if (nextTimestamp === prevTimestamp) {
       return prevPrice
     }
 

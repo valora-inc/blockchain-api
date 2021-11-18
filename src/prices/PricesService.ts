@@ -1,21 +1,17 @@
 import BigNumber from 'bignumber.js'
 import { Knex } from 'knex'
+import { HistoricalPriceRow } from '../database/types'
 import ExchangeRateAPI from '../currencyConversion/ExchangeRateAPI'
-import { configs } from '@valora/exchanges'
 import { logger } from '../logger'
 
 const TABLE_NAME = 'historical_token_prices'
 
 export default class PricesService {
-  db: Knex
-  exchangeAPI: ExchangeRateAPI
-  cUSDAddress: string
-
-  constructor(db: Knex, exchangeAPI: ExchangeRateAPI) {
-    this.db = db
-    this.exchangeAPI = exchangeAPI
-    this.cUSDAddress = getcUSDFromConfig()
-  }
+  constructor(
+    private readonly db: Knex,
+    private readonly exchangeAPI: ExchangeRateAPI,
+    private readonly cUSDAddress: string,
+  ) {}
 
   /**
    * It returns an estimated price in given local currency of given token at given date.
@@ -52,23 +48,23 @@ export default class PricesService {
 
   private async getcUSDPrice(token: string, date: Date): Promise<BigNumber> {
     const isoDate = date.toISOString()
-    const prevPriceRow = await this.db(TABLE_NAME)
-      .first()
+    const prevPriceRow = await this.db<HistoricalPriceRow>(TABLE_NAME)
       .where({
         token: token,
         base_token: this.cUSDAddress,
       })
       .andWhere('at', '<=', isoDate)
       .orderBy('at', 'desc')
-
-    const nextPriceRow = await this.db(TABLE_NAME)
       .first()
+
+    const nextPriceRow = await this.db<HistoricalPriceRow>(TABLE_NAME)
       .where({
         token: token,
         base_token: this.cUSDAddress,
       })
       .andWhere('at', '>=', isoDate)
       .orderBy('at', 'asc')
+      .first()
 
     // Should we check if prev_price.at and next_price.at are relative close?
     // Let's say less than 4 hours. And if not failing instead of returning the estimated price?
@@ -81,8 +77,12 @@ export default class PricesService {
     return this.estimatePrice(prevPriceRow, nextPriceRow, date)
   }
 
-  // It returns a linnear estimation of the price using previous and next known prices.
-  private estimatePrice(prevPriceRow: any, nextPriceRow: any, date: Date) {
+  // It returns a linear estimation of the price using previous and next known prices.
+  private estimatePrice(
+    prevPriceRow: HistoricalPriceRow,
+    nextPriceRow: HistoricalPriceRow,
+    date: Date,
+  ) {
     const queryTimestamp = date.getTime()
     const prevTimestamp = new Date(prevPriceRow.at).getTime()
     const prevPrice = new BigNumber(prevPriceRow.price)
@@ -93,11 +93,13 @@ export default class PricesService {
       return prevPrice
     }
 
-    // Linnear estimation
-    return prevPrice
-      .times(nextTimestamp - queryTimestamp)
-      .plus(nextPrice.times(queryTimestamp - prevTimestamp))
-      .dividedBy(nextTimestamp - prevTimestamp)
+    // Linear estimation: https://mathworld.wolfram.com/Two-PointForm.html
+    return prevPrice.plus(
+      nextPrice
+        .minus(prevPrice)
+        .dividedBy(nextTimestamp - prevTimestamp)
+        .times(queryTimestamp - prevTimestamp),
+    )
   }
 
   private async cUSDToLocalCurrency(
@@ -110,20 +112,4 @@ export default class PricesService {
       timestamp: date.getTime(),
     })
   }
-}
-
-function getcUSDFromConfig(): string {
-  if (!process.env.EXCHANGES_ENV) {
-    throw new Error(`EXCHANGES_ENV is missing, can't create PriceService`)
-  }
-
-  const config = configs[process.env.EXCHANGES_ENV]
-
-  if (!config) {
-    throw new Error(
-      `Couldn't obtain exchanges config, can't create PriceService`,
-    )
-  }
-
-  return config.tokenAddresses.cUSD
 }

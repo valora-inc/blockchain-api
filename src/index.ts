@@ -54,8 +54,7 @@ async function parseArgs() {
       demandOption: true,
     })
     .epilogue(
-      'Always specify arguments as environment variables. Not all arguments are ' +
-        'supported as CLI ones yet.',
+      'Always specify arguments as environment variables. Not all arguments are supported as CLI ones yet.',
     ).argv
 
   return argv

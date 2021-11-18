@@ -73,7 +73,7 @@
     "sqlite3": "^5.0.2",
     "ts-jest": "^27.0.7",
     "tsc-watch": "^4.2.3",
-    "typescript": "^4.4.4"
+    "typescript": "^4.5.2"
   },
   "resolutions": {
     "**/cross-fetch": "3.0.4"

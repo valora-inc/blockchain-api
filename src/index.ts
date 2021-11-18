@@ -31,33 +31,32 @@ async function parseArgs() {
     .option('exchange-rates-api-access-key', {
       description: 'API key for exchange-rates-api',
       type: 'string',
-      demandOption: true
+      demandOption: true,
     })
     .option('blockchain-db-host', {
       description: 'Blockchain DB host',
       type: 'string',
-      demandOption: true
+      demandOption: true,
     })
     .option('blockchain-db-database', {
       description: 'Blockchain DB database',
       type: 'string',
-      demandOption: true
+      demandOption: true,
     })
     .option('blockchain-db-user', {
       description: 'Blockchain DB user',
       type: 'string',
-      demandOption: true
+      demandOption: true,
     })
     .option('blockchain-db-pass', {
       description: 'Blockchain DB pass',
       type: 'string',
-      demandOption: true
+      demandOption: true,
     })
     .epilogue(
       'Always specify arguments as environment variables. Not all arguments are ' +
-        'supported as CLI ones yet.'
-    )
-    .argv
+        'supported as CLI ones yet.',
+    ).argv
 
   return argv
 }

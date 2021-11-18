@@ -662,8 +662,8 @@
     bigi "^1.1.0"
     bignumber.js "^9.0.0"
     bip32 "2.0.5"
-    bip39 "git+https://github.com/bitcoinjs/bip39.git#d8ea080a18b40f301d4e2219a2991cd2417e83c2"
-    bls12377js "git+https://github.com/celo-org/bls12377js.git#cb38a4cfb643c778619d79b20ca3e5283a2122a6"
+    bip39 "https://github.com/bitcoinjs/bip39#d8ea080a18b40f301d4e2219a2991cd2417e83c2"
+    bls12377js "https://github.com/celo-org/bls12377js#cb38a4cfb643c778619d79b20ca3e5283a2122a6"
     bn.js "4.11.8"
     buffer-reverse "^1.0.1"
     country-data "^0.0.31"
@@ -3111,7 +3111,6 @@ bip32@2.0.5:
 
 "bip39@git+https://github.com/bitcoinjs/bip39.git#d8ea080a18b40f301d4e2219a2991cd2417e83c2":
   version "3.0.3"
-  uid d8ea080a18b40f301d4e2219a2991cd2417e83c2
   resolved "git+https://github.com/bitcoinjs/bip39.git#d8ea080a18b40f301d4e2219a2991cd2417e83c2"
   dependencies:
     "@types/node" "11.11.6"
@@ -3151,7 +3150,6 @@ block-stream@*:
 
 "bls12377js@git+https://github.com/celo-org/bls12377js.git#cb38a4cfb643c778619d79b20ca3e5283a2122a6":
   version "0.1.0"
-  uid cb38a4cfb643c778619d79b20ca3e5283a2122a6
   resolved "git+https://github.com/celo-org/bls12377js.git#cb38a4cfb643c778619d79b20ca3e5283a2122a6"
   dependencies:
     "@stablelib/blake2xs" "0.10.4"
@@ -14151,6 +14149,19 @@ yargs@^16.1.1, yargs@^16.2.0:
   version "16.2.0"
   resolved "https://registry.npmjs.org/yargs/-/yargs-16.2.0.tgz"
   integrity sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==
+  dependencies:
+    cliui "^7.0.2"
+    escalade "^3.1.1"
+    get-caller-file "^2.0.5"
+    require-directory "^2.1.1"
+    string-width "^4.2.0"
+    y18n "^5.0.5"
+    yargs-parser "^20.2.2"
+
+yargs@^17.2.1:
+  version "17.2.1"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.2.1.tgz#e2c95b9796a0e1f7f3bf4427863b42e0418191ea"
+  integrity sha512-XfR8du6ua4K6uLGm5S6fA+FIJom/MdJcFNVY8geLlp2v8GYbOXD4EB1tPNZsRn4vBzKGMgb5DRZMeWuFc2GO8Q==
   dependencies:
     cliui "^7.0.2"
     escalade "^3.1.1"

@@ -8,6 +8,7 @@ import { logger } from './logger'
 import { loadSecret } from '@valora/secrets-loader'
 import { initDatabase } from './database/db'
 import { updatePrices } from './prices/PricesUpdater'
+import yargs from 'yargs'
 
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
@@ -16,7 +17,7 @@ const GRAPHQL_PATH: string = '/'
 const PORT: number = Number(process.env.PORT) || 8080
 const INTERFACE: string = process.env.INTERFACE || '0.0.0.0'
 
-async function main() {
+async function parseArgs() {
   //
   // Load secrets from Secrets Manager and inject into process.env.
   //
@@ -25,18 +26,42 @@ async function main() {
     Object.assign(process.env, await loadSecret(secretName))
   }
 
-  if (!process.env.EXCHANGE_RATES_API_ACCESS_KEY) {
-    throw new Error('Missing required EXCHANGE_RATES_API_ACCESS_KEY')
-  }
+  const argv = yargs
+    .env('')
+    .option('exchange-rates-api-access-key', {
+      description: 'API key for exchange-rates-api',
+      type: 'string',
+      demandOption: true,
+    })
+    .option('blockchain-db-host', {
+      description: 'Blockchain DB host',
+      type: 'string',
+      demandOption: true,
+    })
+    .option('blockchain-db-database', {
+      description: 'Blockchain DB database',
+      type: 'string',
+      demandOption: true,
+    })
+    .option('blockchain-db-user', {
+      description: 'Blockchain DB user',
+      type: 'string',
+      demandOption: true,
+    })
+    .option('blockchain-db-pass', {
+      description: 'Blockchain DB pass',
+      type: 'string',
+      demandOption: true,
+    })
+    .epilogue(
+      'Always specify arguments as environment variables. Not all arguments are supported as CLI ones yet.',
+    ).argv
 
-  if (
-    !process.env.BLOCKCHAIN_DB_HOST ||
-    !process.env.BLOCKCHAIN_DB_DATABASE ||
-    !process.env.BLOCKCHAIN_DB_USER ||
-    !process.env.BLOCKCHAIN_DB_PASS
-  ) {
-    throw new Error("Blockchain database secrets couldn't be obtained")
-  }
+  return argv
+}
+
+async function main() {
+  const args = await parseArgs()
 
   const db = await initDatabase()
 
@@ -75,7 +100,7 @@ async function main() {
   knownAddressesCache.startListening()
 
   const exchangeRateAPI = new ExchangeRateAPI({
-    exchangeRatesAPIAccessKey: process.env.EXCHANGE_RATES_API_ACCESS_KEY,
+    exchangeRatesAPIAccessKey: args['exchange-rates-api-access-key'],
   })
   const currencyConversionAPI = new CurrencyConversionAPI({ exchangeRateAPI })
   const apolloServer = initApolloServer({ currencyConversionAPI })

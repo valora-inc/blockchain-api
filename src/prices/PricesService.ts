@@ -5,6 +5,7 @@ import ExchangeRateAPI from '../currencyConversion/ExchangeRateAPI'
 import { logger } from '../logger'
 
 const TABLE_NAME = 'historical_token_prices'
+const MAX_TIME_GAP = 1000 * 60 * 60 * 4 // 4 hours
 
 export default class PricesService {
   constructor(
@@ -91,6 +92,13 @@ export default class PricesService {
     const prevPrice = new BigNumber(prevPriceRow.price)
     const nextTimestamp = new Date(nextPriceRow.at).getTime()
     const nextPrice = new BigNumber(nextPriceRow.price)
+
+
+    if (nextTimestamp - prevTimestamp > MAX_TIME_GAP) {
+      throw new Error(
+        `Couldn't obtain an accurate price for ${prevPriceRow.token} at ${date}`,
+      )
+    }
 
     if (nextTimestamp === prevTimestamp) {
       return prevPrice

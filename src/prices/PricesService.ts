@@ -17,18 +17,18 @@ export default class PricesService {
    * It returns an estimated price in given local currency of given token at given date.
    * To do it, it uses this route: token -> cUSD -> localCurrency
    *
-   * @param token token address - e.g. '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73'
+   * @param tokenAddress token address - e.g. '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73'
    * @param localCurrency local currency code - e.g. 'USD'
    * @param date
    * @throws An error if the price can't be calculated
    */
   async getTokenToLocalCurrencyPrice(
-    token: string,
+    tokenAddress: string,
     localCurrency: string,
     date: Date,
   ): Promise<BigNumber> {
     try {
-      const cUSDPrice = await this.getcUSDPrice(token, date)
+      const cUSDPrice = await this.getcUSDPrice(tokenAddress, date)
       const cUSDToLocalCurrencyPrice = await this.cUSDToLocalCurrency(
         localCurrency,
         date,
@@ -37,7 +37,7 @@ export default class PricesService {
     } catch (e) {
       logger.error({
         type: 'ERROR_CALCULATE_LOCAL_CURRENCY_PRICE',
-        token,
+        tokenAddress,
         localCurrency,
         date,
         error: (e as Error)?.message,
@@ -46,11 +46,14 @@ export default class PricesService {
     }
   }
 
-  private async getcUSDPrice(token: string, date: Date): Promise<BigNumber> {
+  private async getcUSDPrice(
+    tokenAddress: string,
+    date: Date,
+  ): Promise<BigNumber> {
     const isoDate = date.toISOString()
     const prevPriceRow = await this.db<HistoricalPriceRow>(TABLE_NAME)
       .where({
-        token: token,
+        token: tokenAddress,
         base_token: this.cUSDAddress,
       })
       .andWhere('at', '<=', isoDate)
@@ -59,7 +62,7 @@ export default class PricesService {
 
     const nextPriceRow = await this.db<HistoricalPriceRow>(TABLE_NAME)
       .where({
-        token: token,
+        token: tokenAddress,
         base_token: this.cUSDAddress,
       })
       .andWhere('at', '>=', isoDate)
@@ -70,7 +73,7 @@ export default class PricesService {
     // Let's say less than 4 hours. And if not failing instead of returning the estimated price?
     if (!prevPriceRow || !nextPriceRow) {
       throw new Error(
-        `Couldn't find entries in the db to calculate cUSD prices for ${token} at ${date}`,
+        `Couldn't find entries in the db to calculate cUSD prices for ${tokenAddress} at ${date}`,
       )
     }
 

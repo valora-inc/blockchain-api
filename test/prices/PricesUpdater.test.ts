@@ -38,7 +38,7 @@ describe('PricesUpdater#updatePrices', () => {
 
     dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => mockDate)
 
-    db = await initDatabase()
+    db = await initDatabase({ client: 'sqlite3' })
   })
 
   afterEach(async () => {

@@ -22,36 +22,34 @@ async function checkAndMigrate(db: Knex) {
   logger.info('Database initialized successfully')
 }
 
-function createInMemoryDatabase(): Knex {
-  logger.info('Connecting on memory database')
-  return knex({
-    client: 'sqlite3',
-    connection: {
-      filename: ':memory:',
-    },
-    useNullAsDefault: true,
-  })
-}
-
-function createDatabaseFromEnvVars(): Knex {
-  logger.info('Connecting database')
-  return knex({
-    client: 'pg',
-    connection: {
-      host: process.env.BLOCKCHAIN_DB_HOST,
-      database: process.env.BLOCKCHAIN_DB_DATABASE,
-      user: process.env.BLOCKCHAIN_DB_USER,
-      password: process.env.BLOCKCHAIN_DB_PASS,
-    },
-  })
-}
-
-export async function initDatabase() {
+export async function initDatabase({
+  client,
+  connection,
+}: {
+  client: string
+  connection?: {
+    host: string
+    database: string
+    user: string
+    password: string
+  }
+}) {
   let db: Knex
-  if (process.env.NODE_ENV === 'test') {
-    db = createInMemoryDatabase()
+  if (client === 'sqlite3') {
+    db = knex({
+      client: 'sqlite3',
+      connection: {
+        filename: ':memory:',
+      },
+      useNullAsDefault: true,
+    })
+  } else if (client === 'pg') {
+    db = knex({
+      client: 'pg',
+      connection,
+    })
   } else {
-    db = createDatabaseFromEnvVars()
+    throw Error(`Unsupported client type: ${client}`)
   }
 
   await checkAndMigrate(db)

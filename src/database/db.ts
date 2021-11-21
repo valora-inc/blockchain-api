@@ -2,16 +2,6 @@ import { Knex, knex } from 'knex'
 import { logger } from '../logger'
 
 async function checkAndMigrate(db: Knex) {
-  try {
-    await db.raw('select 1')
-    logger.info('Database connected successfully')
-  } catch (e) {
-    logger.error(
-      `Database couldn't be initialized successfully ${(e as Error)?.message}`,
-    )
-    throw e
-  }
-
   logger.info('Running migrations')
 
   await db.migrate.latest({

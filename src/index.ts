@@ -9,6 +9,10 @@ import { loadSecret } from '@valora/secrets-loader'
 import { initDatabase } from './database/db'
 import { updatePrices } from './prices/PricesUpdater'
 import yargs from 'yargs'
+import {
+  createNewManager,
+  configs as exchangesConfigs,
+} from '@valora/exchanges'
 
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
@@ -29,6 +33,12 @@ async function parseArgs() {
       description: 'Port to listen on',
       type: 'number',
       default: 8080,
+    })
+    .option('exchanges-config', {
+      description: 'Exchanges config',
+      choices: Object.keys(exchangesConfigs),
+      type: 'string',
+      demandOption: true,
     })
     .option('exchange-rates-api-access-key', {
       description: 'API key for exchange-rates-api',
@@ -79,6 +89,9 @@ async function main() {
     },
   })
 
+  const exchangeRateConfig = exchangesConfigs[args['exchanges-config']]
+  const exchangeRateManager = createNewManager(exchangeRateConfig)
+
   const app = express()
 
   app.use(metricsMiddleware)
@@ -97,7 +110,7 @@ async function main() {
     }
 
     try {
-      await updatePrices(db)
+      await updatePrices({ db, exchangeRateManager, exchangeRateConfig })
       res.status(204).send()
     } catch (error) {
       logger.error(error)

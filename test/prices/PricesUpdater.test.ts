@@ -1,7 +1,10 @@
 import { updatePrices } from '../../src/prices/PricesUpdater'
 import { initDatabase } from '../../src/database/db'
 import { Knex } from 'knex'
-import { Config } from '@valora/exchanges'
+import {
+  ExchangeRateManager,
+  Config as ExchangeRateConfig,
+} from '@valora/exchanges'
 import BigNumber from 'bignumber.js'
 
 const mockCalculatePrices = jest.fn()
@@ -9,19 +12,6 @@ const mockCalculatePrices = jest.fn()
 const mockcUSDAddress = 'cUSD'
 const mockDate = 1487076708000
 const tableName = 'historical_token_prices'
-
-jest.mock('@valora/exchanges', () => ({
-  configs: {
-    test: {
-      tokenAddresses: {
-        cUSD: 'cUSD',
-      },
-    },
-  },
-  createNewManager: (config: Config) => ({
-    calculatecUSDPrices: () => mockCalculatePrices(),
-  }),
-}))
 
 describe('PricesUpdater#updatePrices', () => {
   let db: Knex
@@ -37,7 +27,6 @@ describe('PricesUpdater#updatePrices', () => {
     })
 
     dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => mockDate)
-
     db = await initDatabase({ client: 'sqlite3' })
     process.env.EXCHANGES_ENV = 'test'
   })
@@ -49,7 +38,24 @@ describe('PricesUpdater#updatePrices', () => {
   })
 
   it('should store token prices', async () => {
-    await updatePrices(db)
+    // TODO(sbw): @valora/exchanges exports the ExchangeRateManager class instead
+    // of an interface. The class leaks abstractions, like the private properties.
+    // After we update ExchangeRateManager to an interface we can remove the
+    // as unknown as ExchangeRateManager cast and the mockExchangeRateConfig.
+    const mockExchangeRateManager: ExchangeRateManager = {
+      calculatecUSDPrices: mockCalculatePrices,
+    } as unknown as ExchangeRateManager
+    const mockExchangeRateConfig: ExchangeRateConfig = {
+      tokenAddresses: {
+        cUSD: 'cUSD',
+      },
+    } as unknown as ExchangeRateConfig
+
+    await updatePrices({
+      db,
+      exchangeRateManager: mockExchangeRateManager,
+      exchangeRateConfig: mockExchangeRateConfig,
+    })
 
     expect(await db(tableName)).toHaveLength(3)
 

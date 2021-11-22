@@ -1,10 +1,7 @@
 import { updatePrices } from '../../src/prices/PricesUpdater'
 import { initDatabase } from '../../src/database/db'
 import { Knex } from 'knex'
-import {
-  ExchangeRateManager,
-  Config as ExchangeRateConfig,
-} from '@valora/exchanges'
+import { ExchangeRateManager } from '@valora/exchanges'
 import BigNumber from 'bignumber.js'
 
 const mockCalculatePrices = jest.fn()
@@ -38,23 +35,14 @@ describe('PricesUpdater#updatePrices', () => {
   })
 
   it('should store token prices', async () => {
-    // TODO(sbw): @valora/exchanges exports the ExchangeRateManager class instead
-    // of an interface. The class leaks abstractions, like the private properties.
-    // After we update ExchangeRateManager to an interface we can remove the
-    // as unknown as ExchangeRateManager cast and the mockExchangeRateConfig.
     const mockExchangeRateManager: ExchangeRateManager = {
       calculatecUSDPrices: mockCalculatePrices,
-    } as unknown as ExchangeRateManager
-    const mockExchangeRateConfig: ExchangeRateConfig = {
-      tokenAddresses: {
-        cUSD: 'cUSD',
-      },
-    } as unknown as ExchangeRateConfig
+      cUSDTokenAddress: 'cUSD',
+    }
 
     await updatePrices({
       db,
       exchangeRateManager: mockExchangeRateManager,
-      exchangeRateConfig: mockExchangeRateConfig,
     })
 
     expect(await db(tableName)).toHaveLength(3)

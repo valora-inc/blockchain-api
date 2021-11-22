@@ -110,7 +110,7 @@ async function main() {
     }
 
     try {
-      await updatePrices({ db, exchangeRateManager, exchangeRateConfig })
+      await updatePrices({ db, exchangeRateManager })
       res.status(204).send()
     } catch (error) {
       logger.error(error)

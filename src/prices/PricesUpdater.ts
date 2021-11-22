@@ -1,25 +1,20 @@
 import { Knex } from 'knex'
 import { logger } from '../logger'
 
-import {
-  ExchangeRateManager,
-  Config as ExchangeRateConfig,
-} from '@valora/exchanges'
+import { ExchangeRateManager } from '@valora/exchanges'
 
 export async function updatePrices({
   db,
   exchangeRateManager,
-  exchangeRateConfig,
 }: {
   db: Knex
   exchangeRateManager: ExchangeRateManager
-  exchangeRateConfig: ExchangeRateConfig
 }) {
   logger.debug('Updating prices')
 
   const fetchTime = new Date(Date.now())
   const prices = await exchangeRateManager.calculatecUSDPrices()
-  const cUSDAddress = exchangeRateConfig.tokenAddresses.cUSD
+  const cUSDAddress = exchangeRateManager.cUSDTokenAddress
 
   const batchInsertItems = Object.entries(prices).map(([token, price]) => ({
     token,

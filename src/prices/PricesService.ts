@@ -93,7 +93,6 @@ export default class PricesService {
     const nextTimestamp = new Date(nextPriceRow.at).getTime()
     const nextPrice = new BigNumber(nextPriceRow.price)
 
-
     if (nextTimestamp - prevTimestamp > MAX_TIME_GAP) {
       throw new Error(
         `Couldn't obtain an accurate price for ${prevPriceRow.token} at ${date}`,

@@ -34,8 +34,8 @@ async function parseArgs() {
       type: 'number',
       default: 8080,
     })
-    .option('exchanges-config', {
-      description: 'Exchanges config',
+    .option('exchanges-network-config', {
+      description: 'Blockchain network config for exchanges',
       choices: Object.keys(exchangesConfigs),
       type: 'string',
       demandOption: true,
@@ -89,7 +89,7 @@ async function main() {
     },
   })
 
-  const exchangeRateConfig = exchangesConfigs[args['exchanges-config']]
+  const exchangeRateConfig = exchangesConfigs[args['exchanges-network-config']]
   const exchangeRateManager = createNewManager(exchangeRateConfig)
 
   const app = express()

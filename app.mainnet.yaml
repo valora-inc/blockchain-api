@@ -13,4 +13,4 @@ env_variables:
   WEB3_PROVIDER_URL: 'https://forno.celo.org'
   # Comma separated list of Secrets to load.
   SECRET_NAMES: 'projects/1027349420744/secrets/blockchain-api/versions/latest,projects/1027349420744/secrets/blockchain-api-db/versions/latest'
-  EXCHANGES_CONFIG: 'mainnet'
+  EXCHANGES_NETWORK_CONFIG: 'mainnet'

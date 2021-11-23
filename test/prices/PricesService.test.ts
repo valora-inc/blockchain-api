@@ -23,7 +23,7 @@ describe('PricesService', () => {
 
   beforeEach(async () => {
     jest.clearAllMocks()
-    db = await initDatabase()
+    db = await initDatabase({ client: 'sqlite3' })
     // @ts-ignore
     priceService = new PricesService(db, mockExchangeAPI, mockcUSDAddress)
   })

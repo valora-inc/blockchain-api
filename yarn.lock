@@ -509,11 +509,6 @@
   resolved "https://registry.yarnpkg.com/@celo/base/-/base-1.2.2-beta.tgz#c869adb46375cea96016eea5ae102ff964686e8f"
   integrity sha512-dOwss0fzbpZfSPDbQCcuaTDDLD8iqDOc3TXxRMX6uQ17ykSl9s71EKqcYc4eJgD6vP//sDno/pUbSlnqNiNOIA==
 
-"@celo/base@1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@celo/base/-/base-1.3.1.tgz#41257743d6ced36d2c39d211852a5fac2bbba566"
-  integrity sha512-bR6tNvsqNhVi1gAf2ZS53h8aksG9dyCMt8fwaoZI4EgijMsaldGqa4+jbhxZpov+J8OkP3dKJaraNUz5cUGZcg==
-
 "@celo/base@1.3.3":
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/@celo/base/-/base-1.3.3.tgz#a74ef1b9a63afd831d5f3ec6399bb98cc2fc733a"
@@ -612,39 +607,6 @@
     numeral "^2.0.6"
     web3-eth-abi "1.3.5"
     web3-utils "1.3.5"
-
-"@celo/utils@1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@celo/utils/-/utils-1.3.1.tgz#3611356b7aaedd6d298d224754e82086ffd26d87"
-  integrity sha512-KiMPOZQkxYZ1lvInEILHFbjzar19MaTIpL0gWjgmkh61iyaKI61yn7vL3XHC6HbZgxaywzU9gky8FtBezYG2Lw==
-  dependencies:
-    "@celo/base" "1.3.1"
-    "@types/country-data" "^0.0.0"
-    "@types/elliptic" "^6.4.9"
-    "@types/ethereumjs-util" "^5.2.0"
-    "@types/google-libphonenumber" "^7.4.17"
-    "@types/lodash" "^4.14.170"
-    "@types/node" "^10.12.18"
-    "@types/randombytes" "^2.0.0"
-    bigi "^1.1.0"
-    bignumber.js "^9.0.0"
-    bip32 "2.0.5"
-    bip39 "https://github.com/bitcoinjs/bip39#d8ea080a18b40f301d4e2219a2991cd2417e83c2"
-    bls12377js "https://github.com/celo-org/bls12377js#cb38a4cfb643c778619d79b20ca3e5283a2122a6"
-    bn.js "4.11.8"
-    buffer-reverse "^1.0.1"
-    country-data "^0.0.31"
-    crypto-js "^3.1.9-1"
-    elliptic "^6.5.4"
-    ethereumjs-util "^5.2.0"
-    fp-ts "2.1.1"
-    google-libphonenumber "^3.2.15"
-    io-ts "2.0.1"
-    keccak256 "^1.0.0"
-    lodash "^4.17.21"
-    numeral "^2.0.6"
-    web3-eth-abi "1.3.6"
-    web3-utils "1.3.6"
 
 "@celo/utils@1.3.3":
   version "1.3.3"
@@ -1900,15 +1862,15 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@^27.0.2":
-  version "27.0.2"
-  resolved "https://registry.npmjs.org/@types/jest/-/jest-27.0.2.tgz"
-  integrity sha512-4dRxkS/AFX0c5XW6IPMNOydLn2tEhNhJV7DnYK+0bjoJZ+QTmfucBlihX7aoEsh/ocYtkLC73UbnBXBXIxsULA==
+"@types/jest@^27.0.3":
+  version "27.0.3"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-27.0.3.tgz#0cf9dfe9009e467f70a342f0f94ead19842a783a"
+  integrity sha512-cmmwv9t7gBYt7hNKH5Spu7Kuu/DotGa+Ff+JGRKZ4db5eh8PnKS4LuebJ3YLUoyOyIHraTGyULn23YtEAm0VSg==
   dependencies:
     jest-diff "^27.0.0"
     pretty-format "^27.0.0"
 
-"@types/json-schema@^7.0.6", "@types/json-schema@^7.0.7", "@types/json-schema@^7.0.9":
+"@types/json-schema@^7.0.6", "@types/json-schema@^7.0.9":
   version "7.0.9"
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.9.tgz"
   integrity sha512-qcUXuemtEu+E5wZSJHNxUXeCZhAfXKQ41D+duX+VYPde7xyEVZci+/oXKJL13tnRs9lR2pr4fod59GT6/X1/yQ==
@@ -2039,20 +2001,6 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@typescript-eslint/eslint-plugin@^4.32.0":
-  version "4.33.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-4.33.0.tgz#c24dc7c8069c7706bc40d99f6fa87edcb2005276"
-  integrity sha512-aINiAxGVdOl1eJyVjaWn/YcVAq4Gi/Yo35qHGCnqbWVz61g39D0h23veY/MA0rFFGfxK7TySg2uwDeNv+JgVpg==
-  dependencies:
-    "@typescript-eslint/experimental-utils" "4.33.0"
-    "@typescript-eslint/scope-manager" "4.33.0"
-    debug "^4.3.1"
-    functional-red-black-tree "^1.0.1"
-    ignore "^5.1.8"
-    regexpp "^3.1.0"
-    semver "^7.3.5"
-    tsutils "^3.21.0"
-
 "@typescript-eslint/eslint-plugin@^5.4.0":
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.4.0.tgz#05e711a2e7b68342661fde61bccbd1531c19521a"
@@ -2067,18 +2015,6 @@
     semver "^7.3.5"
     tsutils "^3.21.0"
 
-"@typescript-eslint/experimental-utils@4.33.0":
-  version "4.33.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-4.33.0.tgz#6f2a786a4209fa2222989e9380b5331b2810f7fd"
-  integrity sha512-zeQjOoES5JFjTnAhI5QY7ZviczMzDptls15GFsI6jyUOq0kOf9+WonkhtlIhh0RgHRnqj5gdNxW5j1EvAyYg6Q==
-  dependencies:
-    "@types/json-schema" "^7.0.7"
-    "@typescript-eslint/scope-manager" "4.33.0"
-    "@typescript-eslint/types" "4.33.0"
-    "@typescript-eslint/typescript-estree" "4.33.0"
-    eslint-scope "^5.1.1"
-    eslint-utils "^3.0.0"
-
 "@typescript-eslint/experimental-utils@5.4.0":
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-5.4.0.tgz#238a7418d2da3b24874ba35385eb21cc61d2a65e"
@@ -2091,7 +2027,7 @@
     eslint-scope "^5.1.1"
     eslint-utils "^3.0.0"
 
-"@typescript-eslint/parser@^4.25.0", "@typescript-eslint/parser@^4.33.0":
+"@typescript-eslint/parser@^4.25.0":
   version "4.33.0"
   resolved "https://registry.npmjs.org/@typescript-eslint/parser/-/parser-4.33.0.tgz"
   integrity sha512-ZohdsbXadjGBSK0/r+d87X0SBmKzOq4/S5nzK6SBgJspFo9/CUDJ7hjayuze+JK7CZQLDMroqytp7pOcFKTxZA==
@@ -2180,25 +2116,14 @@
   dependencies:
     "@typescript-eslint/parser" "^4.25.0"
 
-"@valora/exchanges@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@valora/exchanges/-/exchanges-1.0.6.tgz#f340a0755cbaf73ff1391468a07ad2434ed48005"
-  integrity sha512-Nf89dIphsbqc29y4ooSAT3vgEsntvPKapGT5VE3i0sO5d/JzVs3/FDTo9iF7U+XCxBWptrkTNraAbVkcTvhrSQ==
+"@valora/exchanges@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@valora/exchanges/-/exchanges-2.0.0.tgz#c9da4fc98d1dc17adc65c7c08c871733c2bd7f00"
+  integrity sha512-qwPSM6Wejm8O0vJiw/XVjQcD5iCHsRlFEdy+1gBbwROuT1QF5tp4acJ1FO/hPDFN8UMR4X4JOtyQjLf6L6atZA==
   dependencies:
     "@celo/contractkit" "1.2.2-beta"
-    "@types/jest" "^27.0.2"
-    "@typescript-eslint/eslint-plugin" "^4.32.0"
-    "@typescript-eslint/parser" "^4.33.0"
-    "@valora/eslint-config-typescript" "^0.0.1"
     bignumber.js "^9.0.0"
-    eslint "^7.32.0"
-    eslint-plugin-import "^2.24.2"
-    eslint-plugin-react "^7.26.0"
-    eslint-plugin-react-hooks "^4.2.0"
-    eslint-plugin-react-native "^3.11.0"
-    jest "^27.3.1"
     tiny-async-pool "^1.2.0"
-    ts-jest "^27.0.7"
 
 "@valora/prettier-config@^0.0.1":
   version "0.0.1"
@@ -3109,15 +3034,6 @@ bip32@2.0.5:
     typeforce "^1.11.5"
     wif "^2.0.6"
 
-"bip39@git+https://github.com/bitcoinjs/bip39.git#d8ea080a18b40f301d4e2219a2991cd2417e83c2":
-  version "3.0.3"
-  resolved "git+https://github.com/bitcoinjs/bip39.git#d8ea080a18b40f301d4e2219a2991cd2417e83c2"
-  dependencies:
-    "@types/node" "11.11.6"
-    create-hash "^1.1.0"
-    pbkdf2 "^3.0.9"
-    randombytes "^2.0.1"
-
 "bip39@https://github.com/bitcoinjs/bip39#d8ea080a18b40f301d4e2219a2991cd2417e83c2":
   version "3.0.3"
   resolved "https://github.com/bitcoinjs/bip39#d8ea080a18b40f301d4e2219a2991cd2417e83c2"
@@ -3147,18 +3063,6 @@ block-stream@*:
   integrity sha1-E+v+d4oDIFz+A3UUgeu0szAMEmo=
   dependencies:
     inherits "~2.0.0"
-
-"bls12377js@git+https://github.com/celo-org/bls12377js.git#cb38a4cfb643c778619d79b20ca3e5283a2122a6":
-  version "0.1.0"
-  resolved "git+https://github.com/celo-org/bls12377js.git#cb38a4cfb643c778619d79b20ca3e5283a2122a6"
-  dependencies:
-    "@stablelib/blake2xs" "0.10.4"
-    "@types/node" "^12.11.7"
-    big-integer "^1.6.44"
-    chai "^4.2.0"
-    mocha "^6.2.2"
-    ts-node "^8.4.1"
-    typescript "^3.6.4"
 
 "bls12377js@https://github.com/celo-org/bls12377js#cb38a4cfb643c778619d79b20ca3e5283a2122a6":
   version "0.1.0"
@@ -3856,12 +3760,13 @@ cli-spinners@^2.0.0:
   resolved "https://registry.npmjs.org/cli-spinners/-/cli-spinners-2.6.1.tgz"
   integrity sha512-x/5fWmGMnbKQAaNwN+UZlV79qBLM9JFnJuJ03gIi5whrob0xV0ofNVHy9DhwGdsMJQc2OKv0oGmLzvaqvAVv+g==
 
-cli-table@^0.3.1:
-  version "0.3.6"
-  resolved "https://registry.yarnpkg.com/cli-table/-/cli-table-0.3.6.tgz#e9d6aa859c7fe636981fd3787378c2a20bce92fc"
-  integrity sha512-ZkNZbnZjKERTY5NwC2SeMeLeifSPq/pubeRoTpdr3WchLlnZg6hEgvHkK5zL7KNFdd9PmHN8lxrENUwI3cE8vQ==
+cli-table@^0.3.1, cli-table@^0.3.8:
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/cli-table/-/cli-table-0.3.8.tgz#d3629cbf893459a8ad99671554e702a1c6d48a01"
+  integrity sha512-5IO15fJRzgM+hHZjvQlqD6UPRuVGWR4Ny5ZzaM5VJxJEQqSIEVyVh9dMAUN6CBAVfMc4/6CFEzbhnRftLRCyug==
   dependencies:
     colors "1.0.3"
+    strip-ansi "^6.0.1"
 
 cli-truncate@^1.1.0:
   version "1.1.0"
@@ -5089,7 +4994,7 @@ eslint-module-utils@^2.7.1:
     find-up "^2.1.0"
     pkg-dir "^2.0.0"
 
-eslint-plugin-import@^2.24.2, eslint-plugin-import@^2.25.3:
+eslint-plugin-import@^2.25.3:
   version "2.25.3"
   resolved "https://registry.yarnpkg.com/eslint-plugin-import/-/eslint-plugin-import-2.25.3.tgz#a554b5f66e08fb4f6dc99221866e57cfff824766"
   integrity sha512-RzAVbby+72IB3iOEL8clzPLzL3wpDrlwjsTBAQXgyp5SeTqqY+0bFubwuo+y/HLhNZcXV4XqTBO4LGsfyHIDXg==
@@ -5108,7 +5013,7 @@ eslint-plugin-import@^2.24.2, eslint-plugin-import@^2.25.3:
     resolve "^1.20.0"
     tsconfig-paths "^3.11.0"
 
-eslint-plugin-react-hooks@^4.2.0, eslint-plugin-react-hooks@^4.3.0:
+eslint-plugin-react-hooks@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.3.0.tgz#318dbf312e06fab1c835a4abef00121751ac1172"
   integrity sha512-XslZy0LnMn+84NEG9jSGR6eGqaZB3133L8xewQo3fQagbQuGt7a63gf+P1NGKZavEYEC3UXaWEAA/AqDkuN6xA==
@@ -5126,10 +5031,10 @@ eslint-plugin-react-native@^3.11.0:
     "@babel/traverse" "^7.7.4"
     eslint-plugin-react-native-globals "^0.1.1"
 
-eslint-plugin-react@^7.26.0, eslint-plugin-react@^7.27.0:
-  version "7.27.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.27.0.tgz#f952c76517a3915b81c7788b220b2b4c96703124"
-  integrity sha512-0Ut+CkzpppgFtoIhdzi2LpdpxxBvgFf99eFqWxJnUrO7mMe0eOiNpou6rvNYeVVV6lWZvTah0BFne7k5xHjARg==
+eslint-plugin-react@^7.27.1:
+  version "7.27.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.27.1.tgz#469202442506616f77a854d91babaae1ec174b45"
+  integrity sha512-meyunDjMMYeWr/4EBLTV1op3iSG3mjT/pz5gti38UzfM4OPpNc2m0t2xvKCOMU5D6FSdd34BIMFOvQbW+i8GAA==
   dependencies:
     array-includes "^3.1.4"
     array.prototype.flatmap "^1.2.5"
@@ -5858,10 +5763,10 @@ firebase-admin@^10.0.0:
     "@google-cloud/firestore" "^4.5.0"
     "@google-cloud/storage" "^5.3.0"
 
-firebase-tools@^9.22.0:
-  version "9.22.0"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-9.22.0.tgz#346af3183094d3b72c2e42f8f043a7035bbff9d8"
-  integrity sha512-RVPrINZOe68XcqKIi81+Jdtb24qKKc4oifBDlwPOqahShjrCX1GsaaRGSQUvh3yl3X52SjJ/sc3AYCaD9qqH0g==
+firebase-tools@^9.23.0:
+  version "9.23.0"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-9.23.0.tgz#d69efa48b075fb34b496f98b628c4285ba84e856"
+  integrity sha512-m5Yj8EBk6kyLktSV0qgvjjjjxZpp6p/ujDH5c6wQpq3dcH3LquK9D4gjmz7XJtfd7F5ww0XkjWsXra5mHcg5Iw==
   dependencies:
     "@google-cloud/pubsub" "^2.7.0"
     "@types/archiver" "^5.1.0"
@@ -5873,7 +5778,7 @@ firebase-tools@^9.22.0:
     chokidar "^3.0.2"
     cjson "^0.3.1"
     cli-color "^1.2.0"
-    cli-table "^0.3.1"
+    cli-table "^0.3.8"
     commander "^4.0.1"
     configstore "^5.0.1"
     cors "^2.8.5"
@@ -5917,7 +5822,7 @@ firebase-tools@^9.22.0:
     universal-analytics "^0.4.16"
     unzipper "^0.10.10"
     update-notifier "^5.1.0"
-    uuid "^3.0.0"
+    uuid "^8.3.2"
     winston "^3.0.0"
     winston-transport "^4.4.0"
     ws "^7.2.3"
@@ -7734,17 +7639,7 @@ jest-config@^27.3.1:
     micromatch "^4.0.4"
     pretty-format "^27.3.1"
 
-jest-diff@^27.0.0:
-  version "27.3.0"
-  resolved "https://registry.npmjs.org/jest-diff/-/jest-diff-27.3.0.tgz"
-  integrity sha512-Nl2rE58B2ye+RvPcU4hN+6wBCHxX7aWz6RMTMFxe9jAg8ZueMj5QQ+T/nmHRutbBc5BEjrbbEWOrRzp9rUEsYA==
-  dependencies:
-    chalk "^4.0.0"
-    diff-sequences "^27.0.6"
-    jest-get-type "^27.0.6"
-    pretty-format "^27.3.0"
-
-jest-diff@^27.3.1:
+jest-diff@^27.0.0, jest-diff@^27.3.1:
   version "27.3.1"
   resolved "https://registry.yarnpkg.com/jest-diff/-/jest-diff-27.3.1.tgz#d2775fea15411f5f5aeda2a5e02c2f36440f6d55"
   integrity sha512-PCeuAH4AWUo2O5+ksW4pL9v5xJAcIKPUPfIhZBcG1RKv/0+dvaWTQK1Nrau8d67dp65fOqbeMdoil+6PedyEPQ==
@@ -7804,11 +7699,6 @@ jest-fetch-mock@^3.0.3:
   dependencies:
     cross-fetch "^3.0.4"
     promise-polyfill "^8.1.3"
-
-jest-get-type@^27.0.6:
-  version "27.0.6"
-  resolved "https://registry.npmjs.org/jest-get-type/-/jest-get-type-27.0.6.tgz"
-  integrity sha512-XTkK5exIeUbbveehcSR8w0bhH+c0yloW/Wpl+9vZrjzztCPWrxhHwkIFpZzCt71oRBsgxmuUfxEqOYoZI2macg==
 
 jest-get-type@^27.3.1:
   version "27.3.1"
@@ -9082,12 +8972,7 @@ mime@1.6.0, mime@^1.4.1:
   resolved "https://registry.npmjs.org/mime/-/mime-1.6.0.tgz"
   integrity sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==
 
-mime@^2.2.0:
-  version "2.5.2"
-  resolved "https://registry.npmjs.org/mime/-/mime-2.5.2.tgz"
-  integrity sha512-tqkh47FzKeCPD2PUiPB6pkbMzsCasjxAfC62/Wap5qrUWcb+sFasXUC5I3gYM5iBM8v/Qpn4UK0x+j0iHyFPDg==
-
-mime@^2.5.2:
+mime@^2.2.0, mime@^2.5.2:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/mime/-/mime-2.6.0.tgz#a2a682a95cd4d0cb1d6257e28f83da7e35800367"
   integrity sha512-USPkMeET31rOMiarsBNIHZKLGgvKc/LrjofAnBlOttf5ajRvqiRA8QsenbcooctK6d6Ts6aqZXBA+XbkKthiQg==
@@ -10481,17 +10366,7 @@ prettier@^2.4.1:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.4.1.tgz#671e11c89c14a4cfc876ce564106c4a6726c9f5c"
   integrity sha512-9fbDAXSBcc6Bs1mZrDYb3XKzDLm4EXXL9sC1LqKP5rZkT6KRr/rf9amVUcODVXgguK/isJz0d0hP72WeaKWsvA==
 
-pretty-format@^27.0.0, pretty-format@^27.3.0:
-  version "27.3.0"
-  resolved "https://registry.npmjs.org/pretty-format/-/pretty-format-27.3.0.tgz"
-  integrity sha512-Nkdd0xmxZdjCe6GoJomHnrLcCYGYzZKI/fRnUX0sCwDai2mmCHJfC9Ecx33lYgaxAFS/pJCAqhfxmWlm1wNVag==
-  dependencies:
-    "@jest/types" "^27.2.5"
-    ansi-regex "^5.0.1"
-    ansi-styles "^5.0.0"
-    react-is "^17.0.1"
-
-pretty-format@^27.3.1:
+pretty-format@^27.0.0, pretty-format@^27.3.1:
   version "27.3.1"
   resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-27.3.1.tgz#7e9486365ccdd4a502061fa761d3ab9ca1b78df5"
   integrity sha512-DR/c+pvFc52nLimLROYjnXPtolawm+uWDxr4FjuLDLUn+ktWnSN851KoHwHzzqq6rfCOjkzN8FLgDrSub6UDuA==
@@ -12942,7 +12817,7 @@ uuid@^3.0.0, uuid@^3.3.2:
   resolved "https://registry.npmjs.org/uuid/-/uuid-3.4.0.tgz"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
-uuid@^8.0.0:
+uuid@^8.0.0, uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==

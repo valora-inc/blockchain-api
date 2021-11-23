@@ -14,9 +14,6 @@ const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
 const GRAPHQL_PATH: string = '/'
 
-const PORT: number = Number(process.env.PORT) || 8080
-const INTERFACE: string = process.env.INTERFACE || '0.0.0.0'
-
 async function parseArgs() {
   //
   // Load secrets from Secrets Manager and inject into process.env.
@@ -28,27 +25,36 @@ async function parseArgs() {
 
   const argv = yargs
     .env('')
+    .option('port', {
+      description: 'Port to listen on',
+      type: 'number',
+      default: 8080,
+    })
     .option('exchange-rates-api-access-key', {
       description: 'API key for exchange-rates-api',
       type: 'string',
       demandOption: true,
     })
     .option('blockchain-db-host', {
+      group: 'Blockchain DB:',
       description: 'Blockchain DB host',
       type: 'string',
       demandOption: true,
     })
     .option('blockchain-db-database', {
+      group: 'Blockchain DB:',
       description: 'Blockchain DB database',
       type: 'string',
       demandOption: true,
     })
     .option('blockchain-db-user', {
+      group: 'Blockchain DB:',
       description: 'Blockchain DB user',
       type: 'string',
       demandOption: true,
     })
     .option('blockchain-db-pass', {
+      group: 'Blockchain DB:',
       description: 'Blockchain DB pass',
       type: 'string',
       demandOption: true,
@@ -63,7 +69,15 @@ async function parseArgs() {
 async function main() {
   const args = await parseArgs()
 
-  const db = await initDatabase()
+  const db = await initDatabase({
+    client: 'pg',
+    connection: {
+      host: args['blockchain-db-host'],
+      database: args['blockchain-db-database'],
+      user: args['blockchain-db-user'],
+      password: args['blockchain-db-pass'],
+    },
+  })
 
   const app = express()
 
@@ -107,11 +121,9 @@ async function main() {
   await apolloServer.start()
   apolloServer.applyMiddleware({ app, path: GRAPHQL_PATH })
 
-  app.listen(PORT, INTERFACE, () => {
-    logger.info(
-      `🚀 GraphQL accessible @ http://${INTERFACE}:${PORT}${apolloServer.graphqlPath}`,
-    )
-    logger.info('[Celo] Starting Server')
+  app.listen(args.port, () => {
+    logger.info(`Listening on port ${args.port}`)
+    logger.info(`GraphQL path ${apolloServer.graphqlPath}`)
   })
 }
 

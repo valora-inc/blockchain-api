@@ -102,8 +102,9 @@ export class BlockscoutAPI extends RESTDataSource {
 
     const transactions = response.data.transferTxs.edges.map(
       ({ node }: any) => {
-        const { celoTransfer, ...partialTransferTx } = node
-        const celoTransfers = node.celoTransfer.edges.map(
+        const newNode = this.mapNewTokensToOldTokens(node)
+        const { celoTransfer, ...partialTransferTx } = newNode
+        const celoTransfers = newNode.celoTransfer.edges.map(
           (edge: any) => edge.node,
         )
 
@@ -130,6 +131,29 @@ export class BlockscoutAPI extends RESTDataSource {
     const t1 = performance.now()
     metrics.setRawTokenDuration(t1 - t0)
     return transactions
+  }
+
+  /**
+   * It maps all new 'CELO' tokens to 'cGLD' to support backward compatibility
+   */
+  private mapNewTokensToOldTokens(node: any) {
+    return {
+      ...node,
+      feeToken: this.mapToOldTokenString(node.feeToken),
+      celoTransfer: {
+        edges: node.celoTransfer.edges.map((edge: any) => {
+          return { node: this.mapToOldCeloTransferNode(edge.node) }
+        }),
+      },
+    }
+  }
+
+  private mapToOldCeloTransferNode(node: any) {
+    return { ...node, token: this.mapToOldTokenString(node.token) }
+  }
+
+  private mapToOldTokenString(token: string) {
+    return token === 'CELO' ? CGLD : token
   }
 
   async ensureContractAddresses(): Promise<ContractAddresses> {

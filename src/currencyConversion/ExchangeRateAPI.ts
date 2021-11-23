@@ -1,5 +1,6 @@
 import { RESTDataSource } from 'apollo-datasource-rest'
 import BigNumber from 'bignumber.js'
+import { logger } from '../logger'
 import { EXCHANGE_RATES_API } from '../config'
 import { metrics } from '../metrics'
 import { CurrencyConversionArgs } from '../resolvers'
@@ -33,19 +34,30 @@ export default class ExchangeRateAPI extends RESTDataSource {
     sourceCurrencyCode,
     currencyCode,
     timestamp,
-  }: CurrencyConversionArgs): Promise<BigNumber> {
+  }: CurrencyConversionArgs): Promise<BigNumber | undefined> {
     if (!currencyCode) {
       throw new Error('No currency code specified')
     }
 
-    const date = timestamp ? new Date(timestamp) : new Date()
-    const fetchedRate = await this.queryExchangeRate(
-      sourceCurrencyCode || USD,
-      currencyCode,
-      date,
-    )
+    try {
+      const date = timestamp ? new Date(timestamp) : new Date()
+      const fetchedRate = await this.queryExchangeRate(
+        sourceCurrencyCode || USD,
+        currencyCode,
+        date,
+      )
 
-    return new BigNumber(fetchedRate)
+      return new BigNumber(fetchedRate)
+    } catch (error) {
+      logger.error({
+        type: 'ERROR_FETCHING_EXCHANGE_RATE',
+        error: (error as Error)?.message,
+        sourceCurrencyCode,
+        currencyCode,
+        timestamp,
+      })
+      return undefined
+    }
   }
 
   private async queryExchangeRate(

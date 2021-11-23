@@ -34,6 +34,9 @@ export default class PricesService {
         localCurrency,
         date,
       )
+      if (!cUSDToLocalCurrencyPrice) {
+        throw new Error('Failed to calculate local currency price')
+      }
       return cUSDPrice.times(cUSDToLocalCurrencyPrice)
     } catch (e) {
       logger.error({
@@ -115,7 +118,7 @@ export default class PricesService {
   private async cUSDToLocalCurrency(
     localCurrency: string,
     date: Date,
-  ): Promise<BigNumber> {
+  ): Promise<BigNumber | undefined> {
     return await this.exchangeAPI.getExchangeRate({
       sourceCurrencyCode: this.cUSDAddress,
       currencyCode: localCurrency,

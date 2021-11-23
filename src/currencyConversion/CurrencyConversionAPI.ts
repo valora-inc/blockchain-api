@@ -34,7 +34,7 @@ export default class CurrencyConversionAPI<TContext = any> extends DataSource {
     currencyCode,
     timestamp,
     impliedExchangeRates,
-  }: CurrencyConversionArgs): Promise<BigNumber> {
+  }: CurrencyConversionArgs): Promise<BigNumber | null> {
     const fromCode = sourceCurrencyCode!
     const toCode = currencyCode
 
@@ -54,9 +54,13 @@ export default class CurrencyConversionAPI<TContext = any> extends DataSource {
     }
 
     const rates = await Promise.all(ratesPromises)
+    const undefinedRateIndex = rates.findIndex(rate => !rate)
+    if (undefinedRateIndex >= 0) {
+      return null
+    }
 
     // Multiply all rates
-    return rates.reduce((acc, rate) => acc.multipliedBy(rate), new BigNumber(1))
+    return rates.reduce<BigNumber>((acc, rate) => acc.multipliedBy(rate!), new BigNumber(1))
   }
 
   // Get conversion steps given the data we have today
@@ -125,7 +129,7 @@ export default class CurrencyConversionAPI<TContext = any> extends DataSource {
     toCode: string,
     timestamp?: number,
     impliedExchangeRates?: MoneyAmount['impliedExchangeRates'],
-  ): BigNumber | Promise<BigNumber> {
+  ): BigNumber | Promise<BigNumber | undefined> {
     const pair = `${fromCode}/${toCode}`
     if (impliedExchangeRates && impliedExchangeRates[pair]) {
       return new BigNumber(impliedExchangeRates[pair])

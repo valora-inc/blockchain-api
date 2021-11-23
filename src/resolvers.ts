@@ -165,6 +165,9 @@ export const resolvers = {
         // released and most users update.
         sourceCurrencyCode: args.sourceCurrencyCode ?? USD,
       })
+      if (!rate) {
+        return null
+      }
       return { rate: rate.toNumber() }
     },
     userBalances: async (
@@ -209,10 +212,13 @@ export const resolvers = {
         timestamp: moneyAmount.timestamp,
         impliedExchangeRates: moneyAmount.impliedExchangeRates,
       })
+      if (!rate) {
+        return null
+      }
       return {
         value: new BigNumber(moneyAmount.value).multipliedBy(rate).toString(),
         currencyCode: localCurrencyCode || 'USD',
-        exchangeRate: rate.toString(),
+        exchangeRate: rate?.toString(),
       }
     },
   },

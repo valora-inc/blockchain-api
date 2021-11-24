@@ -24,6 +24,7 @@ async function main() {
     BLOCKCHAIN_DB_USER: 'postgres',
     BLOCKCHAIN_DB_DATABASE: 'blockchain-api',
     BLOCKCHAIN_DB_PASS: 'pass',
+    EXCHANGES_NETWORK_CONFIG: 'alfajores',
   }
 
   const subprocess: ChildProcess = spawn('node', ['dist/index.js'], {

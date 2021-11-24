@@ -7,16 +7,18 @@ import knownAddressesCache from './helpers/KnownAddressesCache'
 import { logger } from './logger'
 import { loadSecret } from '@valora/secrets-loader'
 import { initDatabase } from './database/db'
-import { updatePrices } from './cron'
+import { updatePrices } from './prices/PricesUpdater'
+import yargs from 'yargs'
+import {
+  createNewManager,
+  configs as exchangesConfigs,
+} from '@valora/exchanges'
 
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
 const GRAPHQL_PATH: string = '/'
 
-const PORT: number = Number(process.env.PORT) || 8080
-const INTERFACE: string = process.env.INTERFACE || '0.0.0.0'
-
-async function main() {
+async function parseArgs() {
   //
   // Load secrets from Secrets Manager and inject into process.env.
   //
@@ -25,25 +27,70 @@ async function main() {
     Object.assign(process.env, await loadSecret(secretName))
   }
 
-  if (!process.env.EXCHANGE_RATES_API_ACCESS_KEY) {
-    throw new Error('Missing required EXCHANGE_RATES_API_ACCESS_KEY')
-  }
-
-  if (
-    !process.env.BLOCKCHAIN_DB_HOST ||
-    !process.env.BLOCKCHAIN_DB_DATABASE ||
-    !process.env.BLOCKCHAIN_DB_USER ||
-    !process.env.BLOCKCHAIN_DB_PASS
-  ) {
-    throw new Error("Blockchain database secrets couldn't be obtained")
-  } else {
-    await initDatabase({
-      host: process.env.BLOCKCHAIN_DB_HOST,
-      database: process.env.BLOCKCHAIN_DB_DATABASE,
-      user: process.env.BLOCKCHAIN_DB_USER,
-      password: process.env.BLOCKCHAIN_DB_PASS,
+  const argv = yargs
+    .env('')
+    .option('port', {
+      description: 'Port to listen on',
+      type: 'number',
+      default: 8080,
     })
-  }
+    .option('exchanges-network-config', {
+      description: 'Blockchain network config for exchanges',
+      choices: Object.keys(exchangesConfigs),
+      type: 'string',
+      demandOption: true,
+    })
+    .option('exchange-rates-api-access-key', {
+      description: 'API key for exchange-rates-api',
+      type: 'string',
+      demandOption: true,
+    })
+    .option('blockchain-db-host', {
+      group: 'Blockchain DB:',
+      description: 'Blockchain DB host',
+      type: 'string',
+      demandOption: true,
+    })
+    .option('blockchain-db-database', {
+      group: 'Blockchain DB:',
+      description: 'Blockchain DB database',
+      type: 'string',
+      demandOption: true,
+    })
+    .option('blockchain-db-user', {
+      group: 'Blockchain DB:',
+      description: 'Blockchain DB user',
+      type: 'string',
+      demandOption: true,
+    })
+    .option('blockchain-db-pass', {
+      group: 'Blockchain DB:',
+      description: 'Blockchain DB pass',
+      type: 'string',
+      demandOption: true,
+    })
+    .epilogue(
+      'Always specify arguments as environment variables. Not all arguments are supported as CLI ones yet.',
+    ).argv
+
+  return argv
+}
+
+async function main() {
+  const args = await parseArgs()
+
+  const db = await initDatabase({
+    client: 'pg',
+    connection: {
+      host: args['blockchain-db-host'],
+      database: args['blockchain-db-database'],
+      user: args['blockchain-db-user'],
+      password: args['blockchain-db-pass'],
+    },
+  })
+
+  const exchangeRateConfig = exchangesConfigs[args['exchanges-network-config']]
+  const exchangeRateManager = createNewManager(exchangeRateConfig)
 
   const app = express()
 
@@ -63,7 +110,7 @@ async function main() {
     }
 
     try {
-      await updatePrices()
+      await updatePrices({ db, exchangeRateManager })
       res.status(204).send()
     } catch (error) {
       logger.error(error)
@@ -80,18 +127,16 @@ async function main() {
   knownAddressesCache.startListening()
 
   const exchangeRateAPI = new ExchangeRateAPI({
-    exchangeRatesAPIAccessKey: process.env.EXCHANGE_RATES_API_ACCESS_KEY,
+    exchangeRatesAPIAccessKey: args['exchange-rates-api-access-key'],
   })
   const currencyConversionAPI = new CurrencyConversionAPI({ exchangeRateAPI })
   const apolloServer = initApolloServer({ currencyConversionAPI })
   await apolloServer.start()
   apolloServer.applyMiddleware({ app, path: GRAPHQL_PATH })
 
-  app.listen(PORT, INTERFACE, () => {
-    logger.info(
-      `🚀 GraphQL accessible @ http://${INTERFACE}:${PORT}${apolloServer.graphqlPath}`,
-    )
-    logger.info('[Celo] Starting Server')
+  app.listen(args.port, () => {
+    logger.info(`Listening on port ${args.port}`)
+    logger.info(`GraphQL path ${apolloServer.graphqlPath}`)
   })
 }
 

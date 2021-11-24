@@ -54,13 +54,16 @@ export default class CurrencyConversionAPI<TContext = any> extends DataSource {
     }
 
     const rates = await Promise.all(ratesPromises)
-    const undefinedRateIndex = rates.findIndex(rate => !rate)
+    const undefinedRateIndex = rates.findIndex((rate) => !rate)
     if (undefinedRateIndex >= 0) {
       return null
     }
 
     // Multiply all rates
-    return rates.reduce<BigNumber>((acc, rate) => acc.multipliedBy(rate!), new BigNumber(1))
+    return rates.reduce<BigNumber>(
+      (acc, rate) => acc.multipliedBy(rate!),
+      new BigNumber(1),
+    )
   }
 
   // Get conversion steps given the data we have today

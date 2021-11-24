@@ -236,6 +236,11 @@ export class BlockscoutAPI extends RESTDataSource {
       .filter((event) => tokens.includes(event.amount.currencyCode))
       .sort((a, b) => b.timestamp - a.timestamp)
 
+    // We're trying to get the local amounts for exchange events because if they fail we can't
+    // return null on the |localAmount| field or the app will crash. Instead, we're just skipping
+    // those events when fetching the exchange rate fails.
+    // After fetching it here it should be stored in the cache, so it will not fail when requested
+    // from the resolver.
     const filteredEvents = (
       await Promise.all(
         events.map(async (event) => {

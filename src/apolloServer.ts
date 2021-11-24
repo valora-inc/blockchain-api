@@ -18,7 +18,7 @@ export function initApolloServer({
   currencyConversionAPI: CurrencyConversionAPI
 }) {
   return new ApolloServer({
-    typeDefs,
+    typeDefs, 
     resolvers,
     dataSources: () => {
       return {
@@ -28,7 +28,7 @@ export function initApolloServer({
       }
     },
     formatError: (error) => {
-      logger.error({
+      logger.error(error, {
         type: 'UNHANDLED_ERROR',
         error: error?.message,
       })

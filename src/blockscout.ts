@@ -2,6 +2,7 @@ import { RESTDataSource } from 'apollo-datasource-rest'
 import { performance } from 'perf_hooks'
 import { BLOCKSCOUT_API, FAUCET_ADDRESS } from './config'
 import { CGLD, CUSD } from './currencyConversion/consts'
+import CurrencyConversionAPI from './currencyConversion/CurrencyConversionAPI'
 import {
   Any,
   ContractCall,
@@ -12,7 +13,7 @@ import {
   Faucet,
   TokenReceived,
   TokenSent,
-  Verification,
+  Verification
 } from './events'
 import { EscrowContractCall } from './events/EscrowContractCall'
 import { ExchangeContractCall } from './events/ExchangeContractCall'
@@ -21,7 +22,7 @@ import { Input } from './helpers/Input'
 import { InputDecoder } from './helpers/InputDecoder'
 import { logger } from './logger'
 import { metrics } from './metrics'
-import { TokenTransactionArgs } from './resolvers'
+import { MoneyAmount, TokenTransactionArgs } from './resolvers'
 import { Transaction } from './transaction/Transaction'
 import { TransactionAggregator } from './transaction/TransactionAggregator'
 import { TransactionClassifier } from './transaction/TransactionClassifier'
@@ -182,12 +183,15 @@ export class BlockscoutAPI extends RESTDataSource {
     return this.contractAddresses
   }
 
-  async getTokenTransactions(args: TokenTransactionArgs) {
+  async getTokenTransactions(
+    args: TokenTransactionArgs,
+    currencyConversionAPI: CurrencyConversionAPI,
+  ) {
     const userAddress = args.address.toLowerCase()
-    const { token, tokens: receivedTokens } = args
+    const { token, tokens: receivedTokens, localCurrencyCode } = args
     const rawTransactions = await this.getRawTokenTransactions(userAddress)
     // cUSD/cGLD is the default for legacy reasons. Can be removed once most users updated to Valora >= 1.16
-    const tokens = receivedTokens ?? (token ? [token!] : [CUSD, CGLD])
+    const tokens = receivedTokens ?? (token ? [token] : [CUSD, CGLD])
     const context = {
       userAddress,
       tokens,
@@ -222,10 +226,9 @@ export class BlockscoutAPI extends RESTDataSource {
         try {
           return type.getEvent(transaction)
         } catch (e) {
-          logger.error({
+          logger.error(e, {
             type: 'ERROR_MAPPING_TO_EVENT',
             transaction: JSON.stringify(transaction),
-            error: (e as Error)?.message,
           })
         }
       })
@@ -233,15 +236,43 @@ export class BlockscoutAPI extends RESTDataSource {
       .filter((event) => tokens.includes(event.amount.currencyCode))
       .sort((a, b) => b.timestamp - a.timestamp)
 
+    const filteredEvents = (
+      await Promise.all(
+        events.map(async (event) => {
+          if (!event.makerAmount && !event.takerAmount) {
+            return event
+          }
+
+          try {
+            await currencyConversionAPI.getFromMoneyAmount({
+              moneyAmount: event.makerAmount as MoneyAmount,
+              localCurrencyCode,
+            })
+            await currencyConversionAPI.getFromMoneyAmount({
+              moneyAmount: event.takerAmount as MoneyAmount,
+              localCurrencyCode,
+            })
+          } catch (error) {
+            logger.error(error, {
+              type: 'ERROR_FETCHING_EXCHANGE_LOCAL_AMOUNT',
+            })
+            return null
+          }
+
+          return event
+        }),
+      )
+    ).filter((e) => e)
+
     logger.info({
       type: 'GET_TOKEN_TRANSACTIONS',
       address: args.address,
       tokens,
       localCurrencyCode: args.localCurrencyCode,
       rawTransactionCount: rawTransactions.length,
-      eventCount: events.length,
+      eventCount: filteredEvents.length,
     })
 
-    return events
+    return filteredEvents
   }
 }

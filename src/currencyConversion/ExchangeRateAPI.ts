@@ -34,13 +34,14 @@ export default class ExchangeRateAPI extends RESTDataSource {
     sourceCurrencyCode,
     currencyCode,
     timestamp,
-  }: CurrencyConversionArgs): Promise<BigNumber | undefined> {
+  }: CurrencyConversionArgs): Promise<BigNumber> {
     if (!currencyCode) {
       throw new Error('No currency code specified')
     }
 
     try {
       const date = timestamp ? new Date(timestamp) : new Date()
+      throw new Error('Testing errors')
       const fetchedRate = await this.queryExchangeRate(
         sourceCurrencyCode || USD,
         currencyCode,
@@ -49,14 +50,13 @@ export default class ExchangeRateAPI extends RESTDataSource {
 
       return new BigNumber(fetchedRate)
     } catch (error) {
-      logger.error({
+      logger.error(error, {
         type: 'ERROR_FETCHING_EXCHANGE_RATE',
-        error: (error as Error)?.message,
         sourceCurrencyCode,
         currencyCode,
         timestamp,
       })
-      return undefined
+      throw error
     }
   }
 

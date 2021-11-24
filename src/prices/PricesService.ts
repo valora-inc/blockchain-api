@@ -118,7 +118,7 @@ export default class PricesService {
   private async cUSDToLocalCurrency(
     localCurrency: string,
     date: Date,
-  ): Promise<BigNumber | undefined> {
+  ): Promise<BigNumber> {
     return await this.exchangeAPI.getExchangeRate({
       sourceCurrencyCode: this.cUSDAddress,
       currencyCode: localCurrency,

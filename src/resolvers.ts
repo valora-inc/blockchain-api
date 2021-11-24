@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { DataSources } from './apolloServer'
 import { USD } from './currencyConversion/consts'
+import { logger } from './logger'
 
 export enum EventTypes {
   EXCHANGE = 'EXCHANGE',
@@ -111,6 +112,12 @@ export interface MoneyAmount {
   timestamp: number
 }
 
+export interface LocalMoneyAmount {
+  value: BigNumber.Value
+  currencyCode: string
+  exchangeRate: string
+}
+
 interface Context {
   dataSources: DataSources
   localCurrencyCode?: string
@@ -138,7 +145,7 @@ export const resolvers = {
       const { dataSources } = context
       context.localCurrencyCode = args.localCurrencyCode
       const transactions = await dataSources.blockscoutAPI.getTokenTransactions(
-        args,
+        args, context.dataSources.currencyConversionAPI
       )
 
       return {
@@ -159,16 +166,18 @@ export const resolvers = {
       args: CurrencyConversionArgs,
       { dataSources }: Context,
     ) => {
-      const rate = await dataSources.currencyConversionAPI.getExchangeRate({
-        ...args,
-        // This field is optional for legacy reasons. Remove default value after Valora 1.16 is
-        // released and most users update.
-        sourceCurrencyCode: args.sourceCurrencyCode ?? USD,
-      })
-      if (!rate) {
+      try {
+        const rate = await dataSources.currencyConversionAPI.getExchangeRate({
+          ...args,
+          // This field is optional for legacy reasons. Remove default value after Valora 1.16 is
+          // released and most users update.
+          sourceCurrencyCode: args.sourceCurrencyCode ?? USD,
+        })
+        return { rate: rate.toNumber() }
+      } catch (error) {
+        logger.error(error, { type: 'ERROR_CURRENCY_CONVERSION' })
         return null
       }
-      return { rate: rate.toNumber() }
     },
     userBalances: async (
       _source: any,
@@ -206,19 +215,21 @@ export const resolvers = {
       context: Context,
     ) => {
       const { dataSources, localCurrencyCode } = context
-      const rate = await dataSources.currencyConversionAPI.getExchangeRate({
-        sourceCurrencyCode: moneyAmount.currencyCode,
-        currencyCode: localCurrencyCode || 'USD',
-        timestamp: moneyAmount.timestamp,
-        impliedExchangeRates: moneyAmount.impliedExchangeRates,
-      })
-      if (!rate) {
+      try {
+        const rate = await dataSources.currencyConversionAPI.getExchangeRate({
+          sourceCurrencyCode: moneyAmount.currencyCode,
+          currencyCode: localCurrencyCode || 'USD',
+          timestamp: moneyAmount.timestamp,
+          impliedExchangeRates: moneyAmount.impliedExchangeRates,
+        })
+        return {
+          value: new BigNumber(moneyAmount.value).multipliedBy(rate).toString(),
+          currencyCode: localCurrencyCode || 'USD',
+          exchangeRate: rate.toString(),
+        }
+      } catch (error) {
+        logger.error(error, { type: 'ERROR_FETCHING_LOCAL_AMOUNT' })
         return null
-      }
-      return {
-        value: new BigNumber(moneyAmount.value).multipliedBy(rate).toString(),
-        currencyCode: localCurrencyCode || 'USD',
-        exchangeRate: rate?.toString(),
       }
     },
   },

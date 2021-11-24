@@ -1,6 +1,10 @@
 import { DataSource, DataSourceConfig } from 'apollo-datasource'
 import BigNumber from 'bignumber.js'
-import { CurrencyConversionArgs, MoneyAmount } from '../resolvers'
+import {
+  CurrencyConversionArgs,
+  LocalMoneyAmount,
+  MoneyAmount,
+} from '../resolvers'
 import {
   CGLD,
   CUSD,
@@ -29,12 +33,32 @@ export default class CurrencyConversionAPI<TContext = any> extends DataSource {
     this.goldExchangeRateAPI.initialize(config)
   }
 
+  async getFromMoneyAmount({
+    moneyAmount,
+    localCurrencyCode,
+  }: {
+    moneyAmount: MoneyAmount
+    localCurrencyCode: string | undefined
+  }): Promise<LocalMoneyAmount> {
+    const rate = await this.getExchangeRate({
+      sourceCurrencyCode: moneyAmount.currencyCode,
+      currencyCode: localCurrencyCode || 'USD',
+      timestamp: moneyAmount.timestamp,
+      impliedExchangeRates: moneyAmount.impliedExchangeRates,
+    })
+    return {
+      value: new BigNumber(moneyAmount.value).multipliedBy(rate).toString(),
+      currencyCode: localCurrencyCode || 'USD',
+      exchangeRate: rate.toString(),
+    }
+  }
+
   async getExchangeRate({
     sourceCurrencyCode,
     currencyCode,
     timestamp,
     impliedExchangeRates,
-  }: CurrencyConversionArgs): Promise<BigNumber | null> {
+  }: CurrencyConversionArgs): Promise<BigNumber> {
     const fromCode = sourceCurrencyCode!
     const toCode = currencyCode
 
@@ -54,16 +78,8 @@ export default class CurrencyConversionAPI<TContext = any> extends DataSource {
     }
 
     const rates = await Promise.all(ratesPromises)
-    const undefinedRateIndex = rates.findIndex((rate) => !rate)
-    if (undefinedRateIndex >= 0) {
-      return null
-    }
-
     // Multiply all rates
-    return rates.reduce<BigNumber>(
-      (acc, rate) => acc.multipliedBy(rate!),
-      new BigNumber(1),
-    )
+    return rates.reduce((acc, rate) => acc.multipliedBy(rate), new BigNumber(1))
   }
 
   // Get conversion steps given the data we have today
@@ -132,7 +148,7 @@ export default class CurrencyConversionAPI<TContext = any> extends DataSource {
     toCode: string,
     timestamp?: number,
     impliedExchangeRates?: MoneyAmount['impliedExchangeRates'],
-  ): BigNumber | Promise<BigNumber | undefined> {
+  ): BigNumber | Promise<BigNumber> {
     const pair = `${fromCode}/${toCode}`
     if (impliedExchangeRates && impliedExchangeRates[pair]) {
       return new BigNumber(impliedExchangeRates[pair])

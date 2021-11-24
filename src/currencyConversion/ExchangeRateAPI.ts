@@ -41,7 +41,6 @@ export default class ExchangeRateAPI extends RESTDataSource {
 
     try {
       const date = timestamp ? new Date(timestamp) : new Date()
-      throw new Error('Testing errors')
       const fetchedRate = await this.queryExchangeRate(
         sourceCurrencyCode || USD,
         currencyCode,

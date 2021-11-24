@@ -38,11 +38,12 @@ describe('ExchangeRateAPI', () => {
   })
 
   it('should throw when requesting an invalid currency code', async () => {
-    const result = await exchangeRateAPI.getExchangeRate({
-      sourceCurrencyCode: 'USD',
-      currencyCode: 'ABC',
-    })
-    expect(result).toBeUndefined()
+    await expect(
+      exchangeRateAPI.getExchangeRate({
+        sourceCurrencyCode: 'USD',
+        currencyCode: 'ABC',
+      }),
+    ).rejects.toThrow('No matching data for USD/ABC')
     expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 

@@ -1,4 +1,5 @@
 import { BlockscoutAPI } from '../src/blockscout'
+import CurrencyConversionAPI from '../src/currencyConversion/CurrencyConversionAPI'
 import mockTokenTxs from './mockTokenTxs'
 
 const mockDataSourcePost = jest.fn(() => mockTokenTxs)
@@ -60,6 +61,11 @@ jest.mock('../src/helpers/KnownAddressesCache.ts', () => {
   }
 })
 
+// @ts-ignore
+const mockCurrencyConversionAPI: CurrencyConversionAPI = {
+  getFromMoneyAmount: jest.fn()
+}
+
 describe('Blockscout', () => {
   let blockscoutAPI: BlockscoutAPI
 
@@ -73,7 +79,7 @@ describe('Blockscout', () => {
       address: '0x0000000000000000000000000000000000007E57',
       token: 'cUSD',
       localCurrencyCode: 'MXN',
-    })
+    }, mockCurrencyConversionAPI)
 
     // Reversing for convenience to match the order in mock data
     const transactions = result.reverse()
@@ -405,7 +411,7 @@ describe('Blockscout', () => {
       address: '0x0000000000000000000000000000000000007E57',
       token: 'cGLD',
       localCurrencyCode: 'MXN',
-    })
+    }, mockCurrencyConversionAPI)
 
     // Reversing for convenience to match the order in mock data
     const transactions = result.reverse()
@@ -609,7 +615,7 @@ describe('Blockscout', () => {
       address: '0x0000000000000000000000000000000000007E57',
       token: null,
       localCurrencyCode: 'MXN',
-    })
+    }, mockCurrencyConversionAPI)
 
     // Reversing for convenience to match the order in mock data
     const transactions = result.reverse()

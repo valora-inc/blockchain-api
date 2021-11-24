@@ -13,7 +13,7 @@ import {
   Faucet,
   TokenReceived,
   TokenSent,
-  Verification
+  Verification,
 } from './events'
 import { EscrowContractCall } from './events/EscrowContractCall'
 import { ExchangeContractCall } from './events/ExchangeContractCall'

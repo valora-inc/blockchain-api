@@ -145,7 +145,8 @@ export const resolvers = {
       const { dataSources } = context
       context.localCurrencyCode = args.localCurrencyCode
       const transactions = await dataSources.blockscoutAPI.getTokenTransactions(
-        args, context.dataSources.currencyConversionAPI
+        args,
+        context.dataSources.currencyConversionAPI,
       )
 
       return {

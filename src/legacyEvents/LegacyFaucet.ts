@@ -3,7 +3,7 @@ import { LegacyEventTypes } from '../resolvers'
 import { LegacyTransaction } from '../legacyTransaction/LegacyTransaction'
 import { LegacyTransactionType } from '../legacyTransaction/LegacyTransactionType'
 
-export class Faucet extends LegacyTransactionType {
+export class LegacyFaucet extends LegacyTransactionType {
   matches(transaction: LegacyTransaction): boolean {
     return (
       transaction.transfers.length === 1 &&

@@ -74,7 +74,8 @@ export interface TokenTransactionArgs {
 export interface TokenTransactionV2Args {
   // Address to fetch transactions from.
   address: string
-  // Filter all the transactions in given tokens. If not present, no filtering is done.
+  // First iteration won't consider this field
+  // TODO: Filter all the transactions in given tokens. If not present, no filtering is done.
   tokens?: [string]
   // If present, every TokenAmount will contain the field localAmount with the estimated amount in given currency
   localCurrencyCode?: string
@@ -116,6 +117,45 @@ interface Context {
   localCurrencyCode?: string
 }
 
+export interface TokenAmount {
+  value: BigNumber.Value
+  tokenAddress: string
+  timestamp: number
+}
+
+export enum EventTypes {
+  EXCHANGE = 'EXCHANGE',
+  RECEIVED = 'RECEIVED',
+  SENT = 'SENT',
+  FAUCET = 'FAUCET',
+  VERIFICATION_FEE = 'VERIFICATION_FEE',
+  ESCROW_SENT = 'ESCROW_SENT',
+  ESCROW_RECEIVED = 'ESCROW_RECEIVED',
+  CONTRACT_CALL = 'CONTRACT_CALL',
+}
+
+export enum TokenTransactionTypeV2 {
+  EXCHANGE = 'EXCHANGE',
+  RECEIVED = 'RECEIVED',
+  SENT = 'SENT',
+  INVITE_SENT = 'INVITE_SENT',
+  INVITE_RECEIVED = 'INVITE_RECEIVED',
+  PAY_REQUEST = 'PAY_REQUEST'
+}
+
+export interface TokenTransactionV2 { 
+  type: TokenTransactionTypeV2,
+  timestamp: number
+  block: string
+  transactionHash: string
+  fees: FeeV2
+}
+
+export interface FeeV2 {
+  type: FeeType
+  amount: TokenAmount
+}
+
 export const resolvers = {
   Query: {
     tokenTransactionsV2: async (
@@ -123,10 +163,11 @@ export const resolvers = {
       args: TokenTransactionV2Args,
       context: Context,
     ) => {
-      // TODO
+      const { dataSources } = context
+      const transactions = await dataSources.blockscoutAPI.getTokenTransactionsV2(args.address)
 
       return {
-        tokens: [],
+        transactions
       }
     },
     // Deprecated

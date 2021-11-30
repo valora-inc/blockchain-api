@@ -3,7 +3,7 @@ import { LegacyEventTypes } from '../resolvers'
 import { LegacyTransaction } from '../legacyTransaction/LegacyTransaction'
 import { LegacyTransactionType } from '../legacyTransaction/LegacyTransactionType'
 
-export class TokenReceived extends LegacyTransactionType {
+export class LegacyTokenReceived extends LegacyTransactionType {
   matches(transaction: LegacyTransaction): boolean {
     return (
       transaction.transfers.length === 1 &&

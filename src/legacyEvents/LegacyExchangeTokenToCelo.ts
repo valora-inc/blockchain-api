@@ -3,7 +3,7 @@ import { LegacyTransaction } from '../legacyTransaction/LegacyTransaction'
 import { LegacyTransactionType } from '../legacyTransaction/LegacyTransactionType'
 import { Contracts } from '../utils'
 
-export class ExchangeTokenToCelo extends LegacyTransactionType {
+export class LegacyExchangeTokenToCelo extends LegacyTransactionType {
   matches(transaction: LegacyTransaction): boolean {
     return (
       transaction.transfers.length === 3 &&

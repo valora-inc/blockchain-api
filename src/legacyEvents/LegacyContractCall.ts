@@ -1,7 +1,7 @@
 import { LegacyTransaction } from '../legacyTransaction/LegacyTransaction'
 import { LegacyTransactionType } from '../legacyTransaction/LegacyTransactionType'
 
-export class ContractCall extends LegacyTransactionType {
+export class LegacyContractCall extends LegacyTransactionType {
   matches(transaction: LegacyTransaction): boolean {
     return transaction.transfers.isEmpty()
   }

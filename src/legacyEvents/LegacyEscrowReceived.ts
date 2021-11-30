@@ -4,7 +4,7 @@ import { LegacyTransaction } from '../legacyTransaction/LegacyTransaction'
 import { LegacyTransactionType } from '../legacyTransaction/LegacyTransactionType'
 import { Contracts } from '../utils'
 
-export class EscrowReceived extends LegacyTransactionType {
+export class LegacyEscrowReceived extends LegacyTransactionType {
   matches(transaction: LegacyTransaction): boolean {
     return (
       this.isEscrowReceivedToEOA(transaction) ||

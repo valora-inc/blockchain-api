@@ -2,11 +2,12 @@ import { LegacyTransaction } from '../legacyTransaction/LegacyTransaction'
 import { LegacyTransactionType } from '../legacyTransaction/LegacyTransactionType'
 import { Contracts } from '../utils'
 
-export class EscrowContractCall extends LegacyTransactionType {
+export class LegacyExchangeContractCall extends LegacyTransactionType {
   matches(transaction: LegacyTransaction): boolean {
     return (
       transaction.transfers.isEmpty() &&
-      transaction.input.hasContractCallTo(Contracts.Escrow)
+      (transaction.input.hasContractCallTo(Contracts.Exchange) ||
+        transaction.input.hasContractCallTo(Contracts.ExchangeEUR))
     )
   }
 

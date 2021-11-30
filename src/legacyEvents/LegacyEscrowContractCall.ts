@@ -1,18 +1,20 @@
-import { metrics } from '../metrics'
 import { LegacyTransaction } from '../legacyTransaction/LegacyTransaction'
 import { LegacyTransactionType } from '../legacyTransaction/LegacyTransactionType'
+import { Contracts } from '../utils'
 
-export class Any extends LegacyTransactionType {
+export class LegacyEscrowContractCall extends LegacyTransactionType {
   matches(transaction: LegacyTransaction): boolean {
-    return true
+    return (
+      transaction.transfers.isEmpty() &&
+      transaction.input.hasContractCallTo(Contracts.Escrow)
+    )
   }
 
   getEvent(transaction: LegacyTransaction) {
-    metrics.unknownTransaction()
-    throw new Error('Unknown transaction type')
+    return
   }
 
   isAggregatable(): boolean {
-    return false
+    return true
   }
 }

@@ -166,6 +166,7 @@ export default `type ExchangeRate {
     transactionHash: String!
     fees: [FeeV2]
     metadata: TokenTransferMetadata
+    account: String!
   }
 
   type TokenExchangeV2 implements TokenTransactionV2 {
@@ -180,7 +181,7 @@ export default `type ExchangeRate {
   }
 
   type TokenTransactionsV2 {
-    tokens: [TokenTransactionV2]!
+    transactions: [TokenTransactionV2]!
   }
 
   type PageInfo {

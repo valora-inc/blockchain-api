@@ -1,6 +1,6 @@
 import { metrics } from '../metrics'
-import { Transaction } from '../Transaction/Transaction'
-import { TransactionType } from '../Transaction/TransactionType'
+import { Transaction } from '../transaction/Transaction'
+import { TransactionType } from '../transaction/TransactionType'
 
 export class Any extends TransactionType {
   matches(transaction: Transaction): boolean {

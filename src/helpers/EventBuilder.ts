@@ -7,7 +7,7 @@ import {
   MoneyAmount,
   TokenTransactionTypeV2
 } from '../resolvers'
-import { Fee, Transaction } from '../Transaction/Transaction'
+import { Fee, Transaction } from '../transaction/Transaction'
 import { WEI_PER_GOLD } from '../utils'
 import knownAddressesCache from './KnownAddressesCache'
 

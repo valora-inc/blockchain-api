@@ -1,7 +1,7 @@
 import { EventBuilder } from '../helpers/EventBuilder'
 import { EventTypes } from '../resolvers'
-import { Transaction } from '../Transaction/Transaction'
-import { TransactionType } from '../Transaction/TransactionType'
+import { Transaction } from '../transaction/Transaction'
+import { TransactionType } from '../transaction/TransactionType'
 
 export class Faucet extends TransactionType {
   matches(transaction: Transaction): boolean {

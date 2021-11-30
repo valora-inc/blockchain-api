@@ -1,5 +1,5 @@
-import { Transaction } from '../Transaction/Transaction'
-import { TransactionType } from '../Transaction/TransactionType'
+import { Transaction } from '../transaction/Transaction'
+import { TransactionType } from '../transaction/TransactionType'
 import { Contracts } from '../utils'
 
 export class EscrowContractCall extends TransactionType {

@@ -34,6 +34,9 @@ export default class PricesService {
         localCurrency,
         date,
       )
+      if (!cUSDToLocalCurrencyPrice) {
+        throw new Error('Failed to calculate local currency price')
+      }
       return cUSDPrice.times(cUSDToLocalCurrencyPrice)
     } catch (e) {
       logger.error({

@@ -1,17 +1,22 @@
 import BigNumber from 'bignumber.js'
 import { FeeType } from '../resolvers'
+<<<<<<< HEAD:src/events/RegisterAccountDekContractCall.ts
 import { Fee, Transaction } from '../transaction/Transaction'
 import { TransactionType } from '../transaction/TransactionType'
+=======
+import { Fee, LegacyTransaction } from '../legacyTransaction/LegacyTransaction'
+import { LegacyTransactionType } from '../legacyTransaction/LegacyTransactionType'
+>>>>>>> main:src/legacyEvents/RegisterAccountDekContractCall.ts
 
-export class RegisterAccountDekContractCall extends TransactionType {
-  matches(transaction: Transaction): boolean {
+export class RegisterAccountDekContractCall extends LegacyTransactionType {
+  matches(transaction: LegacyTransaction): boolean {
     return (
       transaction.transfers.isEmpty() &&
       transaction.input.registersAccountDek(this.context.userAddress)
     )
   }
 
-  getEvent(transaction: Transaction) {
+  getEvent(transaction: LegacyTransaction) {
     return
   }
 
@@ -19,7 +24,7 @@ export class RegisterAccountDekContractCall extends TransactionType {
     return true
   }
 
-  getFees(transaction: Transaction): Fee[] {
+  getFees(transaction: LegacyTransaction): Fee[] {
     if (transaction.fees.length === 0) {
       return []
     }

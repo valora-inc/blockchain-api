@@ -22,7 +22,7 @@ import { Input } from './helpers/Input'
 import { InputDecoder } from './helpers/InputDecoder'
 import { logger } from './logger'
 import { metrics } from './metrics'
-import { MoneyAmount, TokenTransactionArgs, TokenTransactionV2 } from './resolvers'
+import { MoneyAmount, TokenTransactionArgs } from './resolvers'
 import { LegacyTransaction } from './legacyTransaction/LegacyTransaction'
 import { LegacyTransactionAggregator } from './legacyTransaction/LegacyTransactionAggregator'
 import { LegacyTransactionClassifier } from './legacyTransaction/LegacyTransactionClassifier'
@@ -35,8 +35,16 @@ import { Transaction } from './transaction/Transaction'
 import { TransactionClassifier } from './transaction/TransactionClassifier'
 import { ExchangeContractCall } from './events/ExchangeContractCall'
 import { EscrowContractCall } from './events/EscrowContractCall'
-import { RegisterAccountDekContractCall } from './events/RegisterAccountDekContractCall'
-import { Any, ContractCall, EscrowReceived, EscrowSent, ExchangeCeloToToken, ExchangeTokenToCelo, Faucet, TokenReceived, TokenSent, Verification } from './events'
+import {
+  Any,
+  ContractCall,
+  EscrowReceived,
+  EscrowSent,
+  ExchangeCeloToToken,
+  ExchangeTokenToCelo,
+  TokenReceived,
+  TokenSent,
+} from './events'
 import { TransactionAggregator } from './transaction/TransactionAggregator'
 export interface BlockscoutTransferTx {
   blockNumber: number
@@ -81,21 +89,20 @@ export class BlockscoutAPI extends RESTDataSource {
   async getTokenTransactionsV2(address: string) {
     const userAddress = address.toLowerCase()
     const rawTransactions = await this.getRawTokenTransactionsV2(userAddress)
-    
+
+    const context = { userAddress }
+
     const transactionClassifier = new TransactionClassifier([
-      new ExchangeContractCall(),
-      new EscrowContractCall(),
-      new RegisterAccountDekContractCall(),
-      new ContractCall(),
-      new Verification(),
-      new EscrowSent(),
-      new TokenSent(),
-      new Faucet(),
-      new EscrowReceived(),
-      new TokenReceived(),
-      new ExchangeCeloToToken(),
-      new ExchangeTokenToCelo(),
-      new Any(),
+      new ExchangeContractCall(context),
+      new EscrowContractCall(context),
+      new ContractCall(context),
+      new EscrowSent(context),
+      new TokenSent(context),
+      new EscrowReceived(context),
+      new TokenReceived(context),
+      new ExchangeCeloToToken(context),
+      new ExchangeTokenToCelo(context),
+      new Any(context),
     ])
 
     const classifiedTransactions = rawTransactions.map((transaction) =>
@@ -133,7 +140,6 @@ export class BlockscoutAPI extends RESTDataSource {
   }
 
   async getRawTokenTransactionsV2(address: string): Promise<Transaction[]> {
-
     const t0 = performance.now()
     const contractAddresses = await this.ensureContractAddresses()
 
@@ -206,8 +212,6 @@ export class BlockscoutAPI extends RESTDataSource {
     metrics.setRawTokenDuration(t1 - t0)
     return transactions
   }
-
-
 
   async getRawTokenTransactions(address: string): Promise<LegacyTransaction[]> {
     // Measure time at beginning of execution

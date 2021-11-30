@@ -1,5 +1,5 @@
 import { EventBuilder } from '../helpers/EventBuilder'
-import { EventTypes, TokenTransactionTypeV2 } from '../resolvers'
+import { TokenTransactionTypeV2 } from '../resolvers'
 import { Transaction } from '../transaction/Transaction'
 import { TransactionType } from '../transaction/TransactionType'
 import { Contracts } from '../utils'
@@ -22,7 +22,7 @@ export class EscrowReceived extends TransactionType {
     return EventBuilder.transferEvent(
       transaction,
       transfer,
-      TokenTransactionTypeV2.RECEIVED,
+      TokenTransactionTypeV2.INVITE_RECEIVED,
       transfer.fromAddressHash,
       transfer.fromAccountHash,
     )

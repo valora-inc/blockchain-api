@@ -28,7 +28,6 @@ export class ExchangeCeloToToken extends TransactionType {
       transaction,
       inTransfer,
       outTransfer,
-      this.context.tokens,
       transaction.fees,
     )
   }

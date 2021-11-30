@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 export * from './LegacyAny'
 export * from './LegacyContractCall'
 export * from './LegacyEscrowReceived'
@@ -9,15 +8,3 @@ export * from './LegacyFaucet'
 export * from './LegacyTokenReceived'
 export * from './LegacyTokenSent'
 export * from './LegacyVerification'
-=======
-export * from './Any'
-export * from './ContractCall'
-export * from './EscrowReceived'
-export * from './EscrowSent'
-export * from './ExchangeCeloToToken'
-export * from './ExchangeTokenToCelo'
-export * from './Faucet'
-export * from './TokenReceived'
-export * from './TokenSent'
-export * from './Verification'
->>>>>>> main

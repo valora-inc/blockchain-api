@@ -147,11 +147,11 @@ export enum TokenTransactionTypeV2 {
   SENT = 'SENT',
   INVITE_SENT = 'INVITE_SENT',
   INVITE_RECEIVED = 'INVITE_RECEIVED',
-  PAY_REQUEST = 'PAY_REQUEST'
+  PAY_REQUEST = 'PAY_REQUEST',
 }
 
-export interface TokenTransactionV2 { 
-  type: TokenTransactionTypeV2,
+export interface TokenTransactionV2 {
+  type: TokenTransactionTypeV2
   timestamp: number
   block: string
   transactionHash: string
@@ -171,10 +171,11 @@ export const resolvers = {
       context: Context,
     ) => {
       const { dataSources } = context
-      const transactions = await dataSources.blockscoutAPI.getTokenTransactionsV2(args.address)
+      const transactions =
+        await dataSources.blockscoutAPI.getTokenTransactionsV2(args.address)
 
       return {
-        transactions
+        transactions,
       }
     },
     // Deprecated

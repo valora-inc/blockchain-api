@@ -1,4 +1,4 @@
-import { Any } from '../src/legacyEvents/Any'
+import { LegacyAny } from '../src/legacyEvents/LegacyAny'
 import { metrics } from '../src/metrics'
 
 jest.mock('../src/metrics')
@@ -10,7 +10,7 @@ describe('AnyType', () => {
       tokens: ['CUSD'],
     }
 
-    const transaction = new Any(context)
+    const transaction = new LegacyAny(context)
 
     expect(() => {
       transaction.getEvent(null as any)
@@ -23,7 +23,7 @@ describe('AnyType', () => {
       tokens: ['CUSD'],
     }
 
-    const transaction = new Any(context)
+    const transaction = new LegacyAny(context)
     try {
       transaction.getEvent(null as any)
     } catch (error) {

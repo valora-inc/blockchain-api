@@ -1,5 +1,5 @@
 import { EventBuilder } from '../helpers/EventBuilder'
-import { EventTypes } from '../resolvers'
+import { TokenTransactionTypeV2 } from '../resolvers'
 import { Transaction } from '../transaction/Transaction'
 import { TransactionType } from '../transaction/TransactionType'
 
@@ -23,7 +23,7 @@ export class TokenSent extends TransactionType {
     return EventBuilder.transferEvent(
       transaction,
       transfer,
-      EventTypes.SENT,
+      TokenTransactionTypeV2.SENT,
       transfer.toAddressHash,
       transfer.toAccountHash,
       transaction.fees,

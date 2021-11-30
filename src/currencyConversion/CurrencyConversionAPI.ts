@@ -1,6 +1,10 @@
 import { DataSource, DataSourceConfig } from 'apollo-datasource'
 import BigNumber from 'bignumber.js'
-import { CurrencyConversionArgs, MoneyAmount } from '../resolvers'
+import {
+  CurrencyConversionArgs,
+  LocalMoneyAmount,
+  MoneyAmount,
+} from '../resolvers'
 import {
   CGLD,
   CUSD,
@@ -29,6 +33,26 @@ export default class CurrencyConversionAPI<TContext = any> extends DataSource {
     this.goldExchangeRateAPI.initialize(config)
   }
 
+  async getFromMoneyAmount({
+    moneyAmount,
+    localCurrencyCode,
+  }: {
+    moneyAmount: MoneyAmount
+    localCurrencyCode: string | undefined
+  }): Promise<LocalMoneyAmount> {
+    const rate = await this.getExchangeRate({
+      sourceCurrencyCode: moneyAmount.currencyCode,
+      currencyCode: localCurrencyCode || 'USD',
+      timestamp: moneyAmount.timestamp,
+      impliedExchangeRates: moneyAmount.impliedExchangeRates,
+    })
+    return {
+      value: new BigNumber(moneyAmount.value).multipliedBy(rate).toString(),
+      currencyCode: localCurrencyCode || 'USD',
+      exchangeRate: rate.toString(),
+    }
+  }
+
   async getExchangeRate({
     sourceCurrencyCode,
     currencyCode,
@@ -54,7 +78,6 @@ export default class CurrencyConversionAPI<TContext = any> extends DataSource {
     }
 
     const rates = await Promise.all(ratesPromises)
-
     // Multiply all rates
     return rates.reduce((acc, rate) => acc.multipliedBy(rate), new BigNumber(1))
   }

@@ -9,14 +9,14 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 90608,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0x6a61e1e693c765cbab7e02a500665f2e13ee46df',
                     toAddressHash: '0x0000000000000000000000000000000000007E57',
-                    tokenAddress: 'CELO_ADDRESS',
+                    tokenAddress: TEST_GOLD_ADDRESS,
                     value: '1000000000000000000',
                   },
                 },
@@ -25,7 +25,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xf1235cb0d3703e7cc2473fb4e214fbc7a9ff77cc',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '10000000000000000000',
                   },
                 },
@@ -34,7 +34,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0xf1235cb0d3703e7cc2473fb4e214fbc7a9ff77cc',
                     toAddressHash: '0x0000000000000000000000000000000000000000',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '10000000000000000000',
                   },
                 },
@@ -43,7 +43,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '1991590000000000',
                   },
                 },
@@ -52,7 +52,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xdd1f519f63423045f526b8c83edc0eb4ba6434a4',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '7966360000000000',
                   },
                 },
@@ -61,7 +61,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xf9720b2ff2cf69f8a50dc5bec5545ba883e0ae3f',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '0',
                   },
                 },
@@ -82,14 +82,14 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 90608,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '26801514493125',
                   },
                 },
@@ -98,7 +98,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x2eb79345089ca6f703f3b3c4235315cbeaad6d3c',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '107206057972500',
                   },
                 },
@@ -120,14 +120,14 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 90637,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x6a61e1e693c765cbab7e02a500665f2e13ee46df',
-                    tokenAddress: 'CELO_ADDRESS',
+                    tokenAddress: TEST_GOLD_ADDRESS,
                     value: '1000000000000000000',
                   },
                 },
@@ -136,7 +136,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000000000',
                     toAddressHash: '0x0000000000000000000000000000000000007E57',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '10000000000000000000',
                   },
                 },
@@ -145,7 +145,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '2175980000000000',
                   },
                 },
@@ -154,7 +154,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x30d060f129817c4de5fbc1366d53e19f43c8c64f',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '8703920000000000',
                   },
                 },
@@ -163,7 +163,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xfcf7fc2f0c1f06fb6314f9fa2a53e9805aa863e0',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '0',
                   },
                 },
@@ -184,14 +184,14 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 90637,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '29106906186364',
                   },
                 },
@@ -200,7 +200,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xaed733bb20921b682eb35bb89bd398f604ccd5bc',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '116427624745456',
                   },
                 },
@@ -222,14 +222,14 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 90719,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x8b7649116f169d2d2aebb6ea1a77f0baf31f2811',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '150000000000000000',
                   },
                 },
@@ -238,7 +238,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '1131780000000000',
                   },
                 },
@@ -247,7 +247,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x050f34537f5b2a00b9b9c752cb8500a3fce3da7d',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '4527120000000000',
                   },
                 },
@@ -256,7 +256,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x6a0edf42f5e618bee697e7718fa05efb1ea5d11c',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '10000000000000000',
                   },
                 },
@@ -277,14 +277,14 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 90791,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '150000000000000000',
                   },
                 },
@@ -293,7 +293,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '1131780000000000',
                   },
                 },
@@ -302,7 +302,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x050f34537f5b2a00b9b9c752cb8500a3fce3da7d',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '4527120000000000',
                   },
                 },
@@ -311,7 +311,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x6a0edf42f5e618bee697e7718fa05efb1ea5d11c',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '10000000000000000',
                   },
                 },
@@ -332,14 +332,14 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 90792,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x6a0edf42f5e618bee697e7718fa05efb1ea5d11c',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '150000000000000000',
                   },
                 },
@@ -348,7 +348,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '1131780000000000',
                   },
                 },
@@ -357,7 +357,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x050f34537f5b2a00b9b9c752cb8500a3fce3da7d',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '4527120000000000',
                   },
                 },
@@ -366,7 +366,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x6a0edf42f5e618bee697e7718fa05efb1ea5d11c',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '10000000000000000',
                   },
                 },
@@ -387,7 +387,7 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 117453,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
@@ -396,7 +396,7 @@ const mockTokenTxs = {
                     fromAccountHash:
                       '0xf4314cb9046bece6aa54bb9533155434d0c76910', // this should go to the `account` field
                     toAddressHash: '0x0000000000000000000000000000000000007E57',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '10000000000000000000',
                   },
                 },
@@ -406,7 +406,7 @@ const mockTokenTxs = {
                       '0xf4314cb9046bece6aa54bb9533155434d0c76909',
                     toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
                     toAccountHash: null,
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '1297230000000000',
                   },
                 },
@@ -416,7 +416,7 @@ const mockTokenTxs = {
                       '0xf4314cb9046bece6aa54bb9533155434d0c76909',
                     toAddressHash: '0x2a43f97f8bf959e31f69a894ebd80a88572c8553',
                     toAccountHash: null,
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '5188920000000000',
                   },
                 },
@@ -426,7 +426,7 @@ const mockTokenTxs = {
                       '0xf4314cb9046bece6aa54bb9533155434d0c76909',
                     toAddressHash: '0xfcf7fc2f0c1f06fb6314f9fa2a53e9805aa863e0',
                     toAccountHash: null,
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '0',
                   },
                 },
@@ -447,7 +447,7 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 117451,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
@@ -455,7 +455,7 @@ const mockTokenTxs = {
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xf4314cb9046bece6aa54bb9533155434d0c76909',
                     toAccountHash: '0xf4314cb9046bece6aa54bb9533155434d0c76910', // this should go to the `account` field
-                    tokenAddress: 'CELO_ADDRESS',
+                    tokenAddress: TEST_GOLD_ADDRESS,
                     value: '1000000000000000000',
                   },
                 },
@@ -476,14 +476,14 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 117451,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xf4314cb9046bece6aa54bb9533155434d0c76909',
-                    tokenAddress: 'CELO_ADDRESS',
+                    tokenAddress: TEST_GOLD_ADDRESS,
                     value: '1000000000000000000',
                   },
                 },
@@ -504,14 +504,14 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 117451,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0xf4314cb9046bece6aa54bb9533155434d0c76909',
                     toAddressHash: '0x0000000000000000000000000000000000007E57',
-                     tokenAddress: 'CELO_ADDRESS',
+                    tokenAddress: TEST_GOLD_ADDRESS,
                     value: '10000000000000000000',
                   },
                 },
@@ -532,21 +532,21 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 117451,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000f40c37',
                     toAddressHash: '0x0000000000000000000000000000000000007E57',
-                    tokenAddress: 'CELO_ADDRESS',
+                    tokenAddress: TEST_GOLD_ADDRESS,
                     value: '5000000000000000000',
                   },
                 },
               ],
             },
             feeCurrency: null,
-            feeToken: 'cGLD',
+            feeToken: 'CELO',
             gasPrice: '5000000000',
             gasUsed: '47426',
             gatewayFee: '0',
@@ -560,14 +560,14 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 117451,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x0000000000000000000000000000000000a77327',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '118829058457955309',
                   },
                 },
@@ -576,7 +576,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '91454741122586',
                   },
                 },
@@ -585,7 +585,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x2765162cc4ad257a956f0411675bc45257e6cb30',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '365818964490344',
                   },
                 },
@@ -607,14 +607,14 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 117451,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '26782658137854',
                   },
                 },
@@ -623,7 +623,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x90684bc3ded2f69d8853d791bdc57eea0a84c9d0',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '107130632551416',
                   },
                 },
@@ -645,7 +645,7 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 6203333,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
@@ -654,7 +654,7 @@ const mockTokenTxs = {
                     fromAccountHash: null,
                     toAccountHash: null,
                     toAddressHash: '0xc85d6ccf22499898ea76aa8b7ba89a7ceddbe434',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '20000000000000000000',
                   },
                 },
@@ -665,13 +665,13 @@ const mockTokenTxs = {
                     fromAccountHash: null,
                     toAddressHash: '0x566ce6b765f038a98b5753ced0a65fd49aa0a07c',
                     toAccountHash: '0xc85d6ccf22499898ea76aa8b7ba89a7ceddbe434',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '20000000000000000000',
                   },
                 },
               ],
             },
-            feeToken: 'cGLD',
+            feeToken: 'CELO',
             gasPrice: '350000000',
             gasUsed: '134090',
             gatewayFee: '0',
@@ -687,14 +687,14 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 117451,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x0000000000000000000000000000000000a77357',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '200000000000000000',
                   },
                 },
@@ -703,7 +703,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '1590510000000000',
                   },
                 },
@@ -712,7 +712,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xae1ec841923811219b98aceb1db297aade2f46f3',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '6362040000000000',
                   },
                 },
@@ -733,14 +733,14 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 192467,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '990330000000000',
                   },
                 },
@@ -749,7 +749,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x456f41406b32c45d59e539e4bba3d7898c3584da',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '3961320000000000',
                   },
                 },
@@ -758,7 +758,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x6a0edf42f5e618bee697e7718fa05efb1ea5d11c',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '0',
                   },
                 },
@@ -779,14 +779,14 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 1487877,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x0000000000000000000000000000000000007E57',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '1000000000000000000',
                   },
                 },
@@ -795,7 +795,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '10303800000000',
                   },
                 },
@@ -804,7 +804,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0x456f41406b32c45d59e539e4bba3d7898c3584da',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '41215200000000',
                   },
                 },
@@ -826,14 +826,14 @@ const mockTokenTxs = {
         {
           node: {
             blockNumber: 1487875,
-            celoTransfer: {
+            tokenTransfer: {
               edges: [
                 {
                   node: {
                     fromAddressHash:
                       '0x0000000000000000000000000000000000007E57',
                     toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '18842400000000',
                   },
                 },
@@ -842,7 +842,7 @@ const mockTokenTxs = {
                     fromAddressHash:
                       '0x3a42be9c0ce3a98f5b3b0a3f2b9e392126c988fb',
                     toAddressHash: '0xb4e92c94a2712e98c020a81868264bde52c188cb',
-                    tokenAddress: 'CUSD_ADDRESS',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
                     value: '75369600000000',
                   },
                 },

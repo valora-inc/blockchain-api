@@ -126,7 +126,6 @@ export class BlockscoutAPI extends RESTDataSource {
         }
       })
       .filter((e) => e)
-      // .filter((event) => tokens.includes(event.amount.currencyCode))
       .sort((a, b) => b.timestamp - a.timestamp)
 
     logger.info({

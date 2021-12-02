@@ -167,7 +167,6 @@ export class BlockscoutAPI extends RESTDataSource {
                       fromAccountHash
                       toAccountHash
                       value
-                      token
                       tokenAddress
                     }
                   }

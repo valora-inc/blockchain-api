@@ -251,6 +251,20 @@ export const resolvers = {
       return null
     },
   },
+  TokenTransactionV2: {
+    __resolveType(obj: TokenTransactionV2, context: any, info: any) {
+      switch (obj.type) {
+        case TokenTransactionTypeV2.EXCHANGE:
+          return 'TokenExchangeV2'
+        case TokenTransactionTypeV2.RECEIVED:
+        case TokenTransactionTypeV2.SENT:
+        case TokenTransactionTypeV2.INVITE_RECEIVED:
+        case TokenTransactionTypeV2.INVITE_SENT:
+        case TokenTransactionTypeV2.PAY_REQUEST:
+          return 'TokenTransferV2'
+      }
+    }
+  },
   MoneyAmount: {
     localAmount: async (
       moneyAmount: MoneyAmount,

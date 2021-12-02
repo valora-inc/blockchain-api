@@ -2,6 +2,7 @@ import { BlockscoutTokenTransfer } from '../blockscout'
 
 export type TransferFilter = (transfer: BlockscoutTokenTransfer) => boolean
 
+// TODO: Remove this class and replace it with static methods or an utils class.
 export class TransferCollection {
   private transfers: BlockscoutTokenTransfer[] = []
 

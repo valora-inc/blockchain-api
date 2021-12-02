@@ -4,6 +4,7 @@ import { TransferCollection } from './TransferCollection'
 
 const MINTED_TOKEN_ADDRESS = '0x0000000000000000000000000000000000000000'
 
+// TODO: Remove this class and replace it with static methods or an utils class.
 export class TransfersNavigator {
   private contractAddresses: ContractAddresses
   private faucetAddress: string

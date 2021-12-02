@@ -265,6 +265,16 @@ export const resolvers = {
       }
     }
   },
+  TokenAmount: {
+    localAmount: async(
+      tokenAmount: TokenAmount,
+      args: any,
+      context: Context
+    ) => {
+      const { dataSources, localCurrencyCode } = context
+      const rate = await dataSources.
+    }
+  },
   MoneyAmount: {
     localAmount: async (
       moneyAmount: MoneyAmount,

@@ -13,6 +13,7 @@ import {
   createNewManager,
   configs as exchangesConfigs,
 } from '@valora/exchanges'
+import PricesService from './prices/PricesService'
 
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
@@ -130,6 +131,7 @@ async function main() {
     exchangeRatesAPIAccessKey: args['exchange-rates-api-access-key'],
   })
   const currencyConversionAPI = new CurrencyConversionAPI({ exchangeRateAPI })
+  const pricesService = new PricesService(db, exchangeRateAPI, exchangeRateManager.cUSDTokenAddress)
   const apolloServer = initApolloServer({ currencyConversionAPI })
   await apolloServer.start()
   apolloServer.applyMiddleware({ app, path: GRAPHQL_PATH })

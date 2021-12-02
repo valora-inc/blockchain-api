@@ -7,7 +7,7 @@ import { logger } from '../logger'
 const TABLE_NAME = 'historical_token_prices'
 const MAX_TIME_GAP = 1000 * 60 * 60 * 4 // 4 hours
 
-export default class PricesService {
+export default class PricesService implements DataSource {
   constructor(
     private readonly db: Knex,
     private readonly exchangeAPI: ExchangeRateAPI,

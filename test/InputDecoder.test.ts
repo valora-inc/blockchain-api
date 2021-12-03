@@ -35,6 +35,9 @@ const contractAddresses = {
   ExchangeEUR: '0xd1235cb0d3703e7cc2473fb4e214fbc7a9ff77cc',
   Governance: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
   Reserve: '0x6a61e1e693c765cbab7e02a500665f2e13ee46df',
+  GoldToken: '0xf194afdf50b03e69bd7d057c1aa9e10c9954e4c9',
+  StableToken: '0x874069fa1eb16d44d622f2e0ca25eea172369bc1',
+  StableTokenEUR: '0x10c892a6ec43a53e45d0b916b4b7d383b1b78c0f'
 }
 
 describe('Blockchain API Utils', () => {

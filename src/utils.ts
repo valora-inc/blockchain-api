@@ -38,6 +38,9 @@ export enum Contracts {
   ExchangeEUR = 'ExchangeEUR',
   Governance = 'Governance',
   Reserve = 'Reserve',
+  GoldToken = 'GoldToken',
+  StableToken = 'StableToken',
+  StableTokenEUR = 'StableTokenEUR'
 }
 
 export interface ContractAddresses {
@@ -47,6 +50,9 @@ export interface ContractAddresses {
   [Contracts.ExchangeEUR]: string
   [Contracts.Governance]: string
   [Contracts.Reserve]: string
+  [Contracts.GoldToken]: string
+  [Contracts.StableToken]: string
+  [Contracts.StableTokenEUR]: string
 }
 
 let contractAddresses: ContractAddresses
@@ -76,6 +82,15 @@ export async function getContractAddresses(): Promise<ContractAddresses> {
       ).toLowerCase(),
       Reserve: (
         await kit.registry.addressFor(CeloContract.Reserve)
+      ).toLowerCase(),
+      GoldToken: (
+        await kit.registry.addressFor(CeloContract.GoldToken)
+      ).toLowerCase(),
+      StableToken: (
+        await kit.registry.addressFor(CeloContract.StableToken)
+      ).toLowerCase(),
+      StableTokenEUR: (
+        await kit.registry.addressFor(CeloContract.StableTokenEUR)
       ).toLowerCase(),
     }
     logger.info({

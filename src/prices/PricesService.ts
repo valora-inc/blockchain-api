@@ -3,16 +3,22 @@ import { Knex } from 'knex'
 import { HistoricalPriceRow } from '../database/types'
 import ExchangeRateAPI from '../currencyConversion/ExchangeRateAPI'
 import { logger } from '../logger'
+import { SQLDataSource } from 'datasource-sql'
 
 const TABLE_NAME = 'historical_token_prices'
 const MAX_TIME_GAP = 1000 * 60 * 60 * 4 // 4 hours
 
-export default class PricesService implements DataSource {
+// Note: I need this class to extend a DataSource (e.g. SQLDataSource) in order to be able to add it as a datasource in apollo.
+// However I didn't use the feature SQLDataSource gives us.
+export default class PricesService extends SQLDataSource {
+
   constructor(
-    private readonly db: Knex,
+    db: Knex,
     private readonly exchangeAPI: ExchangeRateAPI,
     private readonly cUSDAddress: string,
-  ) {}
+  ) {
+    super(db)
+  }
 
   /**
    * It returns an estimated price in given local currency of given token at given date.

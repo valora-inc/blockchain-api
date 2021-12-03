@@ -272,7 +272,21 @@ export const resolvers = {
       context: Context
     ) => {
       const { dataSources, localCurrencyCode } = context
-      const rate = await dataSources.
+
+      console.log(JSON.stringify(tokenAmount))
+      if (!localCurrencyCode) {
+        return null
+      } else {
+        const rate = await dataSources.pricesService.getTokenToLocalCurrencyPrice(
+          tokenAmount.tokenAddress,
+          localCurrencyCode,
+          new Date(tokenAmount.timestamp))
+        return {
+          value: rate.multipliedBy(tokenAmount.value).toString(),
+          currencyCode: localCurrencyCode,
+          exchangeRate: rate.toString()
+        }
+      }
     }
   },
   MoneyAmount: {

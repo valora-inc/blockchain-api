@@ -1,15 +1,23 @@
 import { BigNumber } from 'bignumber.js'
+import { CELO, CUSD, CEUR } from '../currencyConversion/consts'
 import { BlockscoutTokenTransfer } from '../blockscout'
 import {
   EventTypes,
-  Fee as FormattedFee,
+  FeeV2,
   TokenTransactionTypeV2,
 } from '../resolvers'
 import { Fee, Transaction } from '../transaction/Transaction'
-import { WEI_PER_GOLD } from '../utils'
+import { ContractAddresses, getContractAddresses, WEI_PER_GOLD } from '../utils'
 import knownAddressesCache from './KnownAddressesCache'
 
 export class EventBuilder {
+
+  static contractAddresses: ContractAddresses
+
+  static async loadContractAddresses() {
+    EventBuilder.contractAddresses = await getContractAddresses()
+  }
+
   static transferEvent(
     transaction: Transaction,
     transfer: BlockscoutTokenTransfer,
@@ -89,14 +97,32 @@ export class EventBuilder {
     }
   }
 
-  static formatFees(fees: Fee[], timestamp: number): FormattedFee[] {
+  static formatFees(fees: Fee[], timestamp: number): FeeV2[] {
     return fees.map((fee) => ({
       type: fee.type,
       amount: {
-        currencyCode: fee.currencyCode,
+        tokenAddress: EventBuilder.getTokenAddressFromSymbol(fee.currencyCode),
         timestamp,
         value: fee.value.dividedBy(WEI_PER_GOLD).toFixed(),
       },
     }))
+  }
+
+  /*
+   Note: to avoid changing all TransactionType#getEvent flow to be async,
+   `await getContractAddresses()` is extracted to a static variable (EventBuilder.contractAddresses)
+    that has to be loaded at the beginning of the execution (e.g, in index.ts)
+   */
+  static getTokenAddressFromSymbol(symbol: string): string {
+    switch(symbol) {
+      case CELO:
+        return EventBuilder.contractAddresses.GoldToken
+      case CUSD:
+        return EventBuilder.contractAddresses.StableToken
+      case CEUR:
+        return EventBuilder.contractAddresses.StableTokenEUR
+      default:
+        throw new Error(`Unknown token symbol: ${symbol}`)
+    }
   }
 }

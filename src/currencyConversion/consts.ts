@@ -5,6 +5,7 @@ export const CUSD = CURRENCIES[CURRENCY_ENUM.DOLLAR].code
 export const CEUR = CURRENCIES[CURRENCY_ENUM.EURO].code
 export const EUR = 'EUR'
 export const USD = 'USD'
+export const CELO = 'CELO'
 export enum supportedStableTokens {
   CEUR,
   CUSD,

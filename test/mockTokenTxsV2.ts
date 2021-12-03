@@ -3,7 +3,7 @@ export const TEST_GOLD_ADDRESS = '0x000000000000000000000000000000000000golD' //
 
 const mockTokenTxs = {
   data: {
-    transferTxs: {
+    tokenTransferTxs: {
       edges: [
         // Exchange cUSD -> cGLD (TX 1)
         {

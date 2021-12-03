@@ -11,7 +11,6 @@ const MAX_TIME_GAP = 1000 * 60 * 60 * 4 // 4 hours
 // Note: I need this class to extend a DataSource in order to be able to add it as a datasource in apollo.
 // However I didn't use the feature DataSource gives us.
 export default class PricesService<TContext = any> extends DataSource {
-
   constructor(
     private readonly db: Knex,
     private readonly exchangeRateAPI: ExchangeRateAPI,
@@ -51,8 +50,6 @@ export default class PricesService<TContext = any> extends DataSource {
       }
       return cUSDPrice.times(cUSDToLocalCurrencyPrice)
     } catch (e) {
-      // TODO: Call the legacy conversion code here instead of throwing an error
-      // This way we make sure that previous estimation still remains.
       logger.error({
         type: 'ERROR_CALCULATE_LOCAL_CURRENCY_PRICE',
         tokenAddress,

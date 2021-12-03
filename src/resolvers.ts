@@ -264,13 +264,13 @@ export const resolvers = {
         case TokenTransactionTypeV2.PAY_REQUEST:
           return 'TokenTransferV2'
       }
-    }
+    },
   },
   TokenAmount: {
-    localAmount: async(
+    localAmount: async (
       tokenAmount: TokenAmount,
       args: any,
-      context: Context
+      context: Context,
     ) => {
       const { dataSources, localCurrencyCode } = context
 
@@ -278,21 +278,23 @@ export const resolvers = {
         return null
       } else {
         try {
-          const rate = await dataSources.pricesService.getTokenToLocalCurrencyPrice(
-            tokenAmount.tokenAddress,
-            localCurrencyCode,
-            new Date(tokenAmount.timestamp))
+          const rate =
+            await dataSources.pricesService.getTokenToLocalCurrencyPrice(
+              tokenAmount.tokenAddress,
+              localCurrencyCode,
+              new Date(tokenAmount.timestamp),
+            )
           return {
             value: rate.multipliedBy(tokenAmount.value).toString(),
             currencyCode: localCurrencyCode,
-            exchangeRate: rate.toString()
+            exchangeRate: rate.toString(),
           }
         } catch (error) {
           logger.warn(error, { type: 'ERROR_FETCHING_TOKEN_LOCAL_AMOUNT' })
           return null
         }
       }
-    }
+    },
   },
   MoneyAmount: {
     localAmount: async (

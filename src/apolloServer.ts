@@ -16,9 +16,9 @@ export interface DataSources {
 
 export function initApolloServer({
   currencyConversionAPI,
-  pricesService
+  pricesService,
 }: {
-  currencyConversionAPI: CurrencyConversionAPI,
+  currencyConversionAPI: CurrencyConversionAPI
   pricesService: PricesService
 }) {
   return new ApolloServer({
@@ -29,7 +29,7 @@ export function initApolloServer({
         blockscoutAPI: new BlockscoutAPI(),
         blockscoutJsonAPI: new BlockscoutJsonAPI(),
         currencyConversionAPI,
-        pricesService
+        pricesService,
       }
     },
     formatError: (error) => {

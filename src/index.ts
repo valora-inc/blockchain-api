@@ -127,14 +127,21 @@ async function main() {
   })
 
   knownAddressesCache.startListening()
-  EventBuilder.loadContractAddresses()
+  await EventBuilder.loadContractAddresses()
 
   const exchangeRateAPI = new ExchangeRateAPI({
     exchangeRatesAPIAccessKey: args['exchange-rates-api-access-key'],
   })
   const currencyConversionAPI = new CurrencyConversionAPI({ exchangeRateAPI })
-  const pricesService = new PricesService(db, exchangeRateAPI, exchangeRateManager.cUSDTokenAddress)
-  const apolloServer = initApolloServer({ currencyConversionAPI, pricesService })
+  const pricesService = new PricesService(
+    db,
+    exchangeRateAPI,
+    exchangeRateManager.cUSDTokenAddress,
+  )
+  const apolloServer = initApolloServer({
+    currencyConversionAPI,
+    pricesService,
+  })
   await apolloServer.start()
   apolloServer.applyMiddleware({ app, path: GRAPHQL_PATH })
 

@@ -3,26 +3,32 @@ import { Knex } from 'knex'
 import { HistoricalPriceRow } from '../database/types'
 import ExchangeRateAPI from '../currencyConversion/ExchangeRateAPI'
 import { logger } from '../logger'
-import { SQLDataSource } from 'datasource-sql'
+import { DataSource, DataSourceConfig } from 'apollo-datasource'
 
 const TABLE_NAME = 'historical_token_prices'
 const MAX_TIME_GAP = 1000 * 60 * 60 * 4 // 4 hours
 
-// Note: I need this class to extend a DataSource (e.g. SQLDataSource) in order to be able to add it as a datasource in apollo.
-// However I didn't use the feature SQLDataSource gives us.
-export default class PricesService extends SQLDataSource {
+// Note: I need this class to extend a DataSource in order to be able to add it as a datasource in apollo.
+// However I didn't use the feature DataSource gives us.
+export default class PricesService<TContext = any> extends DataSource {
 
   constructor(
-    db: Knex,
-    private readonly exchangeAPI: ExchangeRateAPI,
+    private readonly db: Knex,
+    private readonly exchangeRateAPI: ExchangeRateAPI,
     private readonly cUSDAddress: string,
   ) {
-    super(db)
+    super()
+  }
+
+  initialize(config: DataSourceConfig<TContext>): void {
+    this.exchangeRateAPI.initialize(config)
   }
 
   /**
    * It returns an estimated price in given local currency of given token at given date.
-   * To do it, it uses this route: token -> cUSD -> localCurrency
+   * To do it, it uses this route: token -> cUSD -> localCurrency.
+   * It query the db to obtain the rate from token -> cUSD and then it uses ExchangeRateAPI to
+   * obtain the rate cUSD -> localCurrency.
    *
    * @param tokenAddress token address - e.g. '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73'
    * @param localCurrency local currency code - e.g. 'USD'
@@ -45,6 +51,8 @@ export default class PricesService extends SQLDataSource {
       }
       return cUSDPrice.times(cUSDToLocalCurrencyPrice)
     } catch (e) {
+      // TODO: Call the legacy conversion code here instead of throwing an error
+      // This way we make sure that previous estimation still remains.
       logger.error({
         type: 'ERROR_CALCULATE_LOCAL_CURRENCY_PRICE',
         tokenAddress,
@@ -125,7 +133,7 @@ export default class PricesService extends SQLDataSource {
     localCurrency: string,
     date: Date,
   ): Promise<BigNumber> {
-    return await this.exchangeAPI.getExchangeRate({
+    return await this.exchangeRateAPI.getExchangeRate({
       sourceCurrencyCode: this.cUSDAddress,
       currencyCode: localCurrency,
       timestamp: date.getTime(),

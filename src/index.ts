@@ -134,7 +134,7 @@ async function main() {
   })
   const currencyConversionAPI = new CurrencyConversionAPI({ exchangeRateAPI })
   const pricesService = new PricesService(db, exchangeRateAPI, exchangeRateManager.cUSDTokenAddress)
-  const apolloServer = initApolloServer({ currencyConversionAPI })
+  const apolloServer = initApolloServer({ currencyConversionAPI, pricesService })
   await apolloServer.start()
   apolloServer.applyMiddleware({ app, path: GRAPHQL_PATH })
 

@@ -7,16 +7,16 @@ Array [
     "fees": Array [
       Object {
         "amount": Object {
-          "currencyCode": "cUSD",
           "timestamp": 1566345797000,
+          "tokenAddress": "0x0000000000000000000000000000000000dollar",
           "value": "0",
         },
         "type": "GATEWAY_FEE",
       },
       Object {
         "amount": Object {
-          "currencyCode": "cUSD",
           "timestamp": 1566345797000,
+          "tokenAddress": "0x0000000000000000000000000000000000dollar",
           "value": "0.010091957572465625",
         },
         "type": "SECURITY_FEE",
@@ -41,16 +41,16 @@ Array [
     "fees": Array [
       Object {
         "amount": Object {
-          "currencyCode": "cUSD",
           "timestamp": 1566345926000,
+          "tokenAddress": "0x0000000000000000000000000000000000dollar",
           "value": "0",
         },
         "type": "GATEWAY_FEE",
       },
       Object {
         "amount": Object {
-          "currencyCode": "cUSD",
           "timestamp": 1566345926000,
+          "tokenAddress": "0x0000000000000000000000000000000000dollar",
           "value": "0.01102543453093182",
         },
         "type": "SECURITY_FEE",
@@ -82,16 +82,16 @@ Array [
     "fees": Array [
       Object {
         "amount": Object {
-          "currencyCode": "cUSD",
           "timestamp": 1566346276000,
+          "tokenAddress": "0x0000000000000000000000000000000000dollar",
           "value": "0.01",
         },
         "type": "GATEWAY_FEE",
       },
       Object {
         "amount": Object {
-          "currencyCode": "cUSD",
           "timestamp": 1566346276000,
+          "tokenAddress": "0x0000000000000000000000000000000000dollar",
           "value": "0.0056589",
         },
         "type": "SECURITY_FEE",
@@ -118,16 +118,16 @@ Array [
     "fees": Array [
       Object {
         "amount": Object {
-          "currencyCode": "cUSD",
           "timestamp": 1566346336000,
+          "tokenAddress": "0x0000000000000000000000000000000000dollar",
           "value": "0.01",
         },
         "type": "GATEWAY_FEE",
       },
       Object {
         "amount": Object {
-          "currencyCode": "cUSD",
           "timestamp": 1566346336000,
+          "tokenAddress": "0x0000000000000000000000000000000000dollar",
           "value": "0.0056589",
         },
         "type": "SECURITY_FEE",
@@ -154,16 +154,16 @@ Array [
     "fees": Array [
       Object {
         "amount": Object {
-          "currencyCode": "cUSD",
           "timestamp": 1566346396000,
+          "tokenAddress": "0x0000000000000000000000000000000000dollar",
           "value": "0.01",
         },
         "type": "GATEWAY_FEE",
       },
       Object {
         "amount": Object {
-          "currencyCode": "cUSD",
           "timestamp": 1566346396000,
+          "tokenAddress": "0x0000000000000000000000000000000000dollar",
           "value": "0.0056589",
         },
         "type": "SECURITY_FEE",
@@ -208,8 +208,8 @@ Array [
     "fees": Array [
       Object {
         "amount": Object {
-          "currencyCode": "cGLD",
           "timestamp": 1566481000000,
+          "tokenAddress": "0x000000000000000000000000000000000000gold",
           "value": "0.00023713",
         },
         "type": "SECURITY_FEE",
@@ -236,16 +236,16 @@ Array [
     "fees": Array [
       Object {
         "amount": Object {
-          "currencyCode": "cGLD",
           "timestamp": 1566481060000,
+          "tokenAddress": "0x000000000000000000000000000000000000gold",
           "value": "0.00000001",
         },
         "type": "GATEWAY_FEE",
       },
       Object {
         "amount": Object {
-          "currencyCode": "cGLD",
           "timestamp": 1566481060000,
+          "tokenAddress": "0x000000000000000000000000000000000000gold",
           "value": "0.00023713",
         },
         "type": "SECURITY_FEE",
@@ -261,6 +261,42 @@ Array [
     "type": "SENT",
   },
   Object {
+    "account": "0xf4314cb9046bece6aa54bb9533155434d0c76909",
+    "address": "0xf4314cb9046bece6aa54bb9533155434d0c76909",
+    "amount": Object {
+      "timestamp": 1566482000000,
+      "tokenAddress": "0x000000000000000000000000000000000000golD",
+      "value": "10",
+    },
+    "block": "117451",
+    "metadata": Object {
+      "comment": "",
+      "image": "Test Image",
+      "title": "Test Name",
+    },
+    "timestamp": 1566482000000,
+    "transactionHash": "0xe8fe81f455eb34b672a8d8dd091472f1ae8d4d204817f0bcbb7a13486b9b5605",
+    "type": "RECEIVED",
+  },
+  Object {
+    "account": "0x0000000000000000000000000000000000f40c37",
+    "address": "0x0000000000000000000000000000000000f40c37",
+    "amount": Object {
+      "timestamp": 1566483000000,
+      "tokenAddress": "0x000000000000000000000000000000000000golD",
+      "value": "5",
+    },
+    "block": "117451",
+    "metadata": Object {
+      "comment": "",
+      "image": undefined,
+      "title": undefined,
+    },
+    "timestamp": 1566483000000,
+    "transactionHash": "0xf6856169eb7bf78211babc312028cddf3dad2761799428ab6e4fcf297a27fe09",
+    "type": "RECEIVED",
+  },
+  Object {
     "account": "0x0000000000000000000000000000000000a77327",
     "address": "0x0000000000000000000000000000000000a77327",
     "amount": Object {
@@ -272,8 +308,8 @@ Array [
     "fees": Array [
       Object {
         "amount": Object {
-          "currencyCode": "cUSD",
           "timestamp": 1566483998000,
+          "tokenAddress": "0x0000000000000000000000000000000000dollar",
           "value": "0.0005911869963022",
         },
         "type": "SECURITY_FEE",
@@ -318,8 +354,8 @@ Array [
     "fees": Array [
       Object {
         "amount": Object {
-          "currencyCode": "cUSD",
           "timestamp": 1618593079000,
+          "tokenAddress": "0x0000000000000000000000000000000000dollar",
           "value": "0.00795255",
         },
         "type": "SECURITY_FEE",
@@ -346,8 +382,8 @@ Array [
     "fees": Array [
       Object {
         "amount": Object {
-          "currencyCode": "cUSD",
           "timestamp": 1621185010000,
+          "tokenAddress": "0x0000000000000000000000000000000000dollar",
           "value": "0.000051519",
         },
         "type": "SECURITY_FEE",

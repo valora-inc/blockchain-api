@@ -1,5 +1,6 @@
 import { BlockscoutAPI } from '../src/blockscout'
 import CurrencyConversionAPI from '../src/currencyConversion/CurrencyConversionAPI'
+import { EventBuilder } from '../src/helpers/EventBuilder'
 import mockTokenTxs from './mockTokenTxsV2'
 
 const mockDataSourcePost = jest.fn(() => mockTokenTxs)
@@ -30,8 +31,8 @@ jest.mock('../src/utils.ts', () => {
   }
   contractGetter.mockReturnValue({
     tokenAddressMapping,
-    goldTokenAddress: '0x000000000000000000000000000000000000gold',
-    stableTokenAddress: '0x0000000000000000000000000000000000dollar',
+    GoldToken: '0x000000000000000000000000000000000000gold',
+    StableToken: '0x0000000000000000000000000000000000dollar',
     Attestations: '0x0000000000000000000000000000000000a77357',
     Escrow: '0x0000000000000000000000000000000000a77327',
     Exchange: '0xf1235cb0d3703e7cc2473fb4e214fbc7a9ff77cc',
@@ -68,10 +69,16 @@ const mockCurrencyConversionAPI: CurrencyConversionAPI = {
 
 describe('Blockscout', () => {
   let blockscoutAPI: BlockscoutAPI
+  let contractAddressesBackup = EventBuilder.contractAddresses 
 
-  beforeEach(() => {
+  beforeEach(async () => {
     blockscoutAPI = new BlockscoutAPI()
     mockDataSourcePost.mockClear()
+    await EventBuilder.loadContractAddresses()
+  })
+
+  afterEach(() => {
+    EventBuilder.contractAddresses = contractAddressesBackup
   })
 
   // TODO: Uncomment these tests when the token filter works

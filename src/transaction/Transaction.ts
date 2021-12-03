@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js'
 import { BlockscoutTransferTx } from '../blockscout'
-import { CGLD } from '../currencyConversion/consts'
+import { CELO } from '../currencyConversion/consts'
 import { InputDecoder } from '../helpers/InputDecoder'
 import { FeeType } from '../resolvers'
 import { Contracts } from '../utils'
@@ -73,7 +73,7 @@ export class Transaction {
   }
 
   isCeloTransaction(): boolean {
-    return !this.blockscoutTx.feeToken || this.blockscoutTx.feeToken === CGLD
+    return !this.blockscoutTx.feeToken || this.blockscoutTx.feeToken === CELO
   }
 
   private hasGatewayRecipient(): boolean {
@@ -132,7 +132,7 @@ export class Transaction {
         this.blockscoutTx.gasUsed,
       ),
       currencyCode: this.isCeloTransaction()
-        ? CGLD
+        ? CELO
         : this.blockscoutTx.feeToken,
     })
   }
@@ -152,7 +152,7 @@ export class Transaction {
       type: FeeType.GATEWAY_FEE,
       value: new BigNumber(this.blockscoutTx.gatewayFee),
       currencyCode: this.isCeloTransaction()
-        ? CGLD
+        ? CELO
         : this.blockscoutTx.feeToken,
     })
   }

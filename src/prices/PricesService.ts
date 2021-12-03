@@ -9,7 +9,6 @@ const TABLE_NAME = 'historical_token_prices'
 const MAX_TIME_GAP = 1000 * 60 * 60 * 4 // 4 hours
 
 // Note: I need this class to extend a DataSource in order to be able to add it as a datasource in apollo.
-// However I didn't use the feature DataSource gives us.
 export default class PricesService<TContext = any> extends DataSource {
   constructor(
     private readonly db: Knex,

@@ -1,6 +1,7 @@
 import PricesService from '../../src/prices/PricesService'
 import { initDatabase } from '../../src/database/db'
 import { Knex } from 'knex'
+import { USD } from '../../src/currencyConversion/consts'
 
 const tableName = 'historical_token_prices'
 
@@ -8,7 +9,7 @@ const mockcUSDAddress = 'cUSD'
 const mockDate = 1487076708000
 const token = 'bitcoin'
 const fakeToken = 'fake'
-const localCurrency = 'USD'
+const localCurrency = 'EUR'
 const HOURS = 1000 * 3600
 
 const mockGetExchangeRate = jest.fn()
@@ -113,7 +114,7 @@ describe('PricesService', () => {
 
     expect(mockGetExchangeRate).toHaveBeenCalledWith(
       expect.objectContaining({
-        sourceCurrencyCode: mockcUSDAddress,
+        sourceCurrencyCode: USD,
         currencyCode: localCurrency,
         timestamp: queryDate.getTime(),
       }),

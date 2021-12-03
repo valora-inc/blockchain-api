@@ -4,6 +4,7 @@ import { HistoricalPriceRow } from '../database/types'
 import ExchangeRateAPI from '../currencyConversion/ExchangeRateAPI'
 import { logger } from '../logger'
 import { DataSource, DataSourceConfig } from 'apollo-datasource'
+import { USD } from '../currencyConversion/consts'
 
 const TABLE_NAME = 'historical_token_prices'
 const MAX_TIME_GAP = 1000 * 60 * 60 * 4 // 4 hours
@@ -24,9 +25,10 @@ export default class PricesService<TContext = any> extends DataSource {
 
   /**
    * It returns an estimated price in given local currency of given token at given date.
-   * To do it, it uses this route: token -> cUSD -> localCurrency.
+   * To do it, it uses this route: token -> cUSD -> USD -> localCurrency.
    * It query the db to obtain the rate from token -> cUSD and then it uses ExchangeRateAPI to
-   * obtain the rate cUSD -> localCurrency.
+   * obtain the rate USD -> localCurrency.
+   * It assumes cUSD -> USD rate is 1. TODO: Use real rate
    *
    * @param tokenAddress token address - e.g. '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73'
    * @param localCurrency local currency code - e.g. 'USD'
@@ -40,7 +42,7 @@ export default class PricesService<TContext = any> extends DataSource {
   ): Promise<BigNumber> {
     try {
       const cUSDPrice = await this.getcUSDPrice(tokenAddress, date)
-      const cUSDToLocalCurrencyPrice = await this.cUSDToLocalCurrency(
+      const cUSDToLocalCurrencyPrice = await this.USDToLocalCurrency(
         localCurrency,
         date,
       )
@@ -125,12 +127,16 @@ export default class PricesService<TContext = any> extends DataSource {
     )
   }
 
-  private async cUSDToLocalCurrency(
+  private async USDToLocalCurrency(
     localCurrency: string,
     date: Date,
   ): Promise<BigNumber> {
+    if (localCurrency === USD) {
+      return new BigNumber(1)
+    }
+
     return await this.exchangeRateAPI.getExchangeRate({
-      sourceCurrencyCode: this.cUSDAddress,
+      sourceCurrencyCode: USD,
       currencyCode: localCurrency,
       timestamp: date.getTime(),
     })

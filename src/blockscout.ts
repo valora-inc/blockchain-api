@@ -146,7 +146,7 @@ export class BlockscoutAPI extends RESTDataSource {
       query: `
         query Transfers($address: AddressHash!) {
           # TXs related to cUSD or cGLD transfers
-          transferTxs(addressHash: $address, first: 100) {
+          tokenTransferTxs(addressHash: $address, first: 100) {
             edges {
               node {
                 transactionHash
@@ -179,7 +179,7 @@ export class BlockscoutAPI extends RESTDataSource {
       variables: { address },
     })
 
-    const transactions = response.data.transferTxs.edges.map(
+    const transactions = response.data.tokenTransferTxs.edges.map(
       ({ node }: any) => {
         const { tokenTransfer, ...partialTransferTx } = node
         const tokenTransfers = node.tokenTransfer.edges.map(

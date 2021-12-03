@@ -69,7 +69,7 @@ const mockCurrencyConversionAPI: CurrencyConversionAPI = {
 
 describe('Blockscout', () => {
   let blockscoutAPI: BlockscoutAPI
-  let contractAddressesBackup = EventBuilder.contractAddresses 
+  const contractAddressesBackup = EventBuilder.contractAddresses
 
   beforeEach(async () => {
     blockscoutAPI = new BlockscoutAPI()

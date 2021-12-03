@@ -126,7 +126,7 @@ async function main() {
   })
 
   knownAddressesCache.startListening()
-  EventBuilder.loadContractAddresses()
+  await EventBuilder.loadContractAddresses()
 
   const exchangeRateAPI = new ExchangeRateAPI({
     exchangeRatesAPIAccessKey: args['exchange-rates-api-access-key'],

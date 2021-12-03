@@ -40,7 +40,7 @@ export enum Contracts {
   Reserve = 'Reserve',
   GoldToken = 'GoldToken',
   StableToken = 'StableToken',
-  StableTokenEUR = 'StableTokenEUR'
+  StableTokenEUR = 'StableTokenEUR',
 }
 
 export interface ContractAddresses {

@@ -1,17 +1,12 @@
 import { BigNumber } from 'bignumber.js'
 import { CELO, CUSD, CEUR } from '../currencyConversion/consts'
 import { BlockscoutTokenTransfer } from '../blockscout'
-import {
-  EventTypes,
-  FeeV2,
-  TokenTransactionTypeV2,
-} from '../resolvers'
+import { EventTypes, FeeV2, TokenTransactionTypeV2 } from '../resolvers'
 import { Fee, Transaction } from '../transaction/Transaction'
 import { ContractAddresses, getContractAddresses, WEI_PER_GOLD } from '../utils'
 import knownAddressesCache from './KnownAddressesCache'
 
 export class EventBuilder {
-
   static contractAddresses: ContractAddresses
 
   static async loadContractAddresses() {
@@ -114,7 +109,7 @@ export class EventBuilder {
     that has to be loaded at the beginning of the execution (e.g, in index.ts)
    */
   static getTokenAddressFromSymbol(symbol: string): string {
-    switch(symbol) {
+    switch (symbol) {
       case CELO:
         return EventBuilder.contractAddresses.GoldToken
       case CUSD:

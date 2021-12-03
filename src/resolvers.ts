@@ -263,7 +263,7 @@ export const resolvers = {
         case TokenTransactionTypeV2.PAY_REQUEST:
           return 'TokenTransferV2'
       }
-    }
+    },
   },
   MoneyAmount: {
     localAmount: async (

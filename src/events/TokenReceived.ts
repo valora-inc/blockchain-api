@@ -11,7 +11,7 @@ export class TokenReceived extends TransactionType {
     )
   }
 
-  getEvent(transaction: Transaction) {
+  async getEvent(transaction: Transaction) {
     const transfer = transaction.transfers.getTransferTo(
       this.context.userAddress,
     )
@@ -20,7 +20,7 @@ export class TokenReceived extends TransactionType {
       throw new Error('Transfer to the user not found.')
     }
 
-    return EventBuilder.transferEvent(
+    return await EventBuilder.transferEvent(
       transaction,
       transfer,
       TokenTransactionTypeV2.RECEIVED,

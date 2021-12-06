@@ -1,7 +1,9 @@
 import { BlockscoutAPI } from '../src/blockscout'
 import CurrencyConversionAPI from '../src/currencyConversion/CurrencyConversionAPI'
-import { EventBuilder } from '../src/helpers/EventBuilder'
-import mockTokenTxs from './mockTokenTxsV2'
+import mockTokenTxs, {
+  TEST_DOLLAR_ADDRESS,
+  TEST_GOLD_ADDRESS,
+} from './mockTokenTxsV2'
 
 const mockDataSourcePost = jest.fn(() => mockTokenTxs)
 
@@ -62,6 +64,19 @@ jest.mock('../src/helpers/KnownAddressesCache.ts', () => {
   }
 })
 
+jest.mock('../src/helpers/TokenInfoCache.ts', () => ({
+  getDecimalsForToken: (address: string) => {
+    switch (address) {
+      case TEST_GOLD_ADDRESS:
+        return 18
+      case TEST_DOLLAR_ADDRESS:
+        return 12
+      default:
+        return 8
+    }
+  },
+}))
+
 // @ts-ignore
 const mockCurrencyConversionAPI: CurrencyConversionAPI = {
   getFromMoneyAmount: jest.fn(),
@@ -69,16 +84,10 @@ const mockCurrencyConversionAPI: CurrencyConversionAPI = {
 
 describe('Blockscout', () => {
   let blockscoutAPI: BlockscoutAPI
-  const contractAddressesBackup = EventBuilder.contractAddresses
 
   beforeEach(async () => {
     blockscoutAPI = new BlockscoutAPI()
     mockDataSourcePost.mockClear()
-    await EventBuilder.loadContractAddresses()
-  })
-
-  afterEach(() => {
-    EventBuilder.contractAddresses = contractAddressesBackup
   })
 
   // TODO: Uncomment these tests when the token filter works

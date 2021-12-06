@@ -12,7 +12,7 @@ export class ExchangeCeloToToken extends TransactionType {
     )
   }
 
-  getEvent(transaction: Transaction) {
+  async getEvent(transaction: Transaction) {
     const inTransfer = transaction.transfers.getTransferTo(Contracts.Reserve)
     const outTransfer = transaction.transfers.getMintedTokenTransfer()
 
@@ -24,7 +24,7 @@ export class ExchangeCeloToToken extends TransactionType {
       throw new Error('Minted token transfer not found.')
     }
 
-    return EventBuilder.exchangeEvent(
+    return await EventBuilder.exchangeEvent(
       transaction,
       inTransfer,
       outTransfer,

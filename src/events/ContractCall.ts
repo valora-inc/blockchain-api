@@ -6,7 +6,7 @@ export class ContractCall extends TransactionType {
     return transaction.transfers.isEmpty()
   }
 
-  getEvent(transaction: Transaction) {
+  async getEvent(transaction: Transaction) {
     return
   }
 

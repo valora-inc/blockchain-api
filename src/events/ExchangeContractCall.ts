@@ -11,7 +11,7 @@ export class ExchangeContractCall extends TransactionType {
     )
   }
 
-  getEvent(transaction: Transaction) {
+  async getEvent(transaction: Transaction) {
     return
   }
 

@@ -113,18 +113,21 @@ export class BlockscoutAPI extends RESTDataSource {
       classifiedTransactions,
     )
 
-    const events: any[] = aggregatedTransactions
-      .map(({ transaction, type }) => {
-        try {
-          return type.getEvent(transaction)
-        } catch (e) {
-          logger.error({
-            type: 'ERROR_MAPPING_TO_EVENT_V2',
-            transaction: JSON.stringify(transaction),
-            error: (e as Error)?.message,
-          })
-        }
-      })
+    const events: any[] = (
+      await Promise.all(
+        aggregatedTransactions.map(async ({ transaction, type }) => {
+          try {
+            return await type.getEvent(transaction)
+          } catch (e) {
+            logger.error({
+              type: 'ERROR_MAPPING_TO_EVENT_V2',
+              transaction: JSON.stringify(transaction),
+              error: (e as Error)?.message,
+            })
+          }
+        }),
+      )
+    )
       .filter((e) => e)
       .sort((a, b) => b.timestamp - a.timestamp)
 

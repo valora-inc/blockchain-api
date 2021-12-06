@@ -13,6 +13,6 @@ export abstract class TransactionType {
   }
 
   abstract matches(transaction: Transaction): boolean
-  abstract getEvent(transaction: Transaction): any
+  abstract getEvent(transaction: Transaction): Promise<any>
   abstract isAggregatable(): boolean
 }

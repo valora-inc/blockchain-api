@@ -134,7 +134,7 @@ export default `type ExchangeRate {
     amount: TokenAmount!
   }
 
-  interface TokenTransferMetadata {
+  type TokenTransferMetadata {
     title: String
     subtitle: String
     image: String
@@ -144,7 +144,7 @@ export default `type ExchangeRate {
   """
   TODO: Add more fields once we understand what useful information we can serve
   """
-  interface TokenExchangeMetadata {
+  type TokenExchangeMetadata {
     title: String
     subtitle: String
   }

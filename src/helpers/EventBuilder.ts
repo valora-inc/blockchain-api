@@ -5,6 +5,7 @@ import { EventTypes, FeeV2, TokenTransactionTypeV2 } from '../resolvers'
 import { Fee, Transaction } from '../transaction/Transaction'
 import { ContractAddresses, getContractAddresses, WEI_PER_GOLD } from '../utils'
 import knownAddressesCache from './KnownAddressesCache'
+import tokenInfoCache from './TokenInfoCache'
 
 export class EventBuilder {
   static contractAddresses: ContractAddresses
@@ -13,7 +14,7 @@ export class EventBuilder {
     EventBuilder.contractAddresses = await getContractAddresses()
   }
 
-  static transferEvent(
+  static async transferEvent(
     transaction: Transaction,
     transfer: BlockscoutTokenTransfer,
     eventType: TokenTransactionTypeV2,
@@ -41,7 +42,7 @@ export class EventBuilder {
         // Signed amount relative to the account currency
         value: new BigNumber(transfer.value)
           .multipliedBy(isOutgoingTransaction ? -1 : 1)
-          .dividedBy(WEI_PER_GOLD)
+          .dividedBy(await this.getWeiForToken(transfer.tokenAddress))
           .toString(),
         tokenAddress: transfer.tokenAddress,
         timestamp,
@@ -52,12 +53,12 @@ export class EventBuilder {
         image: imageUrl,
       },
       ...(fees && {
-        fees: EventBuilder.formatFees(fees, transaction.timestamp),
+        fees: await EventBuilder.formatFees(fees, transaction.timestamp),
       }),
     }
   }
 
-  static exchangeEvent(
+  static async exchangeEvent(
     transaction: Transaction,
     inTransfer: BlockscoutTokenTransfer,
     outTransfer: BlockscoutTokenTransfer,
@@ -74,50 +75,54 @@ export class EventBuilder {
       transactionHash,
       inAmount: {
         value: new BigNumber(inTransfer!.value)
-          .dividedBy(WEI_PER_GOLD)
+          .dividedBy(await this.getWeiForToken(inTransfer.tokenAddress))
           .toString(),
         tokenAddress: inTransfer.tokenAddress,
         timestamp,
       },
       outAmount: {
         value: new BigNumber(outTransfer!.value)
-          .dividedBy(WEI_PER_GOLD)
+          .dividedBy(await this.getWeiForToken(outTransfer.tokenAddress))
           .toString(),
         tokenAddress: outTransfer.tokenAddress,
         timestamp,
       },
       ...(fees && {
-        fees: EventBuilder.formatFees(fees, transaction.timestamp),
+        fees: await EventBuilder.formatFees(fees, transaction.timestamp),
       }),
     }
   }
 
-  static formatFees(fees: Fee[], timestamp: number): FeeV2[] {
-    return fees.map((fee) => ({
-      type: fee.type,
-      amount: {
-        tokenAddress: EventBuilder.getTokenAddressFromSymbol(fee.currencyCode),
-        timestamp,
-        value: fee.value.dividedBy(WEI_PER_GOLD).toFixed(),
-      },
-    }))
+  static async formatFees(fees: Fee[], timestamp: number): Promise<FeeV2[]> {
+    return await Promise.all(
+      fees.map(async (fee) => ({
+        type: fee.type,
+        amount: {
+          tokenAddress: await EventBuilder.getTokenAddressFromSymbol(
+            fee.currencyCode,
+          ),
+          timestamp,
+          value: fee.value.dividedBy(WEI_PER_GOLD).toFixed(),
+        },
+      })),
+    )
   }
 
-  /*
-   Note: to avoid changing all TransactionType#getEvent flow to be async,
-   `await getContractAddresses()` is extracted to a static variable (EventBuilder.contractAddresses)
-    that has to be loaded at the beginning of the execution (e.g, in index.ts)
-   */
-  static getTokenAddressFromSymbol(symbol: string): string {
+  static async getTokenAddressFromSymbol(symbol: string): Promise<string> {
+    const contractAddresses = await getContractAddresses()
     switch (symbol) {
       case CELO:
-        return EventBuilder.contractAddresses.GoldToken
+        return contractAddresses.GoldToken
       case CUSD:
-        return EventBuilder.contractAddresses.StableToken
+        return contractAddresses.StableToken
       case CEUR:
-        return EventBuilder.contractAddresses.StableTokenEUR
+        return contractAddresses.StableTokenEUR
       default:
         throw new Error(`Unknown token symbol: ${symbol}`)
     }
+  }
+
+  static async getWeiForToken(address: string) {
+    return Math.pow(10, await tokenInfoCache.getDecimalsForToken(address))
   }
 }

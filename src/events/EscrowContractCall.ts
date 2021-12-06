@@ -10,7 +10,7 @@ export class EscrowContractCall extends TransactionType {
     )
   }
 
-  getEvent(transaction: Transaction) {
+  async getEvent(transaction: Transaction) {
     return
   }
 

@@ -25,7 +25,7 @@ Array [
     "inAmount": Object {
       "timestamp": 1566345797000,
       "tokenAddress": "0x0000000000000000000000000000000000dollaR",
-      "value": "10",
+      "value": "10000000",
     },
     "outAmount": Object {
       "timestamp": 1566345797000,
@@ -64,7 +64,7 @@ Array [
     "outAmount": Object {
       "timestamp": 1566345926000,
       "tokenAddress": "0x0000000000000000000000000000000000dollaR",
-      "value": "10",
+      "value": "10000000",
     },
     "timestamp": 1566345926000,
     "transactionHash": "0x961403536006f9c120c23900f94da59dbf43edf10eb3569b448665483bab77b2",
@@ -76,7 +76,7 @@ Array [
     "amount": Object {
       "timestamp": 1566346276000,
       "tokenAddress": "0x0000000000000000000000000000000000dollaR",
-      "value": "-0.15",
+      "value": "-150000",
     },
     "block": "90719",
     "fees": Array [
@@ -112,7 +112,7 @@ Array [
     "amount": Object {
       "timestamp": 1566346336000,
       "tokenAddress": "0x0000000000000000000000000000000000dollaR",
-      "value": "-0.15",
+      "value": "-150000",
     },
     "block": "90791",
     "fees": Array [
@@ -148,7 +148,7 @@ Array [
     "amount": Object {
       "timestamp": 1566346396000,
       "tokenAddress": "0x0000000000000000000000000000000000dollaR",
-      "value": "-0.15",
+      "value": "-150000",
     },
     "block": "90792",
     "fees": Array [
@@ -184,7 +184,7 @@ Array [
     "amount": Object {
       "timestamp": 1566479946000,
       "tokenAddress": "0x0000000000000000000000000000000000dollaR",
-      "value": "10",
+      "value": "10000000",
     },
     "block": "117453",
     "metadata": Object {
@@ -302,7 +302,7 @@ Array [
     "amount": Object {
       "timestamp": 1566483998000,
       "tokenAddress": "0x0000000000000000000000000000000000dollaR",
-      "value": "-0.118829058457955309",
+      "value": "-118829.058457955309",
     },
     "block": "117451",
     "fees": Array [
@@ -330,7 +330,7 @@ Array [
     "amount": Object {
       "timestamp": 1618593019000,
       "tokenAddress": "0x0000000000000000000000000000000000dollaR",
-      "value": "20",
+      "value": "20000000",
     },
     "block": "6203333",
     "metadata": Object {
@@ -348,7 +348,7 @@ Array [
     "amount": Object {
       "timestamp": 1618593079000,
       "tokenAddress": "0x0000000000000000000000000000000000dollaR",
-      "value": "-0.2",
+      "value": "-200000",
     },
     "block": "117451",
     "fees": Array [
@@ -376,7 +376,7 @@ Array [
     "amount": Object {
       "timestamp": 1621185010000,
       "tokenAddress": "0x0000000000000000000000000000000000dollaR",
-      "value": "-1",
+      "value": "-1000000",
     },
     "block": "1487877",
     "fees": Array [

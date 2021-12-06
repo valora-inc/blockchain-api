@@ -14,7 +14,7 @@ export class ExchangeTokenToCelo extends TransactionType {
     )
   }
 
-  getEvent(transaction: Transaction) {
+  async getEvent(transaction: Transaction) {
     const inTransfer =
       transaction.transfers.getTransferTo(Contracts.Exchange) ??
       transaction.transfers.getTransferTo(Contracts.ExchangeEUR)
@@ -28,7 +28,7 @@ export class ExchangeTokenToCelo extends TransactionType {
       throw new Error('Transfer from Reserve not found.')
     }
 
-    return EventBuilder.exchangeEvent(
+    return await EventBuilder.exchangeEvent(
       transaction,
       inTransfer,
       outTransfer,

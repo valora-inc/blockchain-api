@@ -12,14 +12,14 @@ export class EscrowReceived extends TransactionType {
     )
   }
 
-  getEvent(transaction: Transaction) {
+  async getEvent(transaction: Transaction) {
     const transfer = transaction.transfers.getTransferFrom(Contracts.Escrow)
 
     if (!transfer) {
       throw new Error('Transfer from Escrow not found.')
     }
 
-    return EventBuilder.transferEvent(
+    return await EventBuilder.transferEvent(
       transaction,
       transfer,
       TokenTransactionTypeV2.INVITE_RECEIVED,

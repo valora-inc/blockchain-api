@@ -13,7 +13,6 @@ import {
   createNewManager,
   configs as exchangesConfigs,
 } from '@valora/exchanges'
-import { EventBuilder } from './helpers/EventBuilder'
 
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
@@ -126,7 +125,6 @@ async function main() {
   })
 
   knownAddressesCache.startListening()
-  await EventBuilder.loadContractAddresses()
 
   const exchangeRateAPI = new ExchangeRateAPI({
     exchangeRatesAPIAccessKey: args['exchange-rates-api-access-key'],

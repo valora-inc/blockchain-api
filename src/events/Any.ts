@@ -7,7 +7,7 @@ export class Any extends TransactionType {
     return true
   }
 
-  getEvent(transaction: Transaction) {
+  async getEvent(transaction: Transaction) {
     metrics.unknownTransaction()
     throw new Error('Unknown transaction type')
   }

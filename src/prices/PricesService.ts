@@ -42,14 +42,14 @@ export default class PricesService<TContext = any> extends DataSource {
   ): Promise<BigNumber> {
     try {
       const cUSDPrice = await this.getcUSDPrice(tokenAddress, date)
-      const cUSDToLocalCurrencyPrice = await this.USDToLocalCurrency(
+      const usdToLocalCurrencyPrice = await this.usdToLocalCurrency(
         localCurrency,
         date,
       )
-      if (!cUSDToLocalCurrencyPrice) {
+      if (!usdToLocalCurrencyPrice) {
         throw new Error('Failed to calculate local currency price')
       }
-      return cUSDPrice.times(cUSDToLocalCurrencyPrice)
+      return cUSDPrice.times(usdToLocalCurrencyPrice)
     } catch (e) {
       logger.error({
         type: 'ERROR_CALCULATE_LOCAL_CURRENCY_PRICE',
@@ -127,7 +127,7 @@ export default class PricesService<TContext = any> extends DataSource {
     )
   }
 
-  private async USDToLocalCurrency(
+  private async usdToLocalCurrency(
     localCurrency: string,
     date: Date,
   ): Promise<BigNumber> {

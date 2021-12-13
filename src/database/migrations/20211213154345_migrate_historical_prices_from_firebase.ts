@@ -4,7 +4,6 @@ import { database } from '../../firebase'
 
 interface TokenAddresses {
   cUSD: string,
-  cEUR: string,
   CELO: string
 }
 
@@ -14,7 +13,6 @@ export async function up(knex: Knex): Promise<void> {
   })
 
   const tokenAddresses = await fetchTokensAddresses()
-  console.log(JSON.stringify(tokenAddresses))
   const tuplesToInsert = await fetchHistoricalData(tokenAddresses)
   await knex.batchInsert('historical_token_prices', tuplesToInsert)
 }
@@ -46,7 +44,6 @@ async function fetchTokensAddresses(): Promise<TokenAddresses> {
   const tokensInfoValue = Object.values(snapshot)
   return {
     cUSD: getAddressForSymbol(tokensInfoValue, "cUSD"),
-    cEUR: getAddressForSymbol(tokensInfoValue, "cEUR"),
     CELO: getAddressForSymbol(tokensInfoValue, "CELO"),
   }
 }

@@ -8,13 +8,15 @@ interface TokenAddresses {
 }
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.schema.alterTable('historical_token_prices', (table) => {
-    table.string('fetched_from')
-  })
-
-  const tokenAddresses = await fetchTokensAddresses()
-  const tuplesToInsert = await fetchHistoricalData(tokenAddresses)
-  await knex.batchInsert('historical_token_prices', tuplesToInsert)
+  try {
+    internalUp(knex)
+  } catch(e) {
+    console.warn("Error while migrating historical prices", (e as Error).message)
+    // Skip e2e since we don't have a firebase connection
+    if (process.env.DEPLOY_ENV !== 'e2e') {
+      throw e
+    }
+  }
 }
 
 export async function down(knex: Knex): Promise<void> {
@@ -25,6 +27,17 @@ export async function down(knex: Knex): Promise<void> {
   await knex.schema.alterTable('historical_token_prices', (table) => {
       table.dropColumn('fetched_from')
   })
+}
+
+async function internalUp(knex: Knex) {
+  await knex.schema.alterTable('historical_token_prices', (table) => {
+    table.string('fetched_from')
+  })
+
+  const tokenAddresses = await fetchTokensAddresses()
+  const tuplesToInsert = await fetchHistoricalData(tokenAddresses)
+  
+  await knex.batchInsert('historical_token_prices', tuplesToInsert)
 }
 
 async function fetchHistoricalData(tokenAddresses: TokenAddresses) {

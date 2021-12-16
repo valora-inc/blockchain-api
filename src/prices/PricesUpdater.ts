@@ -21,7 +21,7 @@ export async function updatePrices({
     base_token: cUSDAddress,
     price: price.toString(),
     at: fetchTime.toISOString(),
-    fetched_from: "Exchange library"
+    fetched_from: 'Exchange library',
   }))
 
   db('historical_token_prices')

@@ -7,17 +7,14 @@ interface TokenAddresses {
   CELO: string
 }
 
+// Once the migration is done in alfajores and mainnet, we could remove this file or at least silent its errors
 export async function up(knex: Knex): Promise<void> {
-  await knex.schema.alterTable('historical_token_prices', (table) => {
-    table.string('fetched_from')
-  })
-
   try {
     await historicalPricesMigration(knex)
     logger.info('Historical prices migrated')
   } catch (e) {
     logger.warn('Error while migrating historical prices', (e as Error).message)
-    // Skip e2e and local since maybe we don't have a firebase connection
+    // Skip e2e and local since maybe we don't have a firebase connection.
     if (
       process.env.DEPLOY_ENV !== 'e2e' &&
       process.env.DEPLOY_ENV !== 'local'
@@ -31,10 +28,6 @@ export async function down(knex: Knex): Promise<void> {
   await knex('historical_token_prices')
     .delete()
     .where({ fetched_from: '20211213154345_migration' })
-
-  await knex.schema.alterTable('historical_token_prices', (table) => {
-    table.dropColumn('fetched_from')
-  })
 }
 
 async function historicalPricesMigration(knex: Knex) {

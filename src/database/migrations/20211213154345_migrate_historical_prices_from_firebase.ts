@@ -54,12 +54,18 @@ async function fetchHistoricalData(tokenAddresses: TokenAddresses) {
 async function fetchTokensAddresses(): Promise<TokenAddresses> {
   const snapshot = (await database.ref(`tokensInfo`).once('value')).val()
   const tokensInfoValue = Object.values(snapshot)
+  const cUSDAddress = getAddressForSymbol(tokensInfoValue, 'cUSD')
+  const celoAddress = getAddressForSymbol(tokensInfoValue, 'CELO')
+
+  if (!cUSDAddress || !celoAddress) {
+    throw new Error("Can't obtain token addresses");
+  }
   return {
-    cUSD: getAddressForSymbol(tokensInfoValue, 'cUSD'),
-    CELO: getAddressForSymbol(tokensInfoValue, 'CELO'),
+    cUSD: cUSDAddress,
+    CELO: celoAddress,
   }
 }
 
-function getAddressForSymbol(tokensInfo: any[], symbol: string): string {
+function getAddressForSymbol(tokensInfo: any[], symbol: string): string | undefined {
   return tokensInfo.find((token) => token.symbol === symbol)?.address
 }

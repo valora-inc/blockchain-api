@@ -43,35 +43,41 @@ async function historicalPricesMigration(knex: Knex) {
   await knex.batchInsert(TABLE_NAME, cEurTuplesToInsert)
 }
 
-async function fetchHistoricalcEurData(tokenAddresses: TokenAddresses, knex: Knex) {
+async function fetchHistoricalcEurData(
+  tokenAddresses: TokenAddresses,
+  knex: Knex,
+) {
   const celoEurSnapshot = Object.values(
     (await database.ref(`exchangeRates/cEUR/cGLD`).once('value')).val(),
   )
 
-  return (await Promise.all(Object.values(celoEurSnapshot).map(async (entry: any) => {
+  return await Promise.all(
+    Object.values(celoEurSnapshot).map(async (entry: any) => {
+      const isoDate = new Date(entry.timestamp).toISOString()
+      const priceRow = await knex<HistoricalPriceRow>(TABLE_NAME)
+        .where({
+          token: tokenAddresses.CELO,
+          base_token: tokenAddresses.cUSD,
+        })
+        .andWhere('at', '=', isoDate)
+        .first()
 
-    const isoDate = new Date(entry.timestamp).toISOString()
-    const priceRow = await knex<HistoricalPriceRow>(TABLE_NAME)
-      .where({
-        token: tokenAddresses.CELO,
+      if (!priceRow) {
+        logger.warn(`Couldn't fetch price for cEUR at ${isoDate}`)
+        return {}
+      }
+
+      return {
+        token: tokenAddresses.cEUR,
         base_token: tokenAddresses.cUSD,
-      })
-      .andWhere('at', '=', isoDate)
-      .first()
-
-    if (!priceRow) {
-      logger.warn(`Couldn't fetch price for cEUR at ${isoDate}`)
-      return {}
-    }
-
-    return {
-      token: tokenAddresses.cEUR,
-      base_token: tokenAddresses.cUSD,
-      at: isoDate,
-      price: new BigNumber(priceRow.price).multipliedBy(entry.exchangeRate).toString(),
-      fetched_from: '20211213154345_migration',
-    }
-  })))
+        at: isoDate,
+        price: new BigNumber(priceRow.price)
+          .multipliedBy(entry.exchangeRate)
+          .toString(),
+        fetched_from: '20211213154345_migration',
+      }
+    }),
+  )
 }
 
 async function fetchHistoricalCeloData(tokenAddresses: TokenAddresses) {
@@ -95,9 +101,8 @@ async function fetchTokensAddresses(): Promise<TokenAddresses> {
   const cEURAddress = getAddressForSymbol(tokensInfoValue, 'cEUR')
   const celoAddress = getAddressForSymbol(tokensInfoValue, 'CELO')
 
-
   if (!cUSDAddress || !cEURAddress || !celoAddress) {
-    throw new Error("Can't obtain token addresses");
+    throw new Error("Can't obtain token addresses")
   }
   return {
     cUSD: cUSDAddress,
@@ -106,6 +111,9 @@ async function fetchTokensAddresses(): Promise<TokenAddresses> {
   }
 }
 
-function getAddressForSymbol(tokensInfo: any[], symbol: string): string | undefined {
+function getAddressForSymbol(
+  tokensInfo: any[],
+  symbol: string,
+): string | undefined {
   return tokensInfo.find((token) => token.symbol === symbol)?.address
 }

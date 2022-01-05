@@ -29,7 +29,6 @@ function findLastIndex<T>(
     return -1
   }
 
-
   export function containsFaucetTransfer(tokenTransfers: BlockscoutTokenTransfer[]): boolean {
     return containsTransferFrom(tokenTransfers, FAUCET_ADDRESS)
   }
@@ -98,10 +97,6 @@ function findLastIndex<T>(
     )
   }
 
-  // popLastTransfer(): BlockscoutTokenTransfer | undefined {
-  //   return this.transferCollection.pop()
-  // }
-
   export function popTransferTo(
     tokenTransfers: BlockscoutTokenTransfer[],
     recipientAddress: Contracts | string,
@@ -116,4 +111,3 @@ function findLastIndex<T>(
         transfer.toAddressHash.toLowerCase() === recipient,
     )
   }
-  

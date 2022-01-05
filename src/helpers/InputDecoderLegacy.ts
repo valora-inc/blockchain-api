@@ -2,7 +2,7 @@ import * as utf8 from 'utf8'
 import { ContractAddresses, Contracts } from '../utils'
 import { Input } from './Input'
 
-export class InputDecoder {
+export class InputDecoderLegacy {
   private contractAddresses: ContractAddresses
   private input: Input
 

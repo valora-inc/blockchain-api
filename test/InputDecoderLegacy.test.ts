@@ -1,7 +1,7 @@
 import * as utf8 from 'utf8'
 import coder from 'web3-eth-abi'
 import { Input } from '../src/helpers/Input'
-import { InputDecoder } from '../src/helpers/InputDecoder'
+import { InputDecoderLegacy } from '../src/helpers/InputDecoderLegacy'
 
 const comment = '✨'
 const input = coder.encodeFunctionCall(
@@ -43,7 +43,7 @@ const contractAddresses = {
 describe('Blockchain API Utils', () => {
   describe('format-comment-string', () => {
     it('should decode comment correctly', () => {
-      const decoder = new InputDecoder(
+      const decoder = new InputDecoderLegacy(
         contractAddresses,
         Input.fromString(input),
       )
@@ -51,7 +51,7 @@ describe('Blockchain API Utils', () => {
       expect(decoded).toEqual(comment)
     })
     it('should return empty on too short input', () => {
-      const decoder = new InputDecoder(
+      const decoder = new InputDecoderLegacy(
         contractAddresses,
         Input.fromString('0x10'),
       )
@@ -59,7 +59,7 @@ describe('Blockchain API Utils', () => {
       expect(decoded).toEqual('')
     })
     it('should return empty on invalid function selector', () => {
-      const decoder = new InputDecoder(
+      const decoder = new InputDecoderLegacy(
         contractAddresses,
         Input.fromString(
           '0x095ea7b30000000000000000000000000000000000000000000000000000000000000' +
@@ -70,7 +70,7 @@ describe('Blockchain API Utils', () => {
       expect(decoded).toEqual('')
     })
     it('should return empty on malformed input', () => {
-      const decoder = new InputDecoder(
+      const decoder = new InputDecoderLegacy(
         contractAddresses,
         Input.fromString(input.slice(0, 80)),
       )

@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js'
+import { Input } from '../helpers/Input'
 import { BlockscoutTokenTransfer, BlockscoutTransferTx } from '../blockscout'
 import { CELO } from '../currencyConversion/consts'
-import { InputDecoder } from '../helpers/InputDecoder'
 import { FeeType } from '../resolvers'
 import { Contracts } from '../utils'
 import { popTransferTo } from './TransfersUtils'
@@ -37,23 +37,22 @@ export class Transaction {
     return this.transactionFees
   }
 
-  get input(): InputDecoder {
-    return this.inputDecoder
+  get input(): Input {
+    return this.txInput
   }
 
   private blockscoutTx: BlockscoutTransferTx
   private tokenTransfers: BlockscoutTokenTransfer[]
   private transactionFees: Fee[] = []
-  private inputDecoder: InputDecoder
+  private txInput: Input
 
   constructor(
     blockscoutTx: BlockscoutTransferTx,
     tokenTransfers: BlockscoutTokenTransfer[],
-    inputDecoder: InputDecoder,
   ) {
     this.blockscoutTx = blockscoutTx
     this.tokenTransfers = tokenTransfers
-    this.inputDecoder = inputDecoder
+    this.txInput = Input.fromString(blockscoutTx.input)
 
     this.extractFees()
   }

@@ -1,3 +1,6 @@
+import { getContractAddressesOrError } from '../utils'
+import { Contracts } from '../utils'
+import utf8 from 'utf8'
 import coder from 'web3-eth-abi'
 import { logger } from '../logger'
 
@@ -40,5 +43,40 @@ export class Input {
 
   isAccountDekRegistration(): boolean {
     return this.functionSelector === REGISTER_ACCOUNT_DEK
+  }
+
+  getTransactionComment(): string {
+    if (!this.isTransferWithComment()) {
+      return ''
+    }
+
+    const decodedInput = this.decode(['address', 'uint256', 'string'])
+    return decodedInput ? utf8.decode(decodedInput[2]) : ''
+  }
+
+  hasContractCallTo(contract: Contracts): boolean {
+    const decodedInput = this.decode(['address', 'uint256'])
+
+    if (!decodedInput) {
+      return false
+    }
+
+    return (
+      decodedInput[0].toLowerCase() === getContractAddressesOrError()[contract]
+    )
+  }
+
+  registersAccountDek(account: string): boolean {
+    if (!this.isAccountDekRegistration()) {
+      return false
+    }
+
+    const decodedInput = this.decode(['uint256', 'uint256', 'address'])
+
+    if (!decodedInput) {
+      return false
+    }
+
+    return decodedInput[2].toLowerCase() === account
   }
 }

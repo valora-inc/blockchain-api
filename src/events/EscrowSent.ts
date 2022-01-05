@@ -1,4 +1,7 @@
-import { containsTransferTo, getTransferTo } from '../transaction/TransfersUtils'
+import {
+  containsTransferTo,
+  getTransferTo,
+} from '../transaction/TransfersUtils'
 import { EventBuilder } from '../helpers/EventBuilder'
 import { TokenTransactionTypeV2 } from '../resolvers'
 import { Transaction } from '../transaction/Transaction'

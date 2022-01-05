@@ -45,7 +45,7 @@ jest.mock('../src/utils.ts', () => {
   return {
     ...(jest.requireActual('../src/utils.ts') as any),
     getContractAddresses: contractGetter,
-    getContractAddressesSync: contractGetter
+    getContractAddressesOrError: contractGetter,
   }
 })
 

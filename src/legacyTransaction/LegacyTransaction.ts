@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import { BlockscoutTransferTx } from '../blockscout'
 import { CGLD } from '../currencyConversion/consts'
-import { InputDecoder } from '../helpers/InputDecoder'
+import { InputDecoderLegacy } from '../helpers/InputDecoderLegacy'
 import { FeeType } from '../resolvers'
 import { Contracts } from '../utils'
 import { LegacyTransfersNavigator } from './LegacyTransfersNavigator'
@@ -37,19 +37,19 @@ export class LegacyTransaction {
     return this.transactionFees
   }
 
-  get input(): InputDecoder {
+  get input(): InputDecoderLegacy {
     return this.inputDecoder
   }
 
   private blockscoutTx: BlockscoutTransferTx
   private transfersNavigator: LegacyTransfersNavigator
   private transactionFees: Fee[] = []
-  private inputDecoder: InputDecoder
+  private inputDecoder: InputDecoderLegacy
 
   constructor(
     blockscoutTx: BlockscoutTransferTx,
     transfersNavigator: LegacyTransfersNavigator,
-    inputDecoder: InputDecoder,
+    inputDecoder: InputDecoderLegacy,
   ) {
     this.blockscoutTx = blockscoutTx
     this.transfersNavigator = transfersNavigator

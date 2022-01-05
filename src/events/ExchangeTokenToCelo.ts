@@ -1,4 +1,10 @@
-import { containsTransferTo, containsTransferFrom, containsBurnedTokenTransfer, getTransferTo, getTransferFrom} from '../transaction/TransfersUtils'
+import {
+  containsTransferTo,
+  containsTransferFrom,
+  containsBurnedTokenTransfer,
+  getTransferTo,
+  getTransferFrom,
+} from '../transaction/TransfersUtils'
 import { EventBuilder } from '../helpers/EventBuilder'
 import { Transaction } from '../transaction/Transaction'
 import { TransactionType } from '../transaction/TransactionType'
@@ -19,7 +25,10 @@ export class ExchangeTokenToCelo extends TransactionType {
     const inTransfer =
       getTransferTo(transaction.transfers, Contracts.Exchange) ??
       getTransferTo(transaction.transfers, Contracts.ExchangeEUR)
-    const outTransfer = getTransferFrom(transaction.transfers, Contracts.Reserve)
+    const outTransfer = getTransferFrom(
+      transaction.transfers,
+      Contracts.Reserve,
+    )
 
     if (!inTransfer) {
       throw new Error('Transfer to Exchange not found.')

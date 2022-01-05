@@ -19,7 +19,7 @@ import { LegacyEscrowContractCall } from './legacyEvents/LegacyEscrowContractCal
 import { LegacyExchangeContractCall } from './legacyEvents/LegacyExchangeContractCall'
 import { LegacyRegisterAccountDekContractCall } from './legacyEvents/LegacyRegisterAccountDekContractCall'
 import { Input } from './helpers/Input'
-import { InputDecoder } from './helpers/InputDecoder'
+import { InputDecoderLegacy } from './helpers/InputDecoderLegacy'
 import { logger } from './logger'
 import { metrics } from './metrics'
 import { MoneyAmount, TokenTransactionArgs } from './resolvers'
@@ -141,7 +141,8 @@ export class BlockscoutAPI extends RESTDataSource {
 
   async getRawTokenTransactionsV2(address: string): Promise<Transaction[]> {
     const t0 = performance.now()
-    const contractAddresses = await this.ensureContractAddresses()
+
+    await this.ensureContractAddresses()
 
     const response = await this.post('', {
       query: `
@@ -187,16 +188,7 @@ export class BlockscoutAPI extends RESTDataSource {
           (edge: any) => edge.node,
         )
 
-        const inputDecoder = new InputDecoder(
-          contractAddresses,
-          Input.fromString(partialTransferTx.input),
-        )
-
-        return new Transaction(
-          partialTransferTx,
-          tokenTransfers,
-          inputDecoder,
-        )
+        return new Transaction(partialTransferTx, tokenTransfers)
       },
     )
 
@@ -262,7 +254,7 @@ export class BlockscoutAPI extends RESTDataSource {
           FAUCET_ADDRESS,
           transferCollection,
         )
-        const inputDecoder = new InputDecoder(
+        const inputDecoder = new InputDecoderLegacy(
           contractAddresses,
           Input.fromString(partialTransferTx.input),
         )

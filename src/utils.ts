@@ -57,7 +57,11 @@ export interface ContractAddresses {
 
 let contractAddresses: ContractAddresses
 
-export function getContractAddressesSync(): ContractAddresses {
+export function getContractAddressesOrError(): ContractAddresses {
+  if (!contractAddresses) {
+    throw new Error('Contract Addresses is not available')
+  }
+
   return contractAddresses
 }
 

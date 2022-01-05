@@ -2127,10 +2127,10 @@
   dependencies:
     "@typescript-eslint/parser" "^4.25.0"
 
-"@valora/exchanges@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@valora/exchanges/-/exchanges-2.0.0.tgz#c9da4fc98d1dc17adc65c7c08c871733c2bd7f00"
-  integrity sha512-qwPSM6Wejm8O0vJiw/XVjQcD5iCHsRlFEdy+1gBbwROuT1QF5tp4acJ1FO/hPDFN8UMR4X4JOtyQjLf6L6atZA==
+"@valora/exchanges@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@valora/exchanges/-/exchanges-2.0.2.tgz#0f6bfb03c62aa13a920f5838c5d2765c54039fce"
+  integrity sha512-wcgdAPWt5Q2y6dApTWOiCL5w/CQaRTMRjIpmdPRCcuymloGOrpUySvAB1X7EuYI3ki1HFxMfHJkfsilK/XSQ5Q==
   dependencies:
     "@celo/contractkit" "1.2.2-beta"
     bignumber.js "^9.0.0"

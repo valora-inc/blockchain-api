@@ -1,3 +1,4 @@
+import { containsTransferTo, getTransferTo } from '../transaction/TransfersUtils'
 import { EventBuilder } from '../helpers/EventBuilder'
 import { TokenTransactionTypeV2 } from '../resolvers'
 import { Transaction } from '../transaction/Transaction'
@@ -8,12 +9,12 @@ export class EscrowSent extends TransactionType {
   matches(transaction: Transaction): boolean {
     return (
       transaction.transfers.length === 1 &&
-      transaction.transfers.containsTransferTo(Contracts.Escrow)
+      containsTransferTo(transaction.transfers, Contracts.Escrow)
     )
   }
 
   async getEvent(transaction: Transaction) {
-    const transfer = transaction.transfers.getTransferTo(Contracts.Escrow)
+    const transfer = getTransferTo(transaction.transfers, Contracts.Escrow)
 
     if (!transfer) {
       throw new Error('Transfer to Escrow not found.')

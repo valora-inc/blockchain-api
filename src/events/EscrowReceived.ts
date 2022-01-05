@@ -1,3 +1,4 @@
+import { getTransferFrom, containsTransferFrom } from '../transaction/TransfersUtils'
 import { EventBuilder } from '../helpers/EventBuilder'
 import { TokenTransactionTypeV2 } from '../resolvers'
 import { Transaction } from '../transaction/Transaction'
@@ -13,7 +14,7 @@ export class EscrowReceived extends TransactionType {
   }
 
   async getEvent(transaction: Transaction) {
-    const transfer = transaction.transfers.getTransferFrom(Contracts.Escrow)
+    const transfer = getTransferFrom(transaction.transfers, Contracts.Escrow)
 
     if (!transfer) {
       throw new Error('Transfer from Escrow not found.')
@@ -35,20 +36,22 @@ export class EscrowReceived extends TransactionType {
   isEscrowReceivedToEOA(transaction: Transaction): boolean {
     return (
       transaction.transfers.length === 1 &&
-      transaction.transfers.containsTransferFrom(Contracts.Escrow)
+      containsTransferFrom(transaction.transfers, Contracts.Escrow)
     )
   }
 
   isEscrowReceivedToMTW(transaction: Transaction): boolean {
-    const transferToAcccount = transaction.transfers.getTransferFrom(
+    const transferToAcccount = getTransferFrom(
+      transaction.transfers,
       Contracts.Escrow,
     )!
-    const transfertoWallet = transaction.transfers.getTransferFrom(
+    const transfertoWallet = getTransferFrom(
+      transaction.transfers,
       transferToAcccount?.toAddressHash,
     )
     return (
       transaction.transfers.length === 2 &&
-      transaction.transfers.containsTransferFrom(Contracts.Escrow) &&
+      containsTransferFrom(transaction.transfers, Contracts.Escrow) &&
       transfertoWallet?.fromAddressHash === transferToAcccount?.toAddressHash &&
       transfertoWallet?.toAccountHash === transfertoWallet?.fromAddressHash
     )

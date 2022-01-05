@@ -57,6 +57,10 @@ export interface ContractAddresses {
 
 let contractAddresses: ContractAddresses
 
+export function getContractAddressesSync(): ContractAddresses {
+  return contractAddresses
+}
+
 export async function getContractAddresses(): Promise<ContractAddresses> {
   if (contractAddresses) {
     return contractAddresses

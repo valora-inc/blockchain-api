@@ -29,8 +29,6 @@ import { LegacyTransactionClassifier } from './legacyTransaction/LegacyTransacti
 import { LegacyTransferCollection } from './legacyTransaction/LegacyTransferCollection'
 import { LegacyTransfersNavigator } from './legacyTransaction/LegacyTransfersNavigator'
 import { ContractAddresses, getContractAddresses } from './utils'
-import { TransferCollection } from './transaction/TransferCollection'
-import { TransfersNavigator } from './transaction/TransfersNavigator'
 import { Transaction } from './transaction/Transaction'
 import { TransactionClassifier } from './transaction/TransactionClassifier'
 import { ExchangeContractCall } from './events/ExchangeContractCall'
@@ -189,12 +187,6 @@ export class BlockscoutAPI extends RESTDataSource {
           (edge: any) => edge.node,
         )
 
-        const transferCollection = new TransferCollection(tokenTransfers)
-        const transfersNavigator = new TransfersNavigator(
-          contractAddresses,
-          FAUCET_ADDRESS,
-          transferCollection,
-        )
         const inputDecoder = new InputDecoder(
           contractAddresses,
           Input.fromString(partialTransferTx.input),
@@ -202,7 +194,7 @@ export class BlockscoutAPI extends RESTDataSource {
 
         return new Transaction(
           partialTransferTx,
-          transfersNavigator,
+          tokenTransfers,
           inputDecoder,
         )
       },

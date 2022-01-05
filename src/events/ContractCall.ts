@@ -3,7 +3,7 @@ import { TransactionType } from '../transaction/TransactionType'
 
 export class ContractCall extends TransactionType {
   matches(transaction: Transaction): boolean {
-    return transaction.transfers.isEmpty()
+    return transaction.transfers.length === 0
   }
 
   async getEvent(transaction: Transaction) {

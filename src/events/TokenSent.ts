@@ -1,3 +1,4 @@
+import { containsTransferFrom, getTransferFrom } from '../transaction/TransfersUtils'
 import { EventBuilder } from '../helpers/EventBuilder'
 import { TokenTransactionTypeV2 } from '../resolvers'
 import { Transaction } from '../transaction/Transaction'
@@ -7,12 +8,13 @@ export class TokenSent extends TransactionType {
   matches(transaction: Transaction): boolean {
     return (
       transaction.transfers.length === 1 &&
-      transaction.transfers.containsTransferFrom(this.context.userAddress)
+      containsTransferFrom(transaction.transfers, this.context.userAddress)
     )
   }
 
   async getEvent(transaction: Transaction) {
-    const transfer = transaction.transfers.getTransferFrom(
+    const transfer = getTransferFrom(
+      transaction.transfers,
       this.context.userAddress,
     )
 

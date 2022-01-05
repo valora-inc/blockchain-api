@@ -5,7 +5,7 @@ import { Contracts } from '../utils'
 export class ExchangeContractCall extends TransactionType {
   matches(transaction: Transaction): boolean {
     return (
-      transaction.transfers.isEmpty() &&
+      transaction.transfers.length === 0 &&
       (transaction.input.hasContractCallTo(Contracts.Exchange) ||
         transaction.input.hasContractCallTo(Contracts.ExchangeEUR))
     )

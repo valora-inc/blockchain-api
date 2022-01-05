@@ -1,3 +1,4 @@
+import { containsMintedTokenTransfer, containsTransferTo, getMintedTokenTransfer, getTransferTo } from '../transaction/TransfersUtils'
 import { EventBuilder } from '../helpers/EventBuilder'
 import { Transaction } from '../transaction/Transaction'
 import { TransactionType } from '../transaction/TransactionType'
@@ -7,14 +8,14 @@ export class ExchangeCeloToToken extends TransactionType {
   matches(transaction: Transaction): boolean {
     return (
       transaction.transfers.length === 2 &&
-      transaction.transfers.containsTransferTo(Contracts.Reserve) &&
-      transaction.transfers.containsMintedTokenTransfer()
+      containsTransferTo(transaction.transfers, Contracts.Reserve) &&
+      containsMintedTokenTransfer(transaction.transfers)
     )
   }
 
   async getEvent(transaction: Transaction) {
-    const inTransfer = transaction.transfers.getTransferTo(Contracts.Reserve)
-    const outTransfer = transaction.transfers.getMintedTokenTransfer()
+    const inTransfer = getTransferTo(transaction.transfers, Contracts.Reserve)
+    const outTransfer = getMintedTokenTransfer(transaction.transfers)
 
     if (!inTransfer) {
       throw new Error('Transfer to Reserve not found.')

@@ -37,38 +37,26 @@ describe('PricesService', () => {
     mockGetExchangeRate.mockReturnValue(1)
     await addHistoricPrice(token, '64000', 0)
     await addHistoricPrice(token, '60000', 10000) // 10 seconds after
-    await addHistoricPrice(token, '62000', 20000) // 20 seconds after
-    await addHistoricPrice(token, '58000', 30000) // 30 seconds after
-    await addHistoricPrice(token, '10000', 30000 + 6 * HOURS) // 6 hours and 30 seconds after
-    await addHistoricPrice(token, '12000', 40000 + 6 * HOURS) // 6 hours and 40 seconds after
     await addHistoricPrice(fakeToken, '1000', 12000) // Different token
 
-    await assertQueryExpectedValue(5000, '62000')
-    await assertQueryExpectedValue(7500, '61000')
+    await assertQueryExpectedValue(5000, '64000')
+    await assertQueryExpectedValue(7500, '64000')
     await assertQueryExpectedValue(10000, '60000')
-    await assertQueryExpectedValue(12500, '60500')
-    await assertQueryExpectedValue(15000, '61000')
-    await assertQueryExpectedValue(30000, '58000')
-    await assertQueryThrowsError(100000)
-    await assertQueryExpectedValue(35000 + 6 * HOURS, '11000')
-    await assertQueryThrowsError(45000 + 6 * HOURS)
+    await assertQueryExpectedValue(12500, '60000')
+    await assertQueryThrowsError(12000 + 4 * HOURS)
   })
 
   it('should return expected price when exchage API returns different than 1', async () => {
     mockGetExchangeRate.mockReturnValue(1.2)
     await addHistoricPrice(token, '64000', 0)
     await addHistoricPrice(token, '60000', 10000) // 10 seconds after
-    await addHistoricPrice(token, '62000', 20000) // 20 seconds after
-    await addHistoricPrice(token, '58000', 30000) // 30 seconds after
     await addHistoricPrice(fakeToken, '1000', 12000) // Different token
 
-    await assertQueryExpectedValue(0, '76800')
-    await assertQueryExpectedValue(5000, '74400')
-    await assertQueryExpectedValue(7500, '73200')
+    await assertQueryExpectedValue(5000, '76800')
+    await assertQueryExpectedValue(7500, '76800')
     await assertQueryExpectedValue(10000, '72000')
-    await assertQueryExpectedValue(12500, '72600')
-    await assertQueryExpectedValue(15000, '73200')
-    await assertQueryThrowsError(32000)
+    await assertQueryExpectedValue(12500, '72000')
+    await assertQueryThrowsError(12000 + 4 * HOURS)
   })
 
   it('should throw an exception when db does not contain enough info', async () => {

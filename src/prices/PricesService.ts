@@ -76,55 +76,20 @@ export default class PricesService<TContext = any> extends DataSource {
       .orderBy('at', 'desc')
       .first()
 
-    const nextPriceRow = await this.db<HistoricalPriceRow>(TABLE_NAME)
-      .where({
-        token: tokenAddress,
-        base_token: this.cUSDAddress,
-      })
-      .andWhere('at', '>=', isoDate)
-      .orderBy('at', 'asc')
-      .first()
-
-    // Should we check if prev_price.at and next_price.at are relative close?
-    // Let's say less than 4 hours. And if not failing instead of returning the estimated price?
-    if (!prevPriceRow || !nextPriceRow) {
+    if (!prevPriceRow) {
       throw new Error(
-        `Couldn't find entries in the db to calculate cUSD prices for ${tokenAddress} at ${date}`,
+        `Couldn't find entries in the db before ${date} for token: ${tokenAddress}`,
       )
     }
 
-    return this.estimatePrice(prevPriceRow, nextPriceRow, date)
-  }
-
-  // It returns a linear estimation of the price using previous and next known prices.
-  private estimatePrice(
-    prevPriceRow: HistoricalPriceRow,
-    nextPriceRow: HistoricalPriceRow,
-    date: Date,
-  ) {
-    const queryTimestamp = date.getTime()
-    const prevTimestamp = new Date(prevPriceRow.at).getTime()
-    const prevPrice = new BigNumber(prevPriceRow.price)
-    const nextTimestamp = new Date(nextPriceRow.at).getTime()
-    const nextPrice = new BigNumber(nextPriceRow.price)
-
-    if (nextTimestamp - prevTimestamp > MAX_TIME_GAP) {
+    const prevDate = new Date(prevPriceRow.at)
+    if (date.getTime() - prevDate.getTime() > MAX_TIME_GAP) {
       throw new Error(
-        `Couldn't obtain an accurate price for ${prevPriceRow.token} at ${date}`,
+        `Couldn't calculate price for ${tokenAddress} at ${date}, the lastest price we have is at ${prevDate}`,
       )
     }
 
-    if (nextTimestamp === prevTimestamp) {
-      return prevPrice
-    }
-
-    // Linear estimation: https://mathworld.wolfram.com/Two-PointForm.html
-    return prevPrice.plus(
-      nextPrice
-        .minus(prevPrice)
-        .dividedBy(nextTimestamp - prevTimestamp)
-        .times(queryTimestamp - prevTimestamp),
-    )
+    return new BigNumber(prevPriceRow.price)
   }
 
   private async usdToLocalCurrency(

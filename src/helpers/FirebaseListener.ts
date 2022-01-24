@@ -4,7 +4,10 @@ import { logger } from '../logger'
 
 const ON_VALUE_CHANGED = 'value'
 
-export function listenFromFirebase<T>(path: string, callback: (value: T) => void): void {
+export function listenFromFirebase<T>(
+  path: string,
+  callback: (value: T) => void,
+): void {
   const onError = (error: Error) => {
     logger.error({
       type: 'ERROR_LISTENING_TO_FIREBASE',

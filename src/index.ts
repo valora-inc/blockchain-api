@@ -1,5 +1,6 @@
 import {
-  configs as exchangesConfigs, createNewManager
+  configs as exchangesConfigs,
+  createNewManager,
 } from '@valora/exchanges'
 import { loadSecret } from '@valora/secrets-loader'
 import express from 'express'

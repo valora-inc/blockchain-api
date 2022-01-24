@@ -1,5 +1,4 @@
 import { BigNumber } from 'bignumber.js'
-import { CELO, CUSD, CEUR } from '../currencyConversion/consts'
 import { BlockscoutTokenTransfer } from '../blockscout'
 import { EventTypes, FeeV2, TokenTransactionTypeV2 } from '../resolvers'
 import { Fee, Transaction } from '../transaction/Transaction'
@@ -42,7 +41,7 @@ export class EventBuilder {
         // Signed amount relative to the account currency
         value: new BigNumber(transfer.value)
           .multipliedBy(isOutgoingTransaction ? -1 : 1)
-          .dividedBy(await this.getWeiForToken(transfer.tokenAddress))
+          .dividedBy(this.getWeiForToken(transfer.tokenAddress))
           .toString(),
         tokenAddress: transfer.tokenAddress,
         timestamp,
@@ -75,14 +74,14 @@ export class EventBuilder {
       transactionHash,
       inAmount: {
         value: new BigNumber(inTransfer!.value)
-          .dividedBy(await this.getWeiForToken(inTransfer.tokenAddress))
+          .dividedBy(this.getWeiForToken(inTransfer.tokenAddress))
           .toString(),
         tokenAddress: inTransfer.tokenAddress,
         timestamp,
       },
       outAmount: {
         value: new BigNumber(outTransfer!.value)
-          .dividedBy(await this.getWeiForToken(outTransfer.tokenAddress))
+          .dividedBy(this.getWeiForToken(outTransfer.tokenAddress))
           .toString(),
         tokenAddress: outTransfer.tokenAddress,
         timestamp,
@@ -98,9 +97,8 @@ export class EventBuilder {
       fees.map(async (fee) => ({
         type: fee.type,
         amount: {
-          tokenAddress: await EventBuilder.getTokenAddressFromSymbol(
-            fee.currencyCode,
-          ),
+          tokenAddress: tokenInfoCache.tokenInfoBySymbol(fee.currencyCode)!
+            .address,
           timestamp,
           value: fee.value.dividedBy(WEI_PER_GOLD).toFixed(),
         },
@@ -108,21 +106,7 @@ export class EventBuilder {
     )
   }
 
-  static async getTokenAddressFromSymbol(symbol: string): Promise<string> {
-    const contractAddresses = await getContractAddresses()
-    switch (symbol) {
-      case CELO:
-        return contractAddresses.GoldToken
-      case CUSD:
-        return contractAddresses.StableToken
-      case CEUR:
-        return contractAddresses.StableTokenEUR
-      default:
-        throw new Error(`Unknown token symbol: ${symbol}`)
-    }
-  }
-
-  static async getWeiForToken(address: string) {
-    return Math.pow(10, await tokenInfoCache.getDecimalsForToken(address))
+  static getWeiForToken(address: string) {
+    return Math.pow(10, tokenInfoCache.getDecimalsForToken(address))
   }
 }

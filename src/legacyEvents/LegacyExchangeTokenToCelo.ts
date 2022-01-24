@@ -9,7 +9,8 @@ export class LegacyExchangeTokenToCelo extends LegacyTransactionType {
       transaction.transfers.length === 3 &&
       transaction.transfers.containsTransferFrom(Contracts.Reserve) &&
       (transaction.transfers.containsTransferTo(Contracts.Exchange) ||
-        transaction.transfers.containsTransferTo(Contracts.ExchangeEUR)) &&
+        transaction.transfers.containsTransferTo(Contracts.ExchangeEUR) ||
+        transaction.transfers.containsTransferTo(Contracts.ExchangeBRL)) &&
       transaction.transfers.containsBurnedTokenTransfer()
     )
   }
@@ -17,7 +18,8 @@ export class LegacyExchangeTokenToCelo extends LegacyTransactionType {
   getEvent(transaction: LegacyTransaction) {
     const inTransfer =
       transaction.transfers.getTransferTo(Contracts.Exchange) ??
-      transaction.transfers.getTransferTo(Contracts.ExchangeEUR)
+      transaction.transfers.getTransferTo(Contracts.ExchangeEUR) ??
+      transaction.transfers.getTransferTo(Contracts.ExchangeBRL)
     const outTransfer = transaction.transfers.getTransferFrom(Contracts.Reserve)
 
     if (!inTransfer) {

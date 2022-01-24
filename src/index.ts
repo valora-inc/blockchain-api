@@ -1,19 +1,19 @@
+import {
+  configs as exchangesConfigs, createNewManager
+} from '@valora/exchanges'
+import { loadSecret } from '@valora/secrets-loader'
 import express from 'express'
 import promBundle from 'express-prom-bundle'
+import yargs from 'yargs'
 import { initApolloServer } from './apolloServer'
 import CurrencyConversionAPI from './currencyConversion/CurrencyConversionAPI'
 import ExchangeRateAPI from './currencyConversion/ExchangeRateAPI'
-import knownAddressesCache from './helpers/KnownAddressesCache'
-import { logger } from './logger'
-import { loadSecret } from '@valora/secrets-loader'
 import { initDatabase } from './database/db'
-import { updatePrices } from './prices/PricesUpdater'
-import yargs from 'yargs'
-import {
-  createNewManager,
-  configs as exchangesConfigs,
-} from '@valora/exchanges'
+import knownAddressesCache from './helpers/KnownAddressesCache'
+import tokenInfoCache from './helpers/TokenInfoCache'
+import { logger } from './logger'
 import PricesService from './prices/PricesService'
+import { updatePrices } from './prices/PricesUpdater'
 
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
@@ -126,6 +126,7 @@ async function main() {
   })
 
   knownAddressesCache.startListening()
+  tokenInfoCache.startListening()
 
   const exchangeRateAPI = new ExchangeRateAPI({
     exchangeRatesAPIAccessKey: args['exchange-rates-api-access-key'],

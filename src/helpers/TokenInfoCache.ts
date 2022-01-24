@@ -1,28 +1,41 @@
-import { getContractKit } from '../utils'
-import erc20 from '../abis/ERC20.json'
+import { logger } from '../logger'
+import { listenFromFirebase } from './FirebaseListener'
 
-interface DecimalsByAddress {
-  [address: string]: number
+const ROOT_KEY = 'tokensInfo'
+
+interface TokenInfo {
+  address: string
+  decimals: number
+  imageUrl: string
+  name: string
+  symbol: string
+  priceFetchedAt?: number
+  isCoreToken?: boolean
+}
+
+interface TokensInfo {
+  [address: string]: TokenInfo
 }
 
 class TokenInfoCache {
-  private decimalsByAddress: DecimalsByAddress = {}
+  private tokensInfo: TokensInfo = {}
 
-  async getDecimalsForToken(address: string): Promise<number> {
-    address = address.toLowerCase()
-    if (!this.decimalsByAddress[address]) {
-      this.decimalsByAddress[address] = await this.getDecimalsFromContract(
-        address,
-      )
-    }
-    return this.decimalsByAddress[address]
+  startListening(): void {
+    listenFromFirebase(ROOT_KEY, (value: TokensInfo) => {
+      logger.info({ type: 'FETCHED_TOKENS_INFO' })
+      this.tokensInfo = value ?? this.tokensInfo
+    })
   }
 
-  private async getDecimalsFromContract(address: string): Promise<number> {
-    const kit = await getContractKit()
-    // @ts-ignore
-    const contract = new kit.web3.eth.Contract(erc20, address)
-    return contract.methods.decimals().call()
+  getDecimalsForToken(address: string): number {
+    address = address.toLowerCase()
+    return this.tokensInfo[address]?.decimals
+  }
+
+  tokenInfoBySymbol(symbol: string): TokenInfo | undefined {
+    return Object.values(this.tokensInfo).find(
+      (token) => token.symbol === symbol,
+    )
   }
 }
 

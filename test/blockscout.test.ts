@@ -36,6 +36,7 @@ jest.mock('../src/utils.ts', () => {
     Escrow: '0x0000000000000000000000000000000000a77327',
     Exchange: '0xf1235cb0d3703e7cc2473fb4e214fbc7a9ff77cc',
     ExchangeEUR: '0xd1235cb0d3703e7cc2473fb4e214fbc7a9ff77cc',
+    ExchangeBRL: '0x4a3acb12178b40d8ca2b719cba6bcae0e8e31f4c',
     Governance: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
     Reserve: '0x6a61e1e693c765cbab7e02a500665f2e13ee46df',
   })

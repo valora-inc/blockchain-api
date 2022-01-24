@@ -16,7 +16,8 @@ export class ExchangeTokenToCelo extends TransactionType {
       transaction.transfers.length === 3 &&
       containsTransferFrom(transaction.transfers, Contracts.Reserve) &&
       (containsTransferTo(transaction.transfers, Contracts.Exchange) ||
-        containsTransferTo(transaction.transfers, Contracts.ExchangeEUR)) &&
+        containsTransferTo(transaction.transfers, Contracts.ExchangeEUR) ||
+        containsTransferTo(transaction.transfers, Contracts.ExchangeBRL)) &&
       containsBurnedTokenTransfer(transaction.transfers)
     )
   }
@@ -24,7 +25,8 @@ export class ExchangeTokenToCelo extends TransactionType {
   async getEvent(transaction: Transaction) {
     const inTransfer =
       getTransferTo(transaction.transfers, Contracts.Exchange) ??
-      getTransferTo(transaction.transfers, Contracts.ExchangeEUR)
+      getTransferTo(transaction.transfers, Contracts.ExchangeEUR) ??
+      getTransferTo(transaction.transfers, Contracts.ExchangeBRL)
     const outTransfer = getTransferFrom(
       transaction.transfers,
       Contracts.Reserve,

@@ -7,7 +7,8 @@ export class LegacyExchangeContractCall extends LegacyTransactionType {
     return (
       transaction.transfers.isEmpty() &&
       (transaction.input.hasContractCallTo(Contracts.Exchange) ||
-        transaction.input.hasContractCallTo(Contracts.ExchangeEUR))
+        transaction.input.hasContractCallTo(Contracts.ExchangeEUR) ||
+        transaction.input.hasContractCallTo(Contracts.ExchangeBRL))
     )
   }
 

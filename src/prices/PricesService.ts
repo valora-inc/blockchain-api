@@ -40,8 +40,9 @@ export default class PricesService<TContext = any> extends DataSource {
     localCurrency: string,
     date: Date,
   ): Promise<BigNumber> {
+    const tokenAddressLowerCase = tokenAddress.toLowerCase()
     try {
-      const cUSDPrice = await this.getcUSDPrice(tokenAddress, date)
+      const cUSDPrice = await this.getcUSDPrice(tokenAddressLowerCase, date)
       const usdToLocalCurrencyPrice = await this.usdToLocalCurrency(
         localCurrency,
         date,
@@ -66,6 +67,10 @@ export default class PricesService<TContext = any> extends DataSource {
     tokenAddress: string,
     date: Date,
   ): Promise<BigNumber> {
+    if (tokenAddress === this.cUSDAddress) {
+      return new BigNumber(1)
+    }
+
     const isoDate = date.toISOString()
     const prevPriceRow = await this.db<HistoricalPriceRow>(TABLE_NAME)
       .where({

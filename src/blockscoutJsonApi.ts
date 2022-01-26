@@ -1,6 +1,7 @@
 import { RESTDataSource } from 'apollo-datasource-rest'
 import { BLOCKSCOUT_API } from './config'
 import { UserTokenBalance } from './resolvers'
+import { Transaction } from './transaction/Transaction'
 
 interface BlockscoutTokenBalance {
   balance: string
@@ -15,6 +16,13 @@ export class BlockscoutJsonAPI extends RESTDataSource {
   constructor() {
     super()
     this.baseURL = `${BLOCKSCOUT_API}/api`
+  }
+
+  async fetchTransactions(address: string): Promise<Transaction[]> {
+    const response = await this.get(
+      `?module=account&action=tokentx&address=${address}`,
+    )
+    return []
   }
 
   async fetchUserBalances(address: string): Promise<UserTokenBalance[]> {

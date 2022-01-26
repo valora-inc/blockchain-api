@@ -5,11 +5,11 @@ import { USD } from '../../src/currencyConversion/consts'
 
 const tableName = 'historical_token_prices'
 
-const mockcUSDAddress = 'cUSD'
+const mockcUSDAddress = 'cusd_address'
 const mockDate = 1487076708000
-const token = 'bitcoin'
+const defaultToken = 'bitcoin'
 const fakeToken = 'fake'
-const localCurrency = 'EUR'
+const defaultLocalCurrency = 'EUR'
 const HOURS = 1000 * 3600
 
 const mockGetExchangeRate = jest.fn()
@@ -30,13 +30,14 @@ describe('PricesService', () => {
   })
 
   afterEach(async () => {
+    jest.clearAllMocks()
     await db.destroy()
   })
 
   it('should return expected price', async () => {
     mockGetExchangeRate.mockReturnValue(1)
-    await addHistoricPrice(token, '64000', 0)
-    await addHistoricPrice(token, '60000', 10000) // 10 seconds after
+    await addHistoricPrice(defaultToken, '64000', 0)
+    await addHistoricPrice(defaultToken, '60000', 10000) // 10 seconds after
     await addHistoricPrice(fakeToken, '1000', 12000) // Different token
 
     await assertQueryExpectedValue(5000, '64000')
@@ -48,8 +49,8 @@ describe('PricesService', () => {
 
   it('should return expected price when exchage API returns different than 1', async () => {
     mockGetExchangeRate.mockReturnValue(1.2)
-    await addHistoricPrice(token, '64000', 0)
-    await addHistoricPrice(token, '60000', 10000) // 10 seconds after
+    await addHistoricPrice(defaultToken, '64000', 0)
+    await addHistoricPrice(defaultToken, '60000', 10000) // 10 seconds after
     await addHistoricPrice(fakeToken, '1000', 12000) // Different token
 
     await assertQueryExpectedValue(5000, '76800')
@@ -61,6 +62,22 @@ describe('PricesService', () => {
 
   it('should throw an exception when db does not contain enough info', async () => {
     await assertQueryThrowsError(5000)
+  })
+
+  it('should return 1 times exchange rate when requested token is cUSD ', async () => {
+    mockGetExchangeRate.mockReturnValue(1.2)
+    await assertQueryExpectedValue(5000, '1.2', mockcUSDAddress)
+  })
+
+  it('should return 1 when requested token is cUSD and local currency is USD', async () => {
+    mockGetExchangeRate.mockReturnValue(1.2)
+    const price = await priceService.getTokenToLocalCurrencyPrice(
+      mockcUSDAddress,
+      USD,
+      new Date(mockDate),
+    )
+    expect(price.toString()).toBe("1")
+    expect(mockGetExchangeRate).not.toHaveBeenCalled()
   })
 
   async function addHistoricPrice(
@@ -80,8 +97,8 @@ describe('PricesService', () => {
     const queryDate = new Date(mockDate + dateOffset)
     const query = async () =>
       await priceService.getTokenToLocalCurrencyPrice(
-        token,
-        localCurrency,
+        defaultToken,
+        defaultLocalCurrency,
         queryDate,
       )
 
@@ -91,11 +108,12 @@ describe('PricesService', () => {
   async function assertQueryExpectedValue(
     dateOffset: number,
     expectedValue: string,
+    token: string = defaultToken
   ) {
     const queryDate = new Date(mockDate + dateOffset)
     const price = await priceService.getTokenToLocalCurrencyPrice(
       token,
-      localCurrency,
+      defaultLocalCurrency,
       queryDate,
     )
     expect(price.toString()).toBe(expectedValue)
@@ -103,7 +121,7 @@ describe('PricesService', () => {
     expect(mockGetExchangeRate).toHaveBeenCalledWith(
       expect.objectContaining({
         sourceCurrencyCode: USD,
-        currencyCode: localCurrency,
+        currencyCode: defaultLocalCurrency,
         timestamp: queryDate.getTime(),
       }),
     )

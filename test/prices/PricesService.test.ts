@@ -76,7 +76,7 @@ describe('PricesService', () => {
       USD,
       new Date(mockDate),
     )
-    expect(price.toString()).toBe("1")
+    expect(price.toString()).toBe('1')
     expect(mockGetExchangeRate).not.toHaveBeenCalled()
   })
 
@@ -108,7 +108,7 @@ describe('PricesService', () => {
   async function assertQueryExpectedValue(
     dateOffset: number,
     expectedValue: string,
-    token: string = defaultToken
+    token: string = defaultToken,
   ) {
     const queryDate = new Date(mockDate + dateOffset)
     const price = await priceService.getTokenToLocalCurrencyPrice(

@@ -1,8 +1,23 @@
 import { RESTDataSource } from 'apollo-datasource-rest'
+import { Body } from 'apollo-datasource-rest/dist/RESTDataSource'
 import { performance } from 'perf_hooks'
 import { BLOCKSCOUT_API, FAUCET_ADDRESS } from './config'
 import { CGLD, CUSD } from './currencyConversion/consts'
 import CurrencyConversionAPI from './currencyConversion/CurrencyConversionAPI'
+import {
+  Any,
+  ContractCall,
+  EscrowReceived,
+  EscrowSent,
+  ExchangeCeloToToken,
+  ExchangeTokenToCelo,
+  TokenReceived,
+  TokenSent
+} from './events'
+import { EscrowContractCall } from './events/EscrowContractCall'
+import { ExchangeContractCall } from './events/ExchangeContractCall'
+import { Input } from './helpers/Input'
+import { InputDecoderLegacy } from './helpers/InputDecoderLegacy'
 import {
   LegacyAny,
   LegacyContractCall,
@@ -13,38 +28,27 @@ import {
   LegacyFaucet,
   LegacyTokenReceived,
   LegacyTokenSent,
-  LegacyVerification,
+  LegacyVerification
 } from './legacyEvents'
 import { LegacyEscrowContractCall } from './legacyEvents/LegacyEscrowContractCall'
 import { LegacyExchangeContractCall } from './legacyEvents/LegacyExchangeContractCall'
 import { LegacyRegisterAccountDekContractCall } from './legacyEvents/LegacyRegisterAccountDekContractCall'
-import { Input } from './helpers/Input'
-import { InputDecoderLegacy } from './helpers/InputDecoderLegacy'
-import { logger } from './logger'
-import { metrics } from './metrics'
-import { MoneyAmount, TokenTransactionArgs } from './resolvers'
 import { LegacyTransaction } from './legacyTransaction/LegacyTransaction'
 import { LegacyTransactionAggregator } from './legacyTransaction/LegacyTransactionAggregator'
 import { LegacyTransactionClassifier } from './legacyTransaction/LegacyTransactionClassifier'
 import { LegacyTransferCollection } from './legacyTransaction/LegacyTransferCollection'
 import { LegacyTransfersNavigator } from './legacyTransaction/LegacyTransfersNavigator'
-import { ContractAddresses, getContractAddresses } from './utils'
+import { logger } from './logger'
+import { metrics } from './metrics'
+import { MoneyAmount, TokenTransactionArgs } from './resolvers'
 import { Transaction } from './transaction/Transaction'
-import { TransactionClassifier } from './transaction/TransactionClassifier'
-import { ExchangeContractCall } from './events/ExchangeContractCall'
-import { EscrowContractCall } from './events/EscrowContractCall'
-import {
-  Any,
-  ContractCall,
-  EscrowReceived,
-  EscrowSent,
-  ExchangeCeloToToken,
-  ExchangeTokenToCelo,
-  TokenReceived,
-  TokenSent,
-} from './events'
 import { TransactionAggregator } from './transaction/TransactionAggregator'
-import { Body } from 'apollo-datasource-rest/dist/RESTDataSource'
+import { TransactionClassifier } from './transaction/TransactionClassifier'
+import {
+  ContractAddresses,
+  getContractAddresses,
+  runWithRetries
+} from './utils'
 export interface BlockscoutTransferTx {
   blockNumber: number
   transactionHash: string
@@ -200,17 +204,7 @@ export class BlockscoutAPI extends RESTDataSource {
   }
 
   async queryBlockscoutWithRetry(body: Body) {
-    for (let i = 0; i < 3; i++) {
-      try {
-        return await this.post('', body)
-      } catch (error) {
-        logger.warn({
-          type: 'BLOCKSCOUT_QUERY_FAILED',
-          try: i,
-        })
-      }
-    }
-    throw new Error('Error querying Blockscout after 3 retries')
+    return await runWithRetries('BLOCKSCOUT_QUERY', () => this.post('', body))
   }
 
   async getRawTokenTransactions(address: string): Promise<LegacyTransaction[]> {

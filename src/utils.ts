@@ -1,4 +1,3 @@
-import { sleep } from '@celo/base'
 import { CeloContract, ContractKit, newKitFromWeb3 } from '@celo/contractkit'
 import Web3 from 'web3'
 import { WEB3_PROVIDER_URL } from './config'
@@ -145,27 +144,4 @@ export async function getContractKit(): Promise<ContractKit> {
     })
     throw new Error('Failed to create contractKit instance')
   }
-}
-
-export async function runWithRetries<ReturnType>(
-  tag: string,
-  fn: () => Promise<ReturnType>,
-  retries: number = 3,
-) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      if (i > 0) {
-        await sleep(Math.pow(2, i) * 1000)
-      }
-      return await fn()
-    } catch (error) {
-      logger.warn({
-        type: 'RUN_FAILED',
-        tag,
-        try: i,
-        error,
-      })
-    }
-  }
-  throw new Error(`Error running ${tag} after ${retries} tries`)
 }

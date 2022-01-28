@@ -1,5 +1,4 @@
 import { RESTDataSource } from 'apollo-datasource-rest'
-import { Body } from 'apollo-datasource-rest/dist/RESTDataSource'
 import { performance } from 'perf_hooks'
 import { BLOCKSCOUT_API, FAUCET_ADDRESS } from './config'
 import { CGLD, CUSD } from './currencyConversion/consts'
@@ -44,11 +43,7 @@ import { MoneyAmount, TokenTransactionArgs } from './resolvers'
 import { Transaction } from './transaction/Transaction'
 import { TransactionAggregator } from './transaction/TransactionAggregator'
 import { TransactionClassifier } from './transaction/TransactionClassifier'
-import {
-  ContractAddresses,
-  getContractAddresses,
-  runWithRetries,
-} from './utils'
+import { ContractAddresses, getContractAddresses } from './utils'
 export interface BlockscoutTransferTx {
   blockNumber: number
   transactionHash: string
@@ -149,7 +144,7 @@ export class BlockscoutAPI extends RESTDataSource {
 
     await this.ensureContractAddresses()
 
-    const response = await this.queryBlockscoutWithRetry({
+    const response = await this.post('', {
       query: `
         query Transfers($address: AddressHash!) {
           # TXs related to cUSD or cGLD transfers
@@ -203,16 +198,12 @@ export class BlockscoutAPI extends RESTDataSource {
     return transactions
   }
 
-  async queryBlockscoutWithRetry(body: Body) {
-    return await runWithRetries('BLOCKSCOUT_QUERY', () => this.post('', body))
-  }
-
   async getRawTokenTransactions(address: string): Promise<LegacyTransaction[]> {
     // Measure time at beginning of execution
     const t0 = performance.now()
     const contractAddresses = await this.ensureContractAddresses()
 
-    const response = await this.queryBlockscoutWithRetry({
+    const response = await this.post('', {
       query: `
         query Transfers($address: AddressHash!) {
           # TXs related to cUSD or cGLD transfers

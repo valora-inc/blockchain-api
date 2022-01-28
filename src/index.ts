@@ -117,7 +117,7 @@ async function main() {
     } catch (error) {
       logger.error({
         type: 'ERROR_UPDATING_PRICES',
-        error: (error as Error)?.message,
+        error,
       })
       res.status(500).send()
     }
@@ -154,10 +154,10 @@ async function main() {
   })
 }
 
-main().catch((err) => {
+main().catch((error) => {
   logger.error({
     type: 'STARTUP',
-    error: err.message,
+    error,
   })
   process.exit(1)
 })

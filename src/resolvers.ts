@@ -184,7 +184,7 @@ export const resolvers = {
           type: 'ERROR_FETCHING_TOKEN_TRANSACTIONS_V2',
           address: args.address,
           localCurrency: args.localCurrencyCode,
-          error: (error as Error)?.message,
+          error,
         })
         throw error
       }
@@ -221,7 +221,7 @@ export const resolvers = {
           type: 'ERROR_FETCHING_TOKEN_TRANSACTIONS',
           address: args.address,
           localCurrency: args.localCurrencyCode,
-          error: (error as Error)?.message,
+          error,
         })
         throw error
       }
@@ -241,7 +241,7 @@ export const resolvers = {
         return { rate: rate.toNumber() }
       } catch (error) {
         logger.error({
-          error: (error as Error)?.message,
+          error,
           type: 'CURRENCY_CONVERSION_ERROR',
           sourceCurrencyCode: args.sourceCurrencyCode,
         })
@@ -262,7 +262,7 @@ export const resolvers = {
         logger.error({
           type: 'ERROR_FETCHING_BALANCES',
           address: args.address,
-          error: (error as Error)?.message,
+          error,
         })
         throw error
       }
@@ -326,7 +326,7 @@ export const resolvers = {
         } catch (error) {
           logger.warn({
             type: 'ERROR_FETCHING_TOKEN_LOCAL_AMOUNT',
-            error: (error as Error)?.message,
+            error,
           })
           return null
         }
@@ -355,7 +355,7 @@ export const resolvers = {
       } catch (error) {
         logger.error({
           type: 'ERROR_FETCHING_LOCAL_AMOUNT',
-          error: (error as Error)?.message,
+          error,
         })
         return null
       }

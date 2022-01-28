@@ -15,4 +15,5 @@ if (process.env['GAE_APPLICATION']) {
 export const logger = Logger.createLogger({
   name: 'blockchain-api',
   streams,
+  serializers: Logger.stdSerializers,
 })

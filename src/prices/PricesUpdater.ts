@@ -26,10 +26,10 @@ export async function updatePrices({
 
   db('historical_token_prices')
     .insert(batchInsertItems)
-    .catch((e) => {
+    .catch((error) => {
       logger.error({
         type: 'ERROR_INSERTING_TOKEN_PRICES',
-        error: (e as Error)?.message,
+        error,
       })
     })
 }

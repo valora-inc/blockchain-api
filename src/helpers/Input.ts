@@ -34,7 +34,7 @@ export class Input {
     } catch (error) {
       logger.warn({
         type: 'INPUT_DECODE_ERROR',
-        error: (error as Error)?.message,
+        error,
       })
       return
     }

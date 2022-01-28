@@ -54,7 +54,7 @@ export default class ExchangeRateAPI extends RESTDataSource {
         sourceCurrencyCode,
         currencyCode,
         timestamp,
-        error: (error as Error)?.message
+        error: (error as Error)?.message,
       })
       throw error
     }

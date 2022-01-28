@@ -117,7 +117,7 @@ async function main() {
     } catch (error) {
       logger.error({
         type: 'ERROR_UPDATING_PRICES',
-        error: (error as Error)?.message
+        error: (error as Error)?.message,
       })
       res.status(500).send()
     }

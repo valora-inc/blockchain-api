@@ -12,7 +12,7 @@ import {
   ExchangeCeloToToken,
   ExchangeTokenToCelo,
   TokenReceived,
-  TokenSent
+  TokenSent,
 } from './events'
 import { EscrowContractCall } from './events/EscrowContractCall'
 import { ExchangeContractCall } from './events/ExchangeContractCall'
@@ -28,7 +28,7 @@ import {
   LegacyFaucet,
   LegacyTokenReceived,
   LegacyTokenSent,
-  LegacyVerification
+  LegacyVerification,
 } from './legacyEvents'
 import { LegacyEscrowContractCall } from './legacyEvents/LegacyEscrowContractCall'
 import { LegacyExchangeContractCall } from './legacyEvents/LegacyExchangeContractCall'
@@ -47,7 +47,7 @@ import { TransactionClassifier } from './transaction/TransactionClassifier'
 import {
   ContractAddresses,
   getContractAddresses,
-  runWithRetries
+  runWithRetries,
 } from './utils'
 export interface BlockscoutTransferTx {
   blockNumber: number

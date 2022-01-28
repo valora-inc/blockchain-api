@@ -165,7 +165,6 @@ export async function runWithRetries<ReturnType>(
         try: i,
         error: (error as Error)?.message,
       })
-      
     }
   }
   throw new Error(`Error running ${tag} after ${retries} tries`)

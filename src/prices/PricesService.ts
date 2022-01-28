@@ -52,7 +52,7 @@ export default class PricesService<TContext = any> extends DataSource {
       }
       return cUSDPrice.times(usdToLocalCurrencyPrice)
     } catch (e) {
-      logger.error({
+      logger.warn({
         type: 'ERROR_CALCULATE_LOCAL_CURRENCY_PRICE',
         tokenAddress,
         localCurrency,

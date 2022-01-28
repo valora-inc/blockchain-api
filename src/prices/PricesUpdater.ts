@@ -27,6 +27,9 @@ export async function updatePrices({
   db('historical_token_prices')
     .insert(batchInsertItems)
     .catch((e) => {
-      logger.error(`Prices couldn't be stored in DB: ${(e as Error)?.message}`)
+      logger.error({
+        type: 'ERROR_INSERTING_TOKEN_PRICES',
+        error: (e as Error)?.message,
+      })
     })
 }

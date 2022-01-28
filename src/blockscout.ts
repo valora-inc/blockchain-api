@@ -44,6 +44,7 @@ import {
   TokenSent,
 } from './events'
 import { TransactionAggregator } from './transaction/TransactionAggregator'
+import { Body } from 'apollo-datasource-rest/dist/RESTDataSource'
 export interface BlockscoutTransferTx {
   blockNumber: number
   transactionHash: string
@@ -117,7 +118,7 @@ export class BlockscoutAPI extends RESTDataSource {
           try {
             return await type.getEvent(transaction)
           } catch (e) {
-            logger.error({
+            logger.warn({
               type: 'ERROR_MAPPING_TO_EVENT_V2',
               transaction: JSON.stringify(transaction),
               error: (e as Error)?.message,
@@ -144,7 +145,7 @@ export class BlockscoutAPI extends RESTDataSource {
 
     await this.ensureContractAddresses()
 
-    const response = await this.post('', {
+    const response = await this.queryBlockscoutWithRetry({
       query: `
         query Transfers($address: AddressHash!) {
           # TXs related to cUSD or cGLD transfers
@@ -198,12 +199,26 @@ export class BlockscoutAPI extends RESTDataSource {
     return transactions
   }
 
+  async queryBlockscoutWithRetry(body: Body) {
+    for (let i = 0; i < 3; i++) {
+      try {
+        return await this.post('', body)
+      } catch (error) {
+        logger.warn({
+          type: 'BLOCKSCOUT_QUERY_FAILED',
+          try: i,
+        })
+      }
+    }
+    throw new Error('Error querying Blockscout after 3 retries')
+  }
+
   async getRawTokenTransactions(address: string): Promise<LegacyTransaction[]> {
     // Measure time at beginning of execution
     const t0 = performance.now()
     const contractAddresses = await this.ensureContractAddresses()
 
-    const response = await this.post('', {
+    const response = await this.queryBlockscoutWithRetry({
       query: `
         query Transfers($address: AddressHash!) {
           # TXs related to cUSD or cGLD transfers
@@ -368,9 +383,10 @@ export class BlockscoutAPI extends RESTDataSource {
         try {
           return type.getEvent(transaction)
         } catch (e) {
-          logger.error(e, {
+          logger.warn({
             type: 'ERROR_MAPPING_TO_EVENT',
             transaction: JSON.stringify(transaction),
+            error: (e as Error)?.message,
           })
         }
       })
@@ -400,8 +416,9 @@ export class BlockscoutAPI extends RESTDataSource {
               localCurrencyCode,
             })
           } catch (error) {
-            logger.error(error, {
+            logger.error({
               type: 'ERROR_FETCHING_EXCHANGE_LOCAL_AMOUNT',
+              error: (error as Error)?.message,
             })
             return null
           }

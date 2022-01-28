@@ -49,11 +49,12 @@ export default class ExchangeRateAPI extends RESTDataSource {
 
       return new BigNumber(fetchedRate)
     } catch (error) {
-      logger.error(error, {
+      logger.error({
         type: 'ERROR_FETCHING_EXCHANGE_RATE',
         sourceCurrencyCode,
         currencyCode,
         timestamp,
+        error: (error as Error)?.message
       })
       throw error
     }

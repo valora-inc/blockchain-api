@@ -172,11 +172,21 @@ export const resolvers = {
     ) => {
       const { dataSources } = context
       context.localCurrencyCode = args.localCurrencyCode
-      const transactions =
-        await dataSources.blockscoutAPI.getTokenTransactionsV2(args.address)
+      try {
+        const transactions =
+          await dataSources.blockscoutAPI.getTokenTransactionsV2(args.address)
 
-      return {
-        transactions,
+        return {
+          transactions,
+        }
+      } catch (error) {
+        logger.error({
+          type: 'ERROR_FETCHING_TOKEN_TRANSACTIONS_V2',
+          address: args.address,
+          localCurrency: args.localCurrencyCode,
+          error: (error as Error)?.message,
+        })
+        throw error
       }
     },
     // Deprecated
@@ -187,22 +197,33 @@ export const resolvers = {
     ) => {
       const { dataSources } = context
       context.localCurrencyCode = args.localCurrencyCode
-      const transactions = await dataSources.blockscoutAPI.getTokenTransactions(
-        args,
-        context.dataSources.currencyConversionAPI,
-      )
+      try {
+        const transactions =
+          await dataSources.blockscoutAPI.getTokenTransactions(
+            args,
+            context.dataSources.currencyConversionAPI,
+          )
 
-      return {
-        edges: transactions.map((tx) => ({
-          node: tx,
-          cursor: 'TODO',
-        })),
-        pageInfo: {
-          hasPreviousPage: false,
-          hasNextPage: false,
-          firstCursor: 'TODO',
-          lastCursor: 'TODO',
-        },
+        return {
+          edges: transactions.map((tx) => ({
+            node: tx,
+            cursor: 'TODO',
+          })),
+          pageInfo: {
+            hasPreviousPage: false,
+            hasNextPage: false,
+            firstCursor: 'TODO',
+            lastCursor: 'TODO',
+          },
+        }
+      } catch (error) {
+        logger.error({
+          type: 'ERROR_FETCHING_TOKEN_TRANSACTIONS',
+          address: args.address,
+          localCurrency: args.localCurrencyCode,
+          error: (error as Error)?.message,
+        })
+        throw error
       }
     },
     currencyConversion: async (
@@ -219,7 +240,11 @@ export const resolvers = {
         })
         return { rate: rate.toNumber() }
       } catch (error) {
-        logger.error(error, { type: 'ERROR_CURRENCY_CONVERSION' })
+        logger.error({
+          error: (error as Error)?.message,
+          type: 'CURRENCY_CONVERSION_ERROR',
+          sourceCurrencyCode: args.sourceCurrencyCode,
+        })
         return null
       }
     },
@@ -228,10 +253,19 @@ export const resolvers = {
       args: { address: string },
       { dataSources }: Context,
     ): Promise<UserTokenBalances> => {
-      const balances = await dataSources.blockscoutJsonAPI.fetchUserBalances(
-        args.address,
-      )
-      return { balances }
+      try {
+        const balances = await dataSources.blockscoutJsonAPI.fetchUserBalances(
+          args.address,
+        )
+        return { balances }
+      } catch (error) {
+        logger.error({
+          type: 'ERROR_FETCHING_BALANCES',
+          address: args.address,
+          error: (error as Error)?.message,
+        })
+        throw error
+      }
     },
   },
   TokenTransaction: {
@@ -290,7 +324,10 @@ export const resolvers = {
             exchangeRate: rate.toString(),
           }
         } catch (error) {
-          logger.warn(error, { type: 'ERROR_FETCHING_TOKEN_LOCAL_AMOUNT' })
+          logger.warn({
+            type: 'ERROR_FETCHING_TOKEN_LOCAL_AMOUNT',
+            error: (error as Error)?.message,
+          })
           return null
         }
       }
@@ -316,7 +353,10 @@ export const resolvers = {
           exchangeRate: rate.toString(),
         }
       } catch (error) {
-        logger.error(error, { type: 'ERROR_FETCHING_LOCAL_AMOUNT' })
+        logger.error({
+          type: 'ERROR_FETCHING_LOCAL_AMOUNT',
+          error: (error as Error)?.message,
+        })
         return null
       }
     },

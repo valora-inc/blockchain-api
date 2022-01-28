@@ -115,7 +115,10 @@ async function main() {
       await updatePrices({ db, exchangeRateManager })
       res.status(204).send()
     } catch (error) {
-      logger.error(error)
+      logger.error({
+        type: 'ERROR_UPDATING_PRICES',
+        error: (error as Error)?.message
+      })
       res.status(500).send()
     }
   })

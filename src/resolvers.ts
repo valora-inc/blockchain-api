@@ -241,9 +241,9 @@ export const resolvers = {
         return { rate: rate.toNumber() }
       } catch (error) {
         logger.error({
+          ...args,
           error,
           type: 'CURRENCY_CONVERSION_ERROR',
-          sourceCurrencyCode: args.sourceCurrencyCode,
         })
         return null
       }
@@ -353,7 +353,7 @@ export const resolvers = {
           exchangeRate: rate.toString(),
         }
       } catch (error) {
-        logger.error({
+        logger.warn({
           type: 'ERROR_FETCHING_LOCAL_AMOUNT',
           error,
         })

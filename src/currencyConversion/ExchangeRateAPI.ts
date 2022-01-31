@@ -35,11 +35,11 @@ export default class ExchangeRateAPI extends RESTDataSource {
     currencyCode,
     timestamp,
   }: CurrencyConversionArgs): Promise<BigNumber> {
-    if (!currencyCode) {
-      throw new Error('No currency code specified')
-    }
-
     try {
+      if (!currencyCode) {
+        throw new Error('No currency code specified')
+      }
+
       const date = timestamp ? new Date(timestamp) : new Date()
       const fetchedRate = await this.queryExchangeRate(
         sourceCurrencyCode || USD,

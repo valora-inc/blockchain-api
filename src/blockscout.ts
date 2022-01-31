@@ -401,7 +401,7 @@ export class BlockscoutAPI extends RESTDataSource {
               localCurrencyCode,
             })
           } catch (error) {
-            logger.error({
+            logger.warn({
               type: 'ERROR_FETCHING_EXCHANGE_LOCAL_AMOUNT',
               error,
             })

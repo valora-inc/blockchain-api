@@ -24,6 +24,14 @@ jobs:
       - run: yarn
       - run: yarn build
       - run: yarn test
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v2
+        with:
+          path: coverage/lcov-report
+      - name: 'Upload coverage to Codecov'
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
   e2e:
     name: e2e
     runs-on: ubuntu-latest

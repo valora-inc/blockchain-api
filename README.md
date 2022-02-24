@@ -8,6 +8,11 @@ Install dependencies:
 yarn
 ```
 
+Build (must run first or tests will not pass!):
+```
+yarn build
+```
+
 ## Testing
 
 Unit tests, linting, and formatting:

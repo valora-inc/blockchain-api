@@ -1,5 +1,13 @@
 cron:
-  - description: 'Update prices'
-    url: /cron/update-prices
+  - description: 'Store current prices in the db'
+    url: /cron/store-prices
     target: blockchain-api
     schedule: every 10 minutes
+  - description: 'Update historical prices in firebase'
+    url: /cron/update-historical-prices
+    target: blockchain-api
+    schedule: every 10 minutes
+  - description: 'Update current prices in firebase'
+    url: /cron/update-current-prices
+    target: blockchain-api
+    schedule: every 1 minutes

@@ -2,17 +2,76 @@ import { Knex } from 'knex'
 import { logger } from '../logger'
 
 import { ExchangeRateManager } from '@valora/exchanges'
+import { updateFirebase } from '../firebase'
+import tokenInfoCache from '../helpers/TokenInfoCache'
+import PricesService from './PricesService'
 
-export async function updatePrices({
+const asyncPool = require('tiny-async-pool')
+
+const FIREBASE_NODE_KEY = '/tokensInfo'
+const MAX_CONCURRENCY = 30
+const DAY = 1000 * 60 * 60 * 24
+
+export async function updateCurrentPrices({exchangeRateManager}: {exchangeRateManager: ExchangeRateManager}) {
+  logger.info('Updating current prices in firebase')
+
+  const fetchTime = Date.now()
+  const prices = await exchangeRateManager.calculatecUSDPrices()
+  const tokenAddresses = tokenInfoCache.getTokensAddresses()
+
+  const updateObject = tokenAddresses.reduce((result: any, tokenAddress: string) => {
+    const price = prices[tokenAddress.toLowerCase()]
+    
+    if (price) {
+      result[`${tokenAddress}/usdPrice`] = price
+      result[`${tokenAddress}/priceFetchedAt`] = fetchTime
+    }
+
+    return result
+  }, {})
+
+  await updateFirebase(FIREBASE_NODE_KEY, updateObject)
+  logger.info('Updated current prices in firebase')
+}
+
+export async function updateHistoricalPrices({pricesService}: {pricesService: PricesService}) {
+  logger.info('Updating historical prices in firebase')
+  const tokenAddresses = tokenInfoCache.getTokensAddresses()
+
+  await updateLastDayPrices(pricesService, tokenAddresses)
+  logger.info('Updated historical prices in firebase')
+}
+
+async function updateLastDayPrices(pricesService: PricesService, tokenAddresses: string[]) {
+  const lastDay = new Date(Date.now() - 1 * DAY)
+  await asyncPool(MAX_CONCURRENCY, tokenAddresses, async (tokenAddress: string) => {
+    try {
+      const lastDayPrice = await pricesService.getTokenTocUSDPrice(tokenAddress, lastDay)
+      await updateFirebase(`${FIREBASE_NODE_KEY}/${tokenAddress}/historicalUsdPrices/lastDay`, {
+        price: lastDayPrice.toString(),
+        at: lastDay.getTime()
+      })
+    }
+    catch (error) {
+      logger.warn({
+        type: 'ERROR_UPDATING_LAST_DAY_PRICE',
+        tokenAddress,
+        error
+      })
+    }
+  })
+}
+
+export async function storeHistoricalPrices({
   db,
   exchangeRateManager,
 }: {
   db: Knex
   exchangeRateManager: ExchangeRateManager
 }) {
-  logger.debug('Updating prices')
+  logger.info('Storing historical prices')
 
-  const fetchTime = new Date(Date.now())
+  const fetchTime = new Date(Date.now() - 1 * DAY)
   const prices = await exchangeRateManager.calculatecUSDPrices()
   const cUSDAddress = exchangeRateManager.cUSDTokenAddress
 
@@ -24,7 +83,7 @@ export async function updatePrices({
     fetched_from: 'Exchange library',
   }))
 
-  db('historical_token_prices')
+  await db('historical_token_prices')
     .insert(batchInsertItems)
     .catch((error) => {
       logger.error({
@@ -32,4 +91,7 @@ export async function updatePrices({
         error,
       })
     })
+  
+  logger.info('Stored historical prices')
 }
+

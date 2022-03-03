@@ -21,8 +21,8 @@ class TokenInfoCache {
   private tokensInfo: TokensInfo = {}
 
   startListening(): void {
+    logger.info({ type: 'FETCHED_TOKENS_INFO' })
     listenFromFirebase(ROOT_KEY, (value: TokensInfo) => {
-      logger.info({ type: 'FETCHED_TOKENS_INFO' })
       this.tokensInfo = value ?? this.tokensInfo
     })
   }
@@ -36,6 +36,10 @@ class TokenInfoCache {
     return Object.values(this.tokensInfo).find(
       (token) => token.symbol === symbol,
     )
+  }
+
+  getTokensAddresses() {
+    return Object.keys(this.tokensInfo)
   }
 }
 

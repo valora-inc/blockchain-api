@@ -84,6 +84,7 @@ describe('Mocking date and exchange manager', () => {
     })
 
     it('should store token prices', async () => {
+      expect(await db(tableName)).toHaveLength(0)
       await storeHistoricalPrices({
         db,
         exchangeRateManager: mockExchangeRateManager,

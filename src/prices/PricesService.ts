@@ -42,7 +42,10 @@ export default class PricesService<TContext = any> extends DataSource {
   ): Promise<BigNumber> {
     const tokenAddressLowerCase = tokenAddress.toLowerCase()
     try {
-      const cUSDPrice = await this.getTokenTocUSDPrice(tokenAddressLowerCase, date)
+      const cUSDPrice = await this.getTokenTocUSDPrice(
+        tokenAddressLowerCase,
+        date,
+      )
       const usdToLocalCurrencyPrice = await this.usdToLocalCurrency(
         localCurrency,
         date,

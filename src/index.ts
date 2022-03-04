@@ -14,7 +14,11 @@ import knownAddressesCache from './helpers/KnownAddressesCache'
 import tokenInfoCache from './helpers/TokenInfoCache'
 import { logger } from './logger'
 import PricesService from './prices/PricesService'
-import { updateCurrentPrices, updateHistoricalPrices, storeHistoricalPrices } from './prices/PricesUpdater'
+import {
+  updateCurrentPrices,
+  updateHistoricalPrices,
+  storeHistoricalPrices,
+} from './prices/PricesUpdater'
 
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
@@ -95,7 +99,7 @@ async function main() {
   const exchangeRateManager = createNewManager(exchangeRateConfig)
 
   knownAddressesCache.startListening()
-  tokenInfoCache.startListening() 
+  tokenInfoCache.startListening()
 
   const exchangeRateAPI = new ExchangeRateAPI({
     exchangeRatesAPIAccessKey: args['exchange-rates-api-access-key'],
@@ -129,7 +133,6 @@ async function main() {
       await updateCurrentPrices({ exchangeRateManager })
       res.status(204).send()
     } catch (error) {
-      console.log(error)
       logger.error({
         type: 'ERROR_UPDATING_CURRENT_PRICES',
         error,

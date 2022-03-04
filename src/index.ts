@@ -7,6 +7,7 @@ import express from 'express'
 import promBundle from 'express-prom-bundle'
 import yargs from 'yargs'
 import { initApolloServer } from './apolloServer'
+import { cronRouter } from './crons'
 import CurrencyConversionAPI from './currencyConversion/CurrencyConversionAPI'
 import ExchangeRateAPI from './currencyConversion/ExchangeRateAPI'
 import { initDatabase } from './database/db'
@@ -14,11 +15,6 @@ import knownAddressesCache from './helpers/KnownAddressesCache'
 import tokenInfoCache from './helpers/TokenInfoCache'
 import { logger } from './logger'
 import PricesService from './prices/PricesService'
-import {
-  updateCurrentPrices,
-  updateHistoricalPrices,
-  storeHistoricalPrices,
-} from './prices/PricesUpdater'
 
 const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 
@@ -121,71 +117,13 @@ async function main() {
     res.send('User-agent: *\nDisallow: /')
   })
 
-  app.get('/cron/update-current-prices', async (req, res) => {
-    // App Engine sets this header if and only if the request is from a cron.
-    if (!req.headers['x-appengine-cron']) {
-      logger.warn('Request does not contain header x-appengine-cron')
-      res.status(401).send()
-      return
-    }
-
-    try {
-      await updateCurrentPrices({ exchangeRateManager })
-      res.status(204).send()
-    } catch (error) {
-      logger.error({
-        type: 'ERROR_UPDATING_CURRENT_PRICES',
-        error,
-      })
-      res.status(500).send()
-    }
-  })
-
-  app.get('/cron/update-historical-prices', async (req, res) => {
-    // App Engine sets this header if and only if the request is from a cron.
-    if (!req.headers['x-appengine-cron']) {
-      logger.warn('Request does not contain header x-appengine-cron')
-      res.status(401).send()
-      return
-    }
-
-    try {
-      await updateHistoricalPrices({ pricesService })
-      res.status(204).send()
-    } catch (error) {
-      logger.error({
-        type: 'ERROR_UPDATING_HISTORICAL_PRICES',
-        error,
-      })
-      res.status(500).send()
-    }
-  })
-
-  app.get('/cron/store-prices', async (req, res) => {
-    // App Engine sets this header if and only if the request is from a cron.
-    if (!req.headers['x-appengine-cron']) {
-      logger.warn('Request does not contain header x-appengine-cron')
-      res.status(401).send()
-      return
-    }
-
-    try {
-      await storeHistoricalPrices({ db, exchangeRateManager })
-      res.status(204).send()
-    } catch (error) {
-      logger.error({
-        type: 'ERROR_UPDATING_HISTORICAL_PRICES',
-        error,
-      })
-      res.status(500).send()
-    }
-  })
-
   app.head('/', (_req, res) => {
     // Preventing HEAD requests made by some browsers causing alerts
     // https://github.com/celo-org/celo-monorepo/issues/2189
     res.end()
   })
+
+  app.use('/cron', cronRouter({ db, pricesService, exchangeRateManager }))
 
   const apolloServer = initApolloServer({
     currencyConversionAPI,

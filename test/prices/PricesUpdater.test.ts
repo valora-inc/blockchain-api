@@ -1,5 +1,5 @@
 import {
-  DAY,
+  ONE_DAY_IN_MS,
   storeHistoricalPrices,
   updateCurrentPrices,
   updateHistoricalPrices,
@@ -115,7 +115,7 @@ describe('Mocking date and exchange manager', () => {
   describe('PricesUpdater#updateLastDayPrices', () => {
     let dateNowSpy: any
     const mockDate = 1487076708000
-    const expectedDateTime = mockDate - 1 * DAY
+    const expectedDateTime = mockDate - 1 * ONE_DAY_IN_MS
     const expectedDate = new Date(expectedDateTime)
 
     beforeAll(async () => {

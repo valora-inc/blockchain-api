@@ -21,7 +21,7 @@ class TokenInfoCache {
   private tokensInfo: TokensInfo = {}
 
   startListening(): void {
-    logger.info({ type: 'FETCHED_TOKENS_INFO' })
+    logger.info({ type: 'START_FETCHING_TOKENS_INFO' })
     listenFromFirebase(ROOT_KEY, (value: TokensInfo) => {
       this.tokensInfo = value ?? this.tokensInfo
     })

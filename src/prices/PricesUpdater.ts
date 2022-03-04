@@ -5,12 +5,11 @@ import { ExchangeRateManager } from '@valora/exchanges'
 import { updateFirebase } from '../firebase'
 import tokenInfoCache from '../helpers/TokenInfoCache'
 import PricesService from './PricesService'
-
-const asyncPool = require('tiny-async-pool')
+import asyncPool from 'tiny-async-pool'
 
 const FIREBASE_NODE_KEY = '/tokensInfo'
 const MAX_CONCURRENCY = 30
-export const DAY = 1000 * 60 * 60 * 24
+export const ONE_DAY_IN_MS = 1000 * 60 * 60 * 24
 
 export async function updateCurrentPrices({
   exchangeRateManager,
@@ -57,7 +56,7 @@ async function updateLastDayPrices(
   pricesService: PricesService,
   tokenAddresses: string[],
 ) {
-  const lastDay = new Date(Date.now() - 1 * DAY)
+  const lastDay = new Date(Date.now() - 1 * ONE_DAY_IN_MS)
   await asyncPool(
     MAX_CONCURRENCY,
     tokenAddresses,

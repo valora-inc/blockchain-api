@@ -16,7 +16,7 @@ class KnownAddressesCache {
   private knownAddresses: KnownAddresses = {}
 
   startListening(): void {
-    logger.info({ type: 'FETCHED_KNOWN_ADDRESSES' })
+    logger.info({ type: 'START_FETCHING_KNOWN_ADDRESSES' })
     listenFromFirebase(ROOT_KEY, (value: KnownAddresses) => {
       this.knownAddresses = value ?? this.knownAddresses
     })

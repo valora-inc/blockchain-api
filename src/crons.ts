@@ -15,7 +15,14 @@ function addEndpoint(
   errorType: string,
   asyncFn: () => Promise<void>,
 ) {
-  router.get(path, async (_, res) => {
+  router.get(path, async (req, res) => {
+    // App Engine sets this header if and only if the request is from a cron.
+    if (!req.headers['x-appengine-cron']) {
+      logger.warn('Request does not contain header x-appengine-cron')
+      res.status(401).send()
+      return
+    }
+
     try {
       await asyncFn()
       res.status(204).send()

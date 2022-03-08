@@ -860,6 +860,134 @@ const mockTokenTxs = {
               '0x1a8c50902bd67443f9fcc1842d20dca5d1b9e6dd4a2f83bd214c8d33cb83f253',
           },
         },
+        // Unknown token sent
+        {
+          node: {
+            blockNumber: 90711,
+            tokenTransfer: {
+              edges: [
+                {
+                  node: {
+                    fromAddressHash:
+                      '0x0000000000000000000000000000000000007E57',
+                    toAddressHash: '0x8b7649116f169d2d2aebb6ea1a77f0baf31f2811',
+                    tokenAddress: 'unknownAddress',
+                    value: '150000000000000000',
+                  },
+                },
+                {
+                  node: {
+                    fromAddressHash:
+                      '0x0000000000000000000000000000000000007E57',
+                    toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
+                    tokenAddress: 'unknownAddress',
+                    value: '1131780000000000',
+                  },
+                },
+                {
+                  node: {
+                    fromAddressHash:
+                      '0x0000000000000000000000000000000000007E57',
+                    toAddressHash: '0x050f34537f5b2a00b9b9c752cb8500a3fce3da7d',
+                    tokenAddress: 'unknownAddress',
+                    value: '4527120000000000',
+                  },
+                },
+                {
+                  node: {
+                    fromAddressHash:
+                      '0x0000000000000000000000000000000000007E57',
+                    toAddressHash: '0x6a0edf42f5e618bee697e7718fa05efb1ea5d11c',
+                    tokenAddress: 'unknownAddress',
+                    value: '10000000000000000',
+                  },
+                },
+              ],
+            },
+            feeCurrency: '0xa561131a1c8ac25925fb848bca45a74af61e5a38',
+            feeToken: 'cUSD',
+            gasPrice: '50000000000',
+            gasUsed: '113178',
+            gatewayFee: '10000000000000000',
+            gatewayFeeRecipient: '0x6a0edf42f5e618bee697e7718fa05efb1ea5d11c',
+            timestamp: '2019-08-21T00:11:16.000000Z',
+            transactionHash:
+              '0x21dd2c18ae6c80d61ffbddaa073f7cde7bbfe9436fdf5059b506f1686326a2fb',
+          },
+        },
+        // Unknown token exchange
+        {
+          node: {
+            blockNumber: 90605,
+            tokenTransfer: {
+              edges: [
+                {
+                  node: {
+                    fromAddressHash:
+                      '0x6a61e1e693c765cbab7e02a500665f2e13ee46df',
+                    toAddressHash: '0x0000000000000000000000000000000000007E57',
+                    tokenAddress: 'unknownAddress',
+                    value: '1000000000000000000',
+                  },
+                },
+                {
+                  node: {
+                    fromAddressHash:
+                      '0x0000000000000000000000000000000000007E57',
+                    toAddressHash: '0xf1235cb0d3703e7cc2473fb4e214fbc7a9ff77cc',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
+                    value: '10000000000000000000',
+                  },
+                },
+                {
+                  node: {
+                    fromAddressHash:
+                      '0xf1235cb0d3703e7cc2473fb4e214fbc7a9ff77cc',
+                    toAddressHash: '0x0000000000000000000000000000000000000000',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
+                    value: '10000000000000000000',
+                  },
+                },
+                {
+                  node: {
+                    fromAddressHash:
+                      '0x0000000000000000000000000000000000007E57',
+                    toAddressHash: '0xa12a699c641cc875a7ca57495861c79c33d293b4',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
+                    value: '1991590000000000',
+                  },
+                },
+                {
+                  node: {
+                    fromAddressHash:
+                      '0x0000000000000000000000000000000000007E57',
+                    toAddressHash: '0xdd1f519f63423045f526b8c83edc0eb4ba6434a4',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
+                    value: '7966360000000000',
+                  },
+                },
+                {
+                  node: {
+                    fromAddressHash:
+                      '0x0000000000000000000000000000000000007E57',
+                    toAddressHash: '0xf9720b2ff2cf69f8a50dc5bec5545ba883e0ae3f',
+                    tokenAddress: TEST_DOLLAR_ADDRESS,
+                    value: '0',
+                  },
+                },
+              ],
+            },
+            feeCurrency: '0xa561131a1c8ac25925fb848bca45a74af61e5a38',
+            feeToken: 'cUSD',
+            gasPrice: '50000000000',
+            gasUsed: '199159',
+            gatewayFee: '0',
+            gatewayFeeRecipient: '0xf9720b2ff2cf69f8a50dc5bec5545ba883e0ae3f',
+            timestamp: '2019-08-21T00:03:17.000000Z',
+            transactionHash:
+              '0xba620de2d812f299d987155eb5dca7abcfeaf154f5cfd99cb1773452a7df3d7a',
+          },
+        },
       ],
     },
   },

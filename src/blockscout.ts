@@ -17,6 +17,7 @@ import { EscrowContractCall } from './events/EscrowContractCall'
 import { ExchangeContractCall } from './events/ExchangeContractCall'
 import { Input } from './helpers/Input'
 import { InputDecoderLegacy } from './helpers/InputDecoderLegacy'
+import tokenInfoCache from './helpers/TokenInfoCache'
 import {
   LegacyAny,
   LegacyContractCall,
@@ -192,10 +193,18 @@ export class BlockscoutAPI extends RESTDataSource {
       },
     )
 
+    const supportedTokens = new Set(tokenInfoCache.getTokensAddresses())
+
+    const filteredUnknownTokens = transactions.filter((tx: Transaction) => {
+      return tx.transfers.every((transfer: BlockscoutTokenTransfer) => {
+        return supportedTokens.has(transfer.tokenAddress.toLowerCase())
+      })
+    })
+
     // Record time at end of execution
     const t1 = performance.now()
     metrics.setRawTokenDuration(t1 - t0)
-    return transactions
+    return filteredUnknownTokens
   }
 
   async getRawTokenTransactions(address: string): Promise<LegacyTransaction[]> {

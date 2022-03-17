@@ -40,11 +40,11 @@ describe('PricesService', () => {
     await addHistoricPrice(defaultToken, '60000', 10000) // 10 seconds after
     await addHistoricPrice(fakeToken, '1000', 12000) // Different token
 
-    await assertQueryExpectedValue(5000, '64000')
-    await assertQueryExpectedValue(7500, '64000')
-    await assertQueryExpectedValue(10000, '60000')
-    await assertQueryExpectedValue(12500, '60000')
-    await assertQueryThrowsError(12000 + 4 * HOURS)
+    await expectQueryValue(5000, '64000')
+    await expectQueryValue(7500, '64000')
+    await expectQueryValue(10000, '60000')
+    await expectQueryValue(12500, '60000')
+    await expectQueryThrowsError(12000 + 4 * HOURS)
   })
 
   it('should return expected price when exchage API returns different than 1', async () => {
@@ -53,20 +53,20 @@ describe('PricesService', () => {
     await addHistoricPrice(defaultToken, '60000', 10000) // 10 seconds after
     await addHistoricPrice(fakeToken, '1000', 12000) // Different token
 
-    await assertQueryExpectedValue(5000, '76800')
-    await assertQueryExpectedValue(7500, '76800')
-    await assertQueryExpectedValue(10000, '72000')
-    await assertQueryExpectedValue(12500, '72000')
-    await assertQueryThrowsError(12000 + 4 * HOURS)
+    await expectQueryValue(5000, '76800')
+    await expectQueryValue(7500, '76800')
+    await expectQueryValue(10000, '72000')
+    await expectQueryValue(12500, '72000')
+    await expectQueryThrowsError(12000 + 4 * HOURS)
   })
 
   it('should throw an exception when db does not contain enough info', async () => {
-    await assertQueryThrowsError(5000)
+    await expectQueryThrowsError(5000)
   })
 
-  it('should return 1 times exchange rate when requested token is cUSD ', async () => {
+  it('should return 1 times exchange rate when requested token is cUSD', async () => {
     mockGetExchangeRate.mockReturnValue(1.2)
-    await assertQueryExpectedValue(5000, '1.2', mockcUSDAddress)
+    await expectQueryValue(5000, '1.2', mockcUSDAddress)
   })
 
   it('should return 1 when requested token is cUSD and local currency is USD', async () => {
@@ -93,7 +93,7 @@ describe('PricesService', () => {
     })
   }
 
-  async function assertQueryThrowsError(dateOffset: number) {
+  async function expectQueryThrowsError(dateOffset: number) {
     const queryDate = new Date(mockDate + dateOffset)
     const query = async () =>
       await priceService.getTokenToLocalCurrencyPrice(
@@ -105,7 +105,7 @@ describe('PricesService', () => {
     await expect(query).rejects.toThrowError()
   }
 
-  async function assertQueryExpectedValue(
+  async function expectQueryValue(
     dateOffset: number,
     expectedValue: string,
     token: string = defaultToken,

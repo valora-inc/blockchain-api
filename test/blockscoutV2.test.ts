@@ -106,6 +106,7 @@ describe('Blockscout', () => {
     mockDataSourcePost.mockClear()
   })
 
+  /* eslint-disable jest/no-commented-out-tests */
   // TODO: Uncomment these tests when the token filter works
   // it('should get dollar transactions and label them properly', async () => {
   //   const result = await blockscoutAPI.getTokenTransactions(
@@ -138,6 +139,7 @@ describe('Blockscout', () => {
 
   //   expect(transactions).toMatchSnapshot()
   // })
+  /* eslint-enable jest/no-commented-out-tests */
 
   it('should get all transactions and label them properly', async () => {
     const result = await blockscoutAPI.getTokenTransactionsV2(

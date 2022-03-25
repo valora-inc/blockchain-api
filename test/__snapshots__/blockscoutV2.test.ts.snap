@@ -401,7 +401,14 @@ Array [
 ]
 `;
 
-exports[`Blockscout should get all transactions and label them properly when afterCursor is passed 2`] = `undefined`;
+exports[`Blockscout should get all transactions and label them properly when afterCursor is passed 2`] = `
+Object {
+  "endCursor": "YXJyYXljb25uZWN0aW9uOjI",
+  "hasNextPage": true,
+  "hasPreviousPage": false,
+  "startCursor": "YXJyYXljb25uZWN0aW9uOjA=",
+}
+`;
 
 exports[`Blockscout should get all transactions and label them properly when there is no afterCursor 1`] = `
 Array [
@@ -804,4 +811,11 @@ Array [
 ]
 `;
 
-exports[`Blockscout should get all transactions and label them properly when there is no afterCursor 2`] = `undefined`;
+exports[`Blockscout should get all transactions and label them properly when there is no afterCursor 2`] = `
+Object {
+  "endCursor": "YXJyYXljb25uZWN0aW9uOjI",
+  "hasNextPage": true,
+  "hasPreviousPage": false,
+  "startCursor": "YXJyYXljb25uZWN0aW9uOjA=",
+}
+`;

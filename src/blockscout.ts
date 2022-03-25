@@ -92,7 +92,7 @@ export interface BlockscoutTokenTransfer {
 const BLOCKSCOUT_QUERY = `
 query Transfers($address: AddressHash!, $afterCursor: String) {
   # TXs related to cUSD or cGLD transfers
-  tokenTransferTxs(addressHash: $address, first: 10, after: $afterCursor) {
+  tokenTransferTxs(addressHash: $address, first: 100, after: $afterCursor) {
     edges {
       node {
         transactionHash

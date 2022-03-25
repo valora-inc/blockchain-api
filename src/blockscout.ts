@@ -58,6 +58,18 @@ export interface BlockscoutTransferTx {
   celoTransfers: BlockscoutCeloTransfer[]
 }
 
+export interface TransactionsBatch {
+  transactions: Transaction[],
+  pageInfo: PageInfo
+}
+
+export interface PageInfo {
+  startCursor: string,
+  endCursor: string,
+  hasNextPage: boolean,
+  hasPreviousPage: boolean
+}
+
 export interface BlockscoutCeloTransfer {
   fromAddressHash: string
   toAddressHash: string
@@ -77,6 +89,46 @@ export interface BlockscoutTokenTransfer {
   value: string
 }
 
+const BLOCKSCOUT_QUERY = `
+query Transfers($address: AddressHash!, $afterCursor: String) {
+  # TXs related to cUSD or cGLD transfers
+  tokenTransferTxs(addressHash: $address, first: 10, after: $afterCursor) {
+    edges {
+      node {
+        transactionHash
+        blockNumber
+        timestamp
+        gasPrice
+        gasUsed
+        feeToken
+        gatewayFee
+        gatewayFeeRecipient
+        input
+        # Transfers associated with the TX
+        tokenTransfer(first: 10) {
+          edges {
+            node {
+              fromAddressHash
+              toAddressHash
+              fromAccountHash
+              toAccountHash
+              value
+              tokenAddress
+            }
+          }
+        }
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+`
+
 export class BlockscoutAPI extends RESTDataSource {
   contractAddresses: ContractAddresses | undefined
 
@@ -85,9 +137,9 @@ export class BlockscoutAPI extends RESTDataSource {
     this.baseURL = `${BLOCKSCOUT_API}/graphql`
   }
 
-  async getTokenTransactionsV2(address: string) {
+  async getTokenTransactionsV2(address: string, afterCursor?: string): Promise<TransactionsBatch> {
     const userAddress = address.toLowerCase()
-    const rawTransactions = await this.getRawTokenTransactionsV2(userAddress)
+    const transactionBatch = await this.getRawTokenTransactionsV2(userAddress, afterCursor)
 
     const context = { userAddress }
 
@@ -104,7 +156,7 @@ export class BlockscoutAPI extends RESTDataSource {
       new Any(context),
     ])
 
-    const classifiedTransactions = rawTransactions.map((transaction) =>
+    const classifiedTransactions = transactionBatch.transactions.map((transaction) =>
       transactionClassifier.classify(transaction),
     )
 
@@ -133,54 +185,28 @@ export class BlockscoutAPI extends RESTDataSource {
     logger.info({
       type: 'GET_TOKEN_TRANSACTIONS_V2',
       address: address,
-      rawTransactionCount: rawTransactions.length,
+      rawTransactionCount: transactionBatch.transactions.length,
+      pageInfo: transactionBatch.pageInfo,
       eventCount: events.length,
     })
 
-    return events
+    return {
+      transactions: events,
+      pageInfo: transactionBatch.pageInfo
+    }
   }
 
-  async getRawTokenTransactionsV2(address: string): Promise<Transaction[]> {
+  async getRawTokenTransactionsV2(address: string, afterCursor?: string): Promise<TransactionsBatch> {
     const t0 = performance.now()
 
     await this.ensureContractAddresses()
 
     const response = await this.post('', {
-      query: `
-        query Transfers($address: AddressHash!) {
-          # TXs related to cUSD or cGLD transfers
-          tokenTransferTxs(addressHash: $address, first: 100) {
-            edges {
-              node {
-                transactionHash
-                blockNumber
-                timestamp
-                gasPrice
-                gasUsed
-                feeToken
-                gatewayFee
-                gatewayFeeRecipient
-                input
-                # Transfers associated with the TX
-                tokenTransfer(first: 10) {
-                  edges {
-                    node {
-                      fromAddressHash
-                      toAddressHash
-                      fromAccountHash
-                      toAccountHash
-                      value
-                      tokenAddress
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      `,
-      variables: { address },
+      query: BLOCKSCOUT_QUERY,
+      variables: { address, afterCursor },
     })
+
+    const pageInfo = response.data.tokenTransferTxs.pageInfo
 
     const transactions = response.data.tokenTransferTxs.edges.map(
       ({ node }: any) => {
@@ -204,7 +230,7 @@ export class BlockscoutAPI extends RESTDataSource {
     // Record time at end of execution
     const t1 = performance.now()
     metrics.setRawTokenDuration(t1 - t0)
-    return filteredUnknownTokens
+    return { transactions: filteredUnknownTokens, pageInfo }
   }
 
   async getRawTokenTransactions(address: string): Promise<LegacyTransaction[]> {

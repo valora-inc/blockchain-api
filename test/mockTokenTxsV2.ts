@@ -10,6 +10,12 @@ const mockTokenTxs = {
           node: {
             blockNumber: 90608,
             tokenTransfer: {
+              pageInfo: {
+                endCursor: "YXJyYXljb25uZWN0aW9uOjI=",
+                hasNextPage: true,
+                hasPreviousPage: false,
+                startCursor: "YXJyYXljb25uZWN0aW9uOjA="
+              },
               edges: [
                 {
                   node: {

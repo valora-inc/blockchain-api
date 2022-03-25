@@ -155,7 +155,7 @@ describe('Blockscout', () => {
   it('should get all transactions and label them properly when afterCursor is passed', async () => {
     const result = await blockscoutAPI.getTokenTransactionsV2(
       '0x0000000000000000000000000000000000007E57',
-      'afterCursor'
+      'afterCursor',
     )
 
     // Reversing for convenience to match the order in mock data

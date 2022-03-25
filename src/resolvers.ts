@@ -176,7 +176,10 @@ export const resolvers = {
       const { dataSources } = context
       context.localCurrencyCode = args.localCurrencyCode
       try {
-        return await dataSources.blockscoutAPI.getTokenTransactionsV2(args.address, args.afterCursor)
+        return await dataSources.blockscoutAPI.getTokenTransactionsV2(
+          args.address,
+          args.afterCursor,
+        )
       } catch (error) {
         logger.error({
           type: 'ERROR_FETCHING_TOKEN_TRANSACTIONS_V2',

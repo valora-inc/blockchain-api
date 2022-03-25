@@ -59,14 +59,14 @@ export interface BlockscoutTransferTx {
 }
 
 export interface TransactionsBatch {
-  transactions: Transaction[],
+  transactions: Transaction[]
   pageInfo: PageInfo
 }
 
 export interface PageInfo {
-  startCursor: string,
-  endCursor: string,
-  hasNextPage: boolean,
+  startCursor: string
+  endCursor: string
+  hasNextPage: boolean
   hasPreviousPage: boolean
 }
 
@@ -137,9 +137,15 @@ export class BlockscoutAPI extends RESTDataSource {
     this.baseURL = `${BLOCKSCOUT_API}/graphql`
   }
 
-  async getTokenTransactionsV2(address: string, afterCursor?: string): Promise<TransactionsBatch> {
+  async getTokenTransactionsV2(
+    address: string,
+    afterCursor?: string,
+  ): Promise<TransactionsBatch> {
     const userAddress = address.toLowerCase()
-    const transactionBatch = await this.getRawTokenTransactionsV2(userAddress, afterCursor)
+    const transactionBatch = await this.getRawTokenTransactionsV2(
+      userAddress,
+      afterCursor,
+    )
 
     const context = { userAddress }
 
@@ -156,8 +162,8 @@ export class BlockscoutAPI extends RESTDataSource {
       new Any(context),
     ])
 
-    const classifiedTransactions = transactionBatch.transactions.map((transaction) =>
-      transactionClassifier.classify(transaction),
+    const classifiedTransactions = transactionBatch.transactions.map(
+      (transaction) => transactionClassifier.classify(transaction),
     )
 
     const aggregatedTransactions = TransactionAggregator.aggregate(
@@ -192,11 +198,14 @@ export class BlockscoutAPI extends RESTDataSource {
 
     return {
       transactions: events,
-      pageInfo: transactionBatch.pageInfo
+      pageInfo: transactionBatch.pageInfo,
     }
   }
 
-  async getRawTokenTransactionsV2(address: string, afterCursor?: string): Promise<TransactionsBatch> {
+  async getRawTokenTransactionsV2(
+    address: string,
+    afterCursor?: string,
+  ): Promise<TransactionsBatch> {
     const t0 = performance.now()
 
     await this.ensureContractAddresses()

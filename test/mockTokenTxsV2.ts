@@ -5,10 +5,10 @@ const mockTokenTxs = {
   data: {
     tokenTransferTxs: {
       pageInfo: {
-        startCursor: "YXJyYXljb25uZWN0aW9uOjA=",
-        endCursor: "YXJyYXljb25uZWN0aW9uOjI",
+        startCursor: 'YXJyYXljb25uZWN0aW9uOjA=',
+        endCursor: 'YXJyYXljb25uZWN0aW9uOjI',
         hasNextPage: true,
-        hasPreviousPage: false
+        hasPreviousPage: false,
       },
       edges: [
         // Exchange cUSD -> cGLD (TX 1)

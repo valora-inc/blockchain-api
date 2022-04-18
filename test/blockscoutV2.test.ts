@@ -139,17 +139,17 @@ describe('Blockscout', () => {
   //   expect(transactions).toMatchSnapshot()
   // })
 
-  it('should get all transactions and label them properly when there is no afterCursor', async () => {
-    const result = await blockscoutAPI.getTokenTransactionsV2(
+  it('should return the same return if afterCursor is passed or not', async () => {
+    const resultWithoutAfterCursor = await blockscoutAPI.getTokenTransactionsV2(
       '0x0000000000000000000000000000000000007E57',
     )
 
-    // Reversing for convenience to match the order in mock data
-    const transactions = result.transactions.reverse()
-    expect(transactions).toMatchSnapshot()
+    const resultWithAfterCursor = await blockscoutAPI.getTokenTransactionsV2(
+      '0x0000000000000000000000000000000000007E57',
+      'afterCursor',
+    )
 
-    const pageInfo = result.pageInfo
-    expect(pageInfo).toMatchSnapshot()
+    expect(resultWithAfterCursor).toMatchObject(resultWithoutAfterCursor)
   })
 
   it('should get all transactions and label them properly when afterCursor is passed', async () => {

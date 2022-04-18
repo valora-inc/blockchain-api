@@ -89,10 +89,13 @@ export interface BlockscoutTokenTransfer {
   value: string
 }
 
+const MAX_RESULTS_PER_QUERY = 100
+const MAX_TRANSFERS_PER_TRANSACTIONS = 10
+
 const BLOCKSCOUT_QUERY = `
 query Transfers($address: AddressHash!, $afterCursor: String) {
   # TXs related to cUSD or cGLD transfers
-  tokenTransferTxs(addressHash: $address, first: 100, after: $afterCursor) {
+  tokenTransferTxs(addressHash: $address, first: ${MAX_RESULTS_PER_QUERY}, after: $afterCursor) {
     edges {
       node {
         transactionHash
@@ -105,7 +108,7 @@ query Transfers($address: AddressHash!, $afterCursor: String) {
         gatewayFeeRecipient
         input
         # Transfers associated with the TX
-        tokenTransfer(first: 10) {
+        tokenTransfer(first: ${MAX_TRANSFERS_PER_TRANSACTIONS}) {
           edges {
             node {
               fromAddressHash
@@ -128,7 +131,6 @@ query Transfers($address: AddressHash!, $afterCursor: String) {
   }
 }
 `
-
 export class BlockscoutAPI extends RESTDataSource {
   contractAddresses: ContractAddresses | undefined
 

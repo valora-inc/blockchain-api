@@ -1,15 +1,27 @@
 import { Knex } from 'knex'
 import { logger } from '../logger'
 
-import { ExchangeRateManager } from '@valora/exchanges'
+import { ExchangeRateManager, PriceByAddress } from '@valora/exchanges'
 import { updateFirebase } from '../firebase'
-import tokenInfoCache from '../helpers/TokenInfoCache'
+import tokenInfoCache, { TokenInfo } from '../helpers/TokenInfoCache'
 import PricesService from './PricesService'
 import asyncPool from 'tiny-async-pool'
 
 const FIREBASE_NODE_KEY = '/tokensInfo'
 const MAX_CONCURRENCY = 30
 export const ONE_DAY_IN_MS = 1000 * 60 * 60 * 24
+
+function addPegPrices(prices: PriceByAddress) {
+  const returnedPrices = {...prices}
+  tokenInfoCache.getTokensInfo()
+    .forEach((token: TokenInfo) => {
+      if (token.pegTo && prices[token.pegTo]) {
+        returnedPrices[token.address] = prices[token.pegTo]
+      }
+    })
+
+  return returnedPrices
+}
 
 export async function updateCurrentPrices({
   exchangeRateManager,
@@ -19,7 +31,8 @@ export async function updateCurrentPrices({
   logger.info('Updating current prices in firebase')
 
   const fetchTime = Date.now()
-  const prices = await exchangeRateManager.calculatecUSDPrices()
+  const prices = addPegPrices(await exchangeRateManager.calculatecUSDPrices())
+
   const tokenAddresses = tokenInfoCache.getTokensAddresses()
 
   const updateObject = tokenAddresses.reduce(
@@ -94,7 +107,7 @@ export async function storeHistoricalPrices({
   logger.info('Storing historical prices')
 
   const fetchTime = new Date(Date.now())
-  const prices = await exchangeRateManager.calculatecUSDPrices()
+  const prices = addPegPrices(await exchangeRateManager.calculatecUSDPrices())
   const cUSDAddress = exchangeRateManager.cUSDTokenAddress
 
   const batchInsertItems = Object.entries(prices)

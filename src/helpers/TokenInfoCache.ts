@@ -3,7 +3,7 @@ import { listenFromFirebase } from './FirebaseListener'
 
 const ROOT_KEY = 'tokensInfo'
 
-interface TokenInfo {
+export interface TokenInfo {
   address: string
   decimals: number
   imageUrl: string
@@ -11,6 +11,7 @@ interface TokenInfo {
   symbol: string
   priceFetchedAt?: number
   isCoreToken?: boolean
+  pegTo?: string
 }
 
 interface TokensInfo {
@@ -40,6 +41,10 @@ class TokenInfoCache {
 
   getTokensAddresses() {
     return Object.keys(this.tokensInfo)
+  }
+
+  getTokensInfo() {
+    return Object.assign([], this.tokensInfo)
   }
 }
 

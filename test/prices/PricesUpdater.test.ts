@@ -14,21 +14,21 @@ const cUSD = {
   address: '0x1234',
 }
 const cEUR = {
-  address: '0x1235'
+  address: '0x1235',
 }
 const bitcoin = {
-  address: '0x1236'
+  address: '0x1236',
 }
 const mcEUR = {
   address: '0x1237',
-  pegTo: '0x1235'
+  pegTo: '0x1235',
 }
 const extraToken = {
-  address: '0x1111'
+  address: '0x1111',
 }
 const extraPegToken = {
   address: '0x1112',
-  pegTo: '0x12222'
+  pegTo: '0x12222',
 }
 
 const OLD_ENV = process.env
@@ -44,7 +44,13 @@ jest.mock('../../src/firebase', () => ({
 
 jest.mock('../../src/helpers/TokenInfoCache', () => ({
   getTokensInfo: () => [cUSD, cEUR, mcEUR, extraToken, extraPegToken],
-  getTokensAddresses: () => [cUSD.address, cEUR.address, mcEUR.address, extraToken.address, extraPegToken.address]
+  getTokensAddresses: () => [
+    cUSD.address,
+    cEUR.address,
+    mcEUR.address,
+    extraToken.address,
+    extraPegToken.address,
+  ],
 }))
 
 describe('Mocking date and exchange manager', () => {
@@ -178,7 +184,10 @@ describe('Mocking date and exchange manager', () => {
       )
 
       await updateHistoricalPrices({ pricesService })
-      expect(mockGetTokenTocUSDPrice).toHaveBeenCalledWith(cUSD.address, expectedDate)
+      expect(mockGetTokenTocUSDPrice).toHaveBeenCalledWith(
+        cUSD.address,
+        expectedDate,
+      )
       expect(mockUpdateFirebase).toHaveBeenCalledWith(
         `${FIREBASE_NODE}/${cUSD.address}/historicalUsdPrices/lastDay`,
         {
@@ -186,7 +195,10 @@ describe('Mocking date and exchange manager', () => {
           at: expectedDateTime,
         },
       )
-      expect(mockGetTokenTocUSDPrice).toHaveBeenCalledWith(cEUR.address, expectedDate)
+      expect(mockGetTokenTocUSDPrice).toHaveBeenCalledWith(
+        cEUR.address,
+        expectedDate,
+      )
       expect(mockUpdateFirebase).toHaveBeenCalledWith(
         `${FIREBASE_NODE}/${cEUR.address}/historicalUsdPrices/lastDay`,
         {

@@ -12,13 +12,12 @@ const MAX_CONCURRENCY = 30
 export const ONE_DAY_IN_MS = 1000 * 60 * 60 * 24
 
 function addPegPrices(prices: PriceByAddress) {
-  const returnedPrices = {...prices}
-  tokenInfoCache.getTokensInfo()
-    .forEach((token: TokenInfo) => {
-      if (token.pegTo && prices[token.pegTo]) {
-        returnedPrices[token.address] = prices[token.pegTo]
-      }
-    })
+  const returnedPrices = { ...prices }
+  tokenInfoCache.getTokensInfo().forEach((token: TokenInfo) => {
+    if (token.pegTo && prices[token.pegTo]) {
+      returnedPrices[token.address] = prices[token.pegTo]
+    }
+  })
 
   return returnedPrices
 }

@@ -11,7 +11,7 @@ const FIREBASE_NODE_KEY = '/tokensInfo'
 const MAX_CONCURRENCY = 30
 export const ONE_DAY_IN_MS = 1000 * 60 * 60 * 24
 
-function addPegPrices(prices: PriceByAddress) {
+function addPeggedPrices(prices: PriceByAddress) {
   const returnedPrices = { ...prices }
   tokenInfoCache.getTokensInfo().forEach((token: TokenInfo) => {
     if (token.pegTo && prices[token.pegTo]) {
@@ -30,7 +30,9 @@ export async function updateCurrentPrices({
   logger.info('Updating current prices in firebase')
 
   const fetchTime = Date.now()
-  const prices = addPegPrices(await exchangeRateManager.calculatecUSDPrices())
+  const prices = addPeggedPrices(
+    await exchangeRateManager.calculatecUSDPrices(),
+  )
 
   const tokenAddresses = tokenInfoCache.getTokensAddresses()
 
@@ -106,7 +108,9 @@ export async function storeHistoricalPrices({
   logger.info('Storing historical prices')
 
   const fetchTime = new Date(Date.now())
-  const prices = addPegPrices(await exchangeRateManager.calculatecUSDPrices())
+  const prices = addPeggedPrices(
+    await exchangeRateManager.calculatecUSDPrices(),
+  )
   const cUSDAddress = exchangeRateManager.cUSDTokenAddress
 
   const batchInsertItems = Object.entries(prices)

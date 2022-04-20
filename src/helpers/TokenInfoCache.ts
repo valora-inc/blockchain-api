@@ -44,7 +44,7 @@ class TokenInfoCache {
   }
 
   getTokensInfo() {
-    return Object.assign([], this.tokensInfo)
+    return Object.values(this.tokensInfo)
   }
 }
 

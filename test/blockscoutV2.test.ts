@@ -106,38 +106,37 @@ describe('Blockscout', () => {
     mockDataSourcePost.mockClear()
   })
 
-  // TODO: Uncomment these tests when the token filter works
-  // it('should get dollar transactions and label them properly', async () => {
-  //   const result = await blockscoutAPI.getTokenTransactions(
-  //     {
-  //       address: '0x0000000000000000000000000000000000007E57',
-  //       token: 'cUSD',
-  //       localCurrencyCode: 'MXN',
-  //     },
-  //     mockCurrencyConversionAPI,
-  //   )
+  it.skip('should get dollar transactions and label them properly', async () => {
+    const result = await blockscoutAPI.getTokenTransactions(
+      {
+        address: '0x0000000000000000000000000000000000007E57',
+        token: 'cUSD',
+        localCurrencyCode: 'MXN',
+      },
+      mockCurrencyConversionAPI,
+    )
 
-  //   // Reversing for convenience to match the order in mock data
-  //   const transactions = result.reverse()
+    // Reversing for convenience to match the order in mock data
+    const transactions = result.reverse()
 
-  //   expect(transactions).toMatchSnapshot()
-  // })
+    expect(transactions).toMatchSnapshot()
+  })
 
-  // it('should get gold transactions and label them properly', async () => {
-  //   const result = await blockscoutAPI.getTokenTransactions(
-  //     {
-  //       address: '0x0000000000000000000000000000000000007E57',
-  //       token: 'cGLD',
-  //       localCurrencyCode: 'MXN',
-  //     },
-  //     mockCurrencyConversionAPI,
-  //   )
+  it.skip('should get gold transactions and label them properly', async () => {
+    const result = await blockscoutAPI.getTokenTransactions(
+      {
+        address: '0x0000000000000000000000000000000000007E57',
+        token: 'cGLD',
+        localCurrencyCode: 'MXN',
+      },
+      mockCurrencyConversionAPI,
+    )
 
-  //   // Reversing for convenience to match the order in mock data
-  //   const transactions = result.reverse()
+    // Reversing for convenience to match the order in mock data
+    const transactions = result.reverse()
 
-  //   expect(transactions).toMatchSnapshot()
-  // })
+    expect(transactions).toMatchSnapshot()
+  })
 
   it('should get all transactions and label them properly', async () => {
     const result = await blockscoutAPI.getTokenTransactionsV2(

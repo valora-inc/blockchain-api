@@ -106,14 +106,31 @@ describe('Blockscout', () => {
     mockDataSourcePost.mockClear()
   })
 
-  it('should get all transactions and label them properly', async () => {
-    const result = await blockscoutAPI.getTokenTransactionsV2(
+
+  it('should return the same return if afterCursor is passed or not', async () => {
+    const resultWithoutAfterCursor = await blockscoutAPI.getTokenTransactionsV2(
       '0x0000000000000000000000000000000000007E57',
     )
 
-    // Reversing for convenience to match the order in mock data
-    const transactions = result.reverse()
+    const resultWithAfterCursor = await blockscoutAPI.getTokenTransactionsV2(
+      '0x0000000000000000000000000000000000007E57',
+      'afterCursor',
+    )
 
+    expect(resultWithAfterCursor).toMatchObject(resultWithoutAfterCursor)
+  })
+
+  it('should get all transactions and label them properly when afterCursor is passed', async () => {
+    const result = await blockscoutAPI.getTokenTransactionsV2(
+      '0x0000000000000000000000000000000000007E57',
+      'afterCursor',
+    )
+
+    // Reversing for convenience to match the order in mock data
+    const transactions = result.transactions.reverse()
     expect(transactions).toMatchSnapshot()
+
+    const pageInfo = result.pageInfo
+    expect(pageInfo).toMatchSnapshot()
   })
 })

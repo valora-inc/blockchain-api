@@ -182,6 +182,14 @@ export default `type ExchangeRate {
 
   type TokenTransactionsV2 {
     transactions: [TokenTransactionV2]!
+    pageInfo: PageInfoV2
+  }
+
+  type PageInfoV2 {
+    hasPreviousPage: Boolean!
+    hasNextPage: Boolean!
+    startCursor: String
+    endCursor: String
   }
 
   type PageInfo {
@@ -207,6 +215,7 @@ export default `type ExchangeRate {
       address: Address!
       tokens: [Address]
       localCurrencyCode: String
+      afterCursor: String
     ): TokenTransactionsV2
 
     tokenTransactions(

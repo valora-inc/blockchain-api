@@ -4,6 +4,12 @@ export const TEST_GOLD_ADDRESS = '0x000000000000000000000000000000000000golD' //
 const mockTokenTxs = {
   data: {
     tokenTransferTxs: {
+      pageInfo: {
+        startCursor: 'YXJyYXljb25uZWN0aW9uOjA=',
+        endCursor: 'YXJyYXljb25uZWN0aW9uOjI',
+        hasNextPage: true,
+        hasPreviousPage: false,
+      },
       edges: [
         // Exchange cUSD -> cGLD (TX 1)
         {

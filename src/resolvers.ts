@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { DataSources } from './apolloServer'
+import { TransactionsBatch } from './blockscout'
 import { USD } from './currencyConversion/consts'
 import { logger } from './logger'
 
@@ -78,8 +79,10 @@ export interface TokenTransactionV2Args {
   // This field is being ignored for now but will be used in future PRs
   // TODO: Filter all the transactions in given tokens. If not present, no filtering is done.
   tokens?: [string]
-  // If present, every TokenAmount will contain the field localAmount with the estimated amount in given currency
+  // If present, every TokenAmount will contain the field localAmount with the estimated amount in given currency.
   localCurrencyCode?: string
+  // If present, this parameter is used as the 'after' parameter for blockscout calls.
+  afterCursor?: string
 }
 
 export interface ExchangeRate {
@@ -169,16 +172,14 @@ export const resolvers = {
       _source: any,
       args: TokenTransactionV2Args,
       context: Context,
-    ) => {
+    ): Promise<TransactionsBatch> => {
       const { dataSources } = context
       context.localCurrencyCode = args.localCurrencyCode
       try {
-        const transactions =
-          await dataSources.blockscoutAPI.getTokenTransactionsV2(args.address)
-
-        return {
-          transactions,
-        }
+        return await dataSources.blockscoutAPI.getTokenTransactionsV2(
+          args.address,
+          args.afterCursor,
+        )
       } catch (error) {
         logger.error({
           type: 'ERROR_FETCHING_TOKEN_TRANSACTIONS_V2',

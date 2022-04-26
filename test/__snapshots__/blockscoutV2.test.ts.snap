@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Blockscout should get all transactions and label them properly 1`] = `
+exports[`Blockscout should get all transactions and label them properly when afterCursor is passed 1`] = `
 Array [
   Object {
     "block": "90608",
@@ -399,4 +399,13 @@ Array [
     "type": "SENT",
   },
 ]
+`;
+
+exports[`Blockscout should get all transactions and label them properly when afterCursor is passed 2`] = `
+Object {
+  "endCursor": "YXJyYXljb25uZWN0aW9uOjI",
+  "hasNextPage": true,
+  "hasPreviousPage": false,
+  "startCursor": "YXJyYXljb25uZWN0aW9uOjA=",
+}
 `;

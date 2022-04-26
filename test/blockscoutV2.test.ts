@@ -106,7 +106,6 @@ describe('Blockscout', () => {
     mockDataSourcePost.mockClear()
   })
 
-
   it('should return the same return if afterCursor is passed or not', async () => {
     const resultWithoutAfterCursor = await blockscoutAPI.getTokenTransactionsV2(
       '0x0000000000000000000000000000000000007E57',

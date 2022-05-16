@@ -13,6 +13,12 @@ interface TokenAddresses {
 }
 
 async function firebaseReady() {
+  // If we don't have a RTDB handle, assume Firebase will never be ready.
+  if (!database) {
+    logger.info('No Firebase RTDB handle')
+    return false
+  }
+
   const timeoutSeconds = 5
   const end = Date.now() + timeoutSeconds * 1000
   while (true) {
@@ -24,6 +30,7 @@ async function firebaseReady() {
     }
     const now = Date.now()
     if (end < now) {
+      // Assume we'll never connect and Firebase will never be ready.
       logger.info('Firebase RTDB timed out')
       return false
     }
@@ -35,6 +42,7 @@ async function firebaseReady() {
     await database.ref(`tokensInfo`).once('value')
   ).val()
   if (!tokensInfoExists) {
+    // Assume we should skip if we're missing expected values.
     logger.info('Firebase RTDB does not have expected tokensInfo')
     return false
   }

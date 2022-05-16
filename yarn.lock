@@ -1047,18 +1047,18 @@
     google-gax "^2.24.1"
     protobufjs "^6.8.6"
 
-"@google-cloud/logging-bunyan@~3.1.1":
-  version "3.1.1"
-  resolved "https://registry.npmjs.org/@google-cloud/logging-bunyan/-/logging-bunyan-3.1.1.tgz"
-  integrity sha512-BIO17OWmdZVIYjbDHC0mt8DtY2edCHZ7B53DXjl8wZbC5gFrB3Vvvuhc4KIZ525f3vqFNLfBRvxkw/k+fhp5IA==
+"@google-cloud/logging-bunyan@~3.3.1":
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@google-cloud/logging-bunyan/-/logging-bunyan-3.3.1.tgz#d9e8da4d569a4244e49698e11dc6096d485c6c1b"
+  integrity sha512-OWxs6jdLqpbmf6hI34LgNhLhlRRhu2DOyv3VqYmUqiBsXgQkfOOwSNangqiu80+4kzeOP0xI+PjKnRdv8g/Ynw==
   dependencies:
-    "@google-cloud/logging" "^9.0.0"
+    "@google-cloud/logging" "^9.8.0"
     google-auth-library "^7.0.0"
 
-"@google-cloud/logging@^9.0.0":
-  version "9.6.1"
-  resolved "https://registry.npmjs.org/@google-cloud/logging/-/logging-9.6.1.tgz"
-  integrity sha512-Ch7wOAysUX9j/blUWShsN4Kia15qeTjCOqP9aqFf18uGNIZiNFfVJ4qhiYHZgSROqpYB8Ep8TzOSDkbc5OaipA==
+"@google-cloud/logging@^9.8.0":
+  version "9.8.3"
+  resolved "https://registry.yarnpkg.com/@google-cloud/logging/-/logging-9.8.3.tgz#38db20938ba891fe84443429a3123019cdfa4ccf"
+  integrity sha512-6+0UiGQK/6/9q1m0brdMHa/1h3WiEK8A3ibgAjnmjDqbnG0CjePHynVlkbphn0FmJvAp12veYgKxhmP2ShAsVA==
   dependencies:
     "@google-cloud/common" "^3.4.1"
     "@google-cloud/paginator" "^3.0.0"

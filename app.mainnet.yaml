@@ -15,3 +15,6 @@ env_variables:
   # Comma separated list of Secrets to load.
   SECRET_NAMES: 'projects/1027349420744/secrets/blockchain-api/versions/latest,projects/1027349420744/secrets/blockchain-api-db/versions/latest'
   EXCHANGES_NETWORK_CONFIG: 'mainnet'
+  # This doesn't need to be kept private:
+  #  https://docs.sentry.io/product/sentry-basics/dsn-explainer/
+  SENTRY_DSN: 'https://6ec58be4c5b04a85870a43d265832fd4@o919540.ingest.sentry.io/6410095'

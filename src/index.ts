@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/node'
+import * as Tracing from '@sentry/tracing'
 import {
   configs as exchangesConfigs,
   createNewManager,
@@ -71,6 +73,10 @@ async function parseArgs() {
       type: 'string',
       demandOption: true,
     })
+    .option('sentry-dsn', {
+      description: 'Sentry DSN',
+      type: 'string',
+    })
     .epilogue(
       'Always specify arguments as environment variables. Not all arguments are supported as CLI ones yet.',
     ).argv
@@ -80,6 +86,30 @@ async function parseArgs() {
 
 async function main() {
   const args = await parseArgs()
+  const app = express()
+
+  // The Sentry documentation recommends initializing as early in your app as
+  // possible.
+  const sentryEnabled = !!args['sentry-dsn']
+  if (sentryEnabled) {
+    Sentry.init({
+      dsn: args['sentry-dsn'],
+      integrations: [
+        // enable HTTP calls tracing
+        new Sentry.Integrations.Http({ tracing: true }),
+        // enable Express.js middleware tracing
+        new Tracing.Integrations.Express({ app }),
+      ],
+
+      // Set tracesSampleRate to 1.0 to capture 100%
+      // of transactions for performance monitoring.
+      // We recommend adjusting this value in production
+      tracesSampleRate: 1.0,
+    })
+
+    app.use(Sentry.Handlers.requestHandler())
+    app.use(Sentry.Handlers.tracingHandler())
+  }
 
   const db = await initDatabase({
     client: 'pg',
@@ -107,8 +137,6 @@ async function main() {
     exchangeRateManager.cUSDTokenAddress,
   )
 
-  const app = express()
-
   app.use(metricsMiddleware)
 
   // What is this? lol
@@ -131,6 +159,27 @@ async function main() {
   })
   await apolloServer.start()
   apolloServer.applyMiddleware({ app, path: GRAPHQL_PATH })
+
+  if (sentryEnabled) {
+    // The Sentry error handler must be before any other error middleware and
+    // after all controllers
+    app.use(Sentry.Handlers.errorHandler())
+  }
+
+  app.use(
+    (
+      error: Error,
+      _req: express.Request,
+      res: express.Response,
+      _next: express.NextFunction,
+    ) => {
+      logger.error({ type: 'UNEXPECTED_ERROR', error })
+      res.statusCode = 500
+      if (sentryEnabled) {
+        res.end((res as any).sentry + '\n')
+      }
+    },
+  )
 
   app.listen(args.port, () => {
     logger.info(`Listening on port ${args.port}`)

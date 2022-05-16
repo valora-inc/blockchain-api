@@ -45,7 +45,7 @@ jobs:
       - run: yarn build
       - run: yarn e2e
   deploy-alfajores:
-    name: Deploy alfajores
+    name: Deploy celo-mobile-alfajores
     if: github.ref == 'refs/heads/main'
     needs:
       - e2e
@@ -59,3 +59,19 @@ jobs:
           credentials_json: ${{ secrets.ALFAJORES_SERVICE_ACCOUNT_KEY }}
       - name: Deploy App
         run: ./deploy.sh -n alfajores
+  deploy-mainnet:
+    name: Deploy celo-mobile-alfajores
+    if: github.ref == 'refs/heads/main'
+    needs:
+      - e2e
+      - test
+      - deploy-alfajores
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: google-github-actions/auth@v0
+        with:
+          project_id: celo-mobile-mainnet
+          credentials_json: ${{ secrets.MAINNET_SERVICE_ACCOUNT_KEY }}
+      - name: Deploy App
+        run: ./deploy.sh -n mainnet

@@ -1,4 +1,4 @@
-runtime: nodejs12
+runtime: nodejs16
 service: blockchain-api
 instance_class: F2
 env_variables:

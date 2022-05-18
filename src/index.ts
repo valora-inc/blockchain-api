@@ -77,6 +77,11 @@ async function parseArgs() {
       description: 'Sentry DSN',
       type: 'string',
     })
+    .option('sentry-traces-sample-rate', {
+      description: 'Sentry traces sample rate',
+      type: 'number',
+      default: 1.0,
+    })
     .epilogue(
       'Always specify arguments as environment variables. Not all arguments are supported as CLI ones yet.',
     ).argv
@@ -100,7 +105,7 @@ async function main() {
         // enable Express.js middleware tracing
         new Tracing.Integrations.Express({ app }),
       ],
-      tracesSampleRate: 1.0,
+      tracesSampleRate: args['sentry-traces-sample-rate'],
     })
 
     app.use(Sentry.Handlers.requestHandler())

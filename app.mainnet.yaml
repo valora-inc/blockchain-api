@@ -18,4 +18,4 @@ env_variables:
   # This doesn't need to be kept private:
   #  https://docs.sentry.io/product/sentry-basics/dsn-explainer/
   SENTRY_DSN: 'https://6ec58be4c5b04a85870a43d265832fd4@o919540.ingest.sentry.io/6410095'
-  SENTRY_TRACES_SAMPLE_RATE: '0.2'
+  SENTRY_TRACES_SAMPLE_RATE: '0.01'

@@ -6,9 +6,9 @@ import { TransactionType } from '../transaction/TransactionType'
 export class NFTsTransaction extends TransactionType {
   matches(transaction: Transaction): boolean {
     return (
-      transaction.transfers.length >= 1 && 
+      transaction.transfers.length >= 1 &&
       transaction.transfers.some((transfer) => {
-        return transfer.tokenType === 'ERC-721';
+        return transfer.tokenType === 'ERC-721'
       })
     )
   }

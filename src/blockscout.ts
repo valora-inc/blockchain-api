@@ -153,7 +153,7 @@ export class BlockscoutAPI extends RESTDataSource {
     )
 
     const context = { userAddress }
-    
+
     // Order is important when classifying transactions.
     // Think that below is like case statement.
     const transactionClassifier = new TransactionClassifier([
@@ -240,7 +240,10 @@ export class BlockscoutAPI extends RESTDataSource {
 
     const filteredUnknownTokens = transactions.filter((tx: Transaction) => {
       return tx.transfers.every((transfer: BlockscoutTokenTransfer) => {
-        return supportedTokens.has(transfer.tokenAddress.toLowerCase()) || (transfer.tokenType === 'ERC-721')
+        return (
+          supportedTokens.has(transfer.tokenAddress.toLowerCase()) ||
+          transfer.tokenType === 'ERC-721'
+        )
       })
     })
 

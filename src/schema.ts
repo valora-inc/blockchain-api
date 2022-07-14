@@ -127,6 +127,7 @@ export default `type ExchangeRate {
     INVITE_SENT
     INVITE_RECEIVED
     PAY_REQUEST
+    NFT_TRANSACTION
   }
 
   type FeeV2 {
@@ -167,6 +168,26 @@ export default `type ExchangeRate {
     fees: [FeeV2]
     metadata: TokenTransferMetadata
     account: String!
+  }
+
+  type BlockscoutTokenTransfer {
+    fromAddressHash: String
+    toAddressHash: String
+    fromAccountHash: String
+    toAccountHash: String
+    token: String
+    tokenAddress: String
+    value: String
+    tokenType: String
+  }
+
+  type NFTsTransactionV2 implements TokenTransactionV2 {
+    type: TokenTransactionTypeV2!
+    transactionHash: String!
+    timestamp: Timestamp!
+    block: String!
+    transfers: [BlockscoutTokenTransfer]
+    fees: [FeeV2]
   }
 
   type TokenExchangeV2 implements TokenTransactionV2 {

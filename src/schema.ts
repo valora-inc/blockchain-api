@@ -127,7 +127,8 @@ export default `type ExchangeRate {
     INVITE_SENT
     INVITE_RECEIVED
     PAY_REQUEST
-    NFT_TRANSACTION
+    NFT_RECEIVED
+    NFT_SENT
   }
 
   type FeeV2 {

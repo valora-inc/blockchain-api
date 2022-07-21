@@ -15,7 +15,8 @@ import {
 } from './events'
 import { EscrowContractCall } from './events/EscrowContractCall'
 import { ExchangeContractCall } from './events/ExchangeContractCall'
-import { NFTsTransaction } from './events/NFTsTransaction'
+import { NftReceived } from './events/NftReceived'
+import { NftSent } from './events/NftSent'
 import { Input } from './helpers/Input'
 import { InputDecoderLegacy } from './helpers/InputDecoderLegacy'
 import tokenInfoCache from './helpers/TokenInfoCache'
@@ -161,7 +162,8 @@ export class BlockscoutAPI extends RESTDataSource {
       new EscrowContractCall(context),
       new ContractCall(context),
       new EscrowSent(context),
-      new NFTsTransaction(context),
+      new NftReceived(context),
+      new NftSent(context),
       new TokenSent(context),
       new EscrowReceived(context),
       new TokenReceived(context),

@@ -71,7 +71,6 @@ export class EventBuilder {
       timestamp,
       block,
       transactionHash,
-      transfers: transaction.transfers,
       ...(fees && {
         fees: await EventBuilder.formatFees(fees, transaction.timestamp),
       }),

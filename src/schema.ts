@@ -171,23 +171,11 @@ export default `type ExchangeRate {
     account: String!
   }
 
-  type BlockscoutTokenTransfer {
-    fromAddressHash: String
-    toAddressHash: String
-    fromAccountHash: String
-    toAccountHash: String
-    token: String
-    tokenAddress: String
-    value: String
-    tokenType: String
-  }
-
   type NFTsTransactionV2 implements TokenTransactionV2 {
     type: TokenTransactionTypeV2!
     transactionHash: String!
     timestamp: Timestamp!
     block: String!
-    transfers: [BlockscoutTokenTransfer]
     fees: [FeeV2]
   }
 

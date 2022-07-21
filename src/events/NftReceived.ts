@@ -7,17 +7,16 @@ export class NftReceived extends TransactionType {
   matches(transaction: Transaction): boolean {
     let isNftExist = false
     let isNftReceived = false
-    let userAddress = this.context.userAddress
 
     for (const transfer of transaction.transfers) {
       if (transfer.tokenType === 'ERC-721') {
         isNftExist = true
 
-        if (transfer.toAddressHash === userAddress) {
+        if (transfer.toAddressHash === this.context.userAddress) {
           isNftReceived = true
         }
 
-        if (transfer.fromAddressHash === userAddress) {
+        if (transfer.fromAddressHash === this.context.userAddress) {
           isNftReceived = false
         }
       }

@@ -171,7 +171,7 @@ export default `type ExchangeRate {
     account: String!
   }
 
-  type NFTsTransactionV2 implements TokenTransactionV2 {
+  type NftTransferV2 implements TokenTransactionV2 {
     type: TokenTransactionTypeV2!
     transactionHash: String!
     timestamp: Timestamp!

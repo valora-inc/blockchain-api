@@ -296,7 +296,7 @@ export const resolvers = {
           return 'TokenExchangeV2'
         case TokenTransactionTypeV2.NFT_RECEIVED:
         case TokenTransactionTypeV2.NFT_SENT:
-          return 'NFTsTransactionV2'
+          return 'NftTransferV2'
         case TokenTransactionTypeV2.RECEIVED:
         case TokenTransactionTypeV2.SENT:
         case TokenTransactionTypeV2.INVITE_RECEIVED:

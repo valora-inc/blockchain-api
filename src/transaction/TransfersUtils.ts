@@ -137,3 +137,11 @@ export function popTransferTo(
       transfer.toAddressHash.toLowerCase() === recipient,
   )
 }
+
+export function isOneToOneSwap(
+  tokenTransfers: BlockscoutTokenTransfer[],
+): boolean {
+  return tokenTransfers.length === 2 &&
+  tokenTransfers[0].toAddressHash.toLowerCase() == tokenTransfers[1].fromAddressHash.toLowerCase() &&
+  tokenTransfers[0].fromAddressHash.toLowerCase() == tokenTransfers[1].toAddressHash.toLowerCase()
+}

@@ -9,6 +9,7 @@ yarn
 ```
 
 Build (must run first or tests will not pass!):
+
 ```
 yarn build
 ```
@@ -98,4 +99,3 @@ You also need a service account for the Firebase connection. You can create one 
 ```
 ./deploy.sh -n {alfajores,mainnet}
 ```
-

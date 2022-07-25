@@ -12,18 +12,24 @@ export class NftSent extends TransactionType {
     for (const transfer of transaction.transfers) {
       if (transfer.tokenType === 'ERC-721') {
         if (transfer.toAddressHash === this.context.userAddress) {
-          cntNftReceivedTransfer++;
+          cntNftReceivedTransfer++
           isNftSent = false
         }
 
         if (transfer.fromAddressHash === this.context.userAddress) {
-          cntNftSentTransfer++;
+          cntNftSentTransfer++
           isNftSent = true
         }
       }
     }
 
-    return transaction.transfers.length >= 1 && (cntNftSentTransfer + cntNftReceivedTransfer > 0) && (cntNftSentTransfer == cntNftReceivedTransfer ? isNftSent : cntNftSentTransfer > cntNftReceivedTransfer)
+    return (
+      transaction.transfers.length >= 1 &&
+      cntNftSentTransfer + cntNftReceivedTransfer > 0 &&
+      (cntNftSentTransfer == cntNftReceivedTransfer
+        ? isNftSent
+        : cntNftSentTransfer > cntNftReceivedTransfer)
+    )
   }
 
   async getEvent(transaction: Transaction) {

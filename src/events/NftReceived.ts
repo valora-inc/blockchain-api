@@ -6,18 +6,18 @@ import { TransactionType } from '../transaction/TransactionType'
 export class NftReceived extends TransactionType {
   matches(transaction: Transaction): boolean {
     let isNftReceived = false
-    let cntNftSentTransfer = 0
-    let cntNftReceivedTransfer = 0
+    let numNftsSent = 0
+    let numNftsReceived = 0
 
     for (const transfer of transaction.transfers) {
       if (transfer.tokenType === 'ERC-721') {
         if (transfer.toAddressHash === this.context.userAddress) {
-          cntNftReceivedTransfer++
+          numNftsReceived++
           isNftReceived = true
         }
 
         if (transfer.fromAddressHash === this.context.userAddress) {
-          cntNftSentTransfer++
+          numNftsSent++
           isNftReceived = false
         }
       }
@@ -25,10 +25,9 @@ export class NftReceived extends TransactionType {
 
     return (
       transaction.transfers.length >= 1 &&
-      cntNftSentTransfer + cntNftReceivedTransfer > 0 &&
-      (cntNftSentTransfer == cntNftReceivedTransfer
+      (numNftsSent == numNftsReceived
         ? isNftReceived
-        : cntNftSentTransfer < cntNftReceivedTransfer)
+        : numNftsSent < numNftsReceived)
     )
   }
 

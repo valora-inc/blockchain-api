@@ -9,7 +9,6 @@ yarn
 ```
 
 Build (must run first or tests will not pass!):
-
 ```
 yarn build
 ```
@@ -38,7 +37,7 @@ For the emulator:
 
 ```
 # Check if there are any values you need to complete
-cp emulator.env .env
+cp emuluator.env .env
 ```
 
 or for the account:
@@ -99,3 +98,4 @@ You also need a service account for the Firebase connection. You can create one 
 ```
 ./deploy.sh -n {alfajores,mainnet}
 ```
+

@@ -15,8 +15,6 @@ import {
 } from './events'
 import { EscrowContractCall } from './events/EscrowContractCall'
 import { ExchangeContractCall } from './events/ExchangeContractCall'
-import { NftReceived } from './events/NftReceived'
-import { NftSent } from './events/NftSent'
 import { Input } from './helpers/Input'
 import { InputDecoderLegacy } from './helpers/InputDecoderLegacy'
 import tokenInfoCache from './helpers/TokenInfoCache'
@@ -89,11 +87,10 @@ export interface BlockscoutTokenTransfer {
   token: string
   tokenAddress: string
   value: string
-  tokenType: string
 }
 
-const MAX_RESULTS_PER_QUERY = 10
-const MAX_TRANSFERS_PER_TRANSACTIONS = 100
+const MAX_RESULTS_PER_QUERY = 100
+const MAX_TRANSFERS_PER_TRANSACTIONS = 10
 
 const BLOCKSCOUT_QUERY = `
 query Transfers($address: AddressHash!, $afterCursor: String) {
@@ -120,7 +117,6 @@ query Transfers($address: AddressHash!, $afterCursor: String) {
               toAccountHash
               value
               tokenAddress
-              tokenType
             }
           }
         }
@@ -155,15 +151,11 @@ export class BlockscoutAPI extends RESTDataSource {
 
     const context = { userAddress }
 
-    // Order is important when classifying transactions.
-    // Think that below is like case statement.
     const transactionClassifier = new TransactionClassifier([
       new ExchangeContractCall(context),
       new EscrowContractCall(context),
       new ContractCall(context),
       new EscrowSent(context),
-      new NftReceived(context),
-      new NftSent(context),
       new TokenSent(context),
       new EscrowReceived(context),
       new TokenReceived(context),
@@ -242,10 +234,7 @@ export class BlockscoutAPI extends RESTDataSource {
 
     const filteredUnknownTokens = transactions.filter((tx: Transaction) => {
       return tx.transfers.every((transfer: BlockscoutTokenTransfer) => {
-        return (
-          supportedTokens.has(transfer.tokenAddress.toLowerCase()) ||
-          transfer.tokenType === 'ERC-721'
-        )
+        return supportedTokens.has(transfer.tokenAddress.toLowerCase())
       })
     })
 

@@ -17,6 +17,7 @@ import { EscrowContractCall } from './events/EscrowContractCall'
 import { ExchangeContractCall } from './events/ExchangeContractCall'
 import { NftReceived } from './events/NftReceived'
 import { NftSent } from './events/NftSent'
+import { SwapTransaction } from './events/SwapTransaction'
 import { Input } from './helpers/Input'
 import { InputDecoderLegacy } from './helpers/InputDecoderLegacy'
 import tokenInfoCache from './helpers/TokenInfoCache'
@@ -153,6 +154,10 @@ export class BlockscoutAPI extends RESTDataSource {
       afterCursor,
     )
 
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log("transactionBatch")
+    console.log(transactionBatch)
+
     const context = { userAddress }
 
     // Order is important when classifying transactions.
@@ -169,6 +174,7 @@ export class BlockscoutAPI extends RESTDataSource {
       new TokenReceived(context),
       new ExchangeCeloToToken(context),
       new ExchangeTokenToCelo(context),
+      new SwapTransaction(context),
       new Any(context),
     ])
 
@@ -176,9 +182,18 @@ export class BlockscoutAPI extends RESTDataSource {
       (transaction) => transactionClassifier.classify(transaction),
     )
 
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log("classifiedTransactions")
+    console.log(classifiedTransactions)
+
     const aggregatedTransactions = TransactionAggregator.aggregate(
       classifiedTransactions,
     )
+
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log("aggregatedTransactions")
+    console.log(aggregatedTransactions)
+    
 
     const events: any[] = (
       await Promise.all(
@@ -197,6 +212,10 @@ export class BlockscoutAPI extends RESTDataSource {
     )
       .filter((e) => e)
       .sort((a, b) => b.timestamp - a.timestamp)
+
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log("events")
+    console.log(events)
 
     logger.info({
       type: 'GET_TOKEN_TRANSACTIONS_V2',
@@ -220,10 +239,110 @@ export class BlockscoutAPI extends RESTDataSource {
 
     await this.ensureContractAddresses()
 
-    const response = await this.post('', {
+    const response2 = await this.post('', {
       query: BLOCKSCOUT_QUERY,
       variables: { address, afterCursor },
     })
+
+    // TODO: Why can't I apply mock response??? They look the same!??
+
+    console.log("@@@@@@@@@@@@@@@@@@@@")
+    console.log("response2")
+    console.log(response2)
+    console.log(response2.data.tokenTransferTxs.edges[0])
+
+    const response = {
+      "data": {
+        "tokenTransferTxs": {
+          "edges": [
+            {
+              "node": {
+                "blockNumber": 14159386,
+                "feeToken": "CELO",
+                "gasPrice": "500000000",
+                "gasUsed": "116857",
+                "gatewayFee": "0",
+                "gatewayFeeRecipient": null,
+                "input": "0x5c11d7950000000000000000000000000000000000000000000000000091a94863ca80000000000000000000000000000000000000000000000000000e096103a13a00a900000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000849fa48c8caa2907032f45765d7d6f52da13598d0000000000000000000000000000000000000000000000000000000062da2e790000000000000000000000000000000000000000000000000000000000000002000000000000000000000000471ece3750da237f93b8e339c536989b8978a43800000000000000000000000000be915b9dcf56a3cbe739d9b9c202ca692409ec",
+                "timestamp": "2022-07-22T04:38:58.000000Z",
+                "tokenTransfer": {
+                  "edges": [
+                    {
+                      "node": {
+                        "fromAccountHash": "0x1f0463bfee248f92d10929461b77a260c2bf5b73",
+                        "fromAddressHash": "0x849fa48c8caa2907032f45765d7d6f52da13598d",
+                        "id": "Q2Vsb1RyYW5zZmVyOnsibG9nX2luZGV4IjoxLCJ0cmFuc2FjdGlvbl9oYXNoIjoiMHhkZGJkZWU0ZjJhYTdjYTdmZDdiNzBmZGEwZDZlYTA2ZmI1OGY4YTBmNDNiOWFhZTgyYzNlZmEyMWU3ZWI5N2Q5In0=",
+                        "toAccountHash": null,
+                        "toAddressHash": "0xe7b5ad135fa22678f426a381c7748f6a5f2c9e6c",
+                        "token": "CELO",
+                        "tokenAddress": "0x471ece3750da237f93b8e339c536989b8978a438",
+                        "tokenType": "ERC-20",
+                        "value": "41000000000000000"
+                      }
+                    },
+                    {
+                      "node": {
+                        "fromAccountHash": null,
+                        "fromAddressHash": "0xe7b5ad135fa22678f426a381c7748f6a5f2c9e6c",
+                        "id": "Q2Vsb1RyYW5zZmVyOnsibG9nX2luZGV4IjoyLCJ0cmFuc2FjdGlvbl9oYXNoIjoiMHhkZGJkZWU0ZjJhYTdjYTdmZDdiNzBmZGEwZDZlYTA2ZmI1OGY4YTBmNDNiOWFhZTgyYzNlZmEyMWU3ZWI5N2Q5In0=",
+                        "toAccountHash": "0x1f0463bfee248f92d10929461b77a260c2bf5b73",
+                        "toAddressHash": "0x849fa48c8caa2907032f45765d7d6f52da13598d",
+                        "token": "UBE",
+                        "tokenAddress": "0x00be915b9dcf56a3cbe739d9b9c202ca692409ec",
+                        "tokenType": "ERC-20",
+                        "value": "1016503490836811783"
+                      }
+                    }
+                  ]
+                },
+                "transactionHash": "0xddbdee4f2aa7ca7fd7b70fda0d6ea06fb58f8a0f43b9aae82c3efa21e7eb97d9"
+              }
+            },
+            {
+              "node": {
+                "blockNumber": 14156278,
+                "feeToken": "CELO",
+                "gasPrice": "500000000",
+                "gasUsed": "21000",
+                "gatewayFee": "0",
+                "gatewayFeeRecipient": null,
+                "input": "0x",
+                "timestamp": "2022-07-22T00:19:58.000000Z",
+                "tokenTransfer": {
+                  "edges": [
+                    {
+                      "node": {
+                        "fromAccountHash": null,
+                        "fromAddressHash": "0xc74294680ceacdf8237253245835ebe172721937",
+                        "id": "Q2Vsb1RyYW5zZmVyOnsibG9nX2luZGV4IjotMTAwMjAwMCwidHJhbnNhY3Rpb25faGFzaCI6IjB4MTIwMTI1ZGJmNDk3OWE3YTkxZDhlZmExM2RlNzY2MGVlM2JkZmZlZjRhOTNjZWY1MjRmZTMwYTIxN2U5MjU2MyJ9",
+                        "toAccountHash": "0x1f0463bfee248f92d10929461b77a260c2bf5b73",
+                        "toAddressHash": "0x849fa48c8caa2907032f45765d7d6f52da13598d",
+                        "token": "CELO",
+                        "tokenAddress": "0x471ece3750da237f93b8e339c536989b8978a438",
+                        "tokenType": "ERC-20",
+                        "value": "50172357400000000000"
+                      }
+                    }
+                  ]
+                },
+                "transactionHash": "0x120125dbf4979a7a91d8efa13de7660ee3bdffef4a93cef524fe30a217e92563"
+              }
+            }
+          ],
+          "pageInfo": {
+            "endCursor": "YXJyYXljb25uZWN0aW9uOjE=",
+            "hasNextPage": false,
+            "hasPreviousPage": false,
+            "startCursor": "YXJyYXljb25uZWN0aW9uOjA="
+          }
+        }
+      }
+    }
+
+    console.log("@@@@@@@@@@@@@@@@@@@@")
+    console.log("response")
+    console.log(response)
+    console.log(response.data.tokenTransferTxs.edges[0])
 
     const pageInfo = response.data.tokenTransferTxs.pageInfo
 
@@ -239,12 +358,17 @@ export class BlockscoutAPI extends RESTDataSource {
     )
 
     const supportedTokens = new Set(tokenInfoCache.getTokensAddresses())
-
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log("supportedTokens")
+    console.log(supportedTokens)
+    
     const filteredUnknownTokens = transactions.filter((tx: Transaction) => {
       return tx.transfers.every((transfer: BlockscoutTokenTransfer) => {
-        return (
-          supportedTokens.has(transfer.tokenAddress.toLowerCase()) ||
-          transfer.tokenType === 'ERC-721'
+        return ( true
+          // supportedTokens.has(transfer.tokenAddress.toLowerCase()) ||
+          // transfer.tokenType === 'ERC-721'
         )
       })
     })

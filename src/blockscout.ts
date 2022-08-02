@@ -158,7 +158,12 @@ export class BlockscoutAPI extends RESTDataSource {
     // For now, when you create a new transaction type other than TokenTransferV2, TokenExchangeV2
     // You should do version check to take care of backward compatibility with wallet client.
     const userInfo = await fetchFromFirebase(`registrations/${userAddress}`)
-    const isNftSupport = (userInfo['appVersion'] === undefined ? false : (userInfo['appVersion'] >= '1.38.0'));
+    const isNftSupport =
+      userInfo === undefined
+        ? false
+        : userInfo['appVersion'] === undefined
+        ? false
+        : userInfo['appVersion'] >= '1.38.0'
 
     const context = { userAddress }
 
@@ -246,7 +251,12 @@ export class BlockscoutAPI extends RESTDataSource {
     )
 
     const userInfo = await fetchFromFirebase(`registrations/${address}`)
-    const isNftSupport = (userInfo['appVersion'] === undefined ? false : (userInfo['appVersion'] >= '1.38.0'));
+    const isNftSupport =
+      userInfo === undefined
+        ? false
+        : userInfo['appVersion'] === undefined
+        ? false
+        : userInfo['appVersion'] >= '1.38.0'
 
     const supportedTokens = new Set(tokenInfoCache.getTokensAddresses())
 

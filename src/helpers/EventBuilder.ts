@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js'
 import { BlockscoutTokenTransfer } from '../blockscout'
-import { EventTypes, FeeV2, TokenTransactionTypeV2 } from '../resolvers'
+import { FeeV2, TokenTransactionTypeV2 } from '../resolvers'
 import { Fee, Transaction } from '../transaction/Transaction'
 import { ContractAddresses, getContractAddresses, WEI_PER_GOLD } from '../utils'
 import knownAddressesCache from './KnownAddressesCache'
@@ -79,6 +79,7 @@ export class EventBuilder {
 
   static async exchangeEvent(
     transaction: Transaction,
+    eventType: TokenTransactionTypeV2,
     inTransfer: BlockscoutTokenTransfer,
     outTransfer: BlockscoutTokenTransfer,
     fees?: Fee[],
@@ -88,7 +89,7 @@ export class EventBuilder {
     const timestamp = transaction.timestamp
 
     return {
-      type: EventTypes.EXCHANGE,
+      type: eventType,
       timestamp,
       block,
       transactionHash,

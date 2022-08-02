@@ -129,6 +129,7 @@ export default `type ExchangeRate {
     PAY_REQUEST
     NFT_RECEIVED
     NFT_SENT
+    SWAP_TRANSACTION
   }
 
   type FeeV2 {

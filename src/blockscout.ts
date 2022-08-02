@@ -17,6 +17,7 @@ import { EscrowContractCall } from './events/EscrowContractCall'
 import { ExchangeContractCall } from './events/ExchangeContractCall'
 import { NftReceived } from './events/NftReceived'
 import { NftSent } from './events/NftSent'
+import { SwapTransaction } from './events/SwapTransaction'
 import { Input } from './helpers/Input'
 import { InputDecoderLegacy } from './helpers/InputDecoderLegacy'
 import tokenInfoCache from './helpers/TokenInfoCache'
@@ -153,6 +154,10 @@ export class BlockscoutAPI extends RESTDataSource {
       afterCursor,
     )
 
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log("transactionBatch")
+    console.log(transactionBatch)
+
     const context = { userAddress }
 
     // Order is important when classifying transactions.
@@ -169,6 +174,7 @@ export class BlockscoutAPI extends RESTDataSource {
       new TokenReceived(context),
       new ExchangeCeloToToken(context),
       new ExchangeTokenToCelo(context),
+      new SwapTransaction(context),
       new Any(context),
     ])
 
@@ -176,9 +182,18 @@ export class BlockscoutAPI extends RESTDataSource {
       (transaction) => transactionClassifier.classify(transaction),
     )
 
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log("classifiedTransactions")
+    console.log(classifiedTransactions)
+
     const aggregatedTransactions = TransactionAggregator.aggregate(
       classifiedTransactions,
     )
+
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log("aggregatedTransactions")
+    console.log(aggregatedTransactions)
+    
 
     const events: any[] = (
       await Promise.all(
@@ -197,6 +212,10 @@ export class BlockscoutAPI extends RESTDataSource {
     )
       .filter((e) => e)
       .sort((a, b) => b.timestamp - a.timestamp)
+
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log("events")
+    console.log(events)
 
     logger.info({
       type: 'GET_TOKEN_TRANSACTIONS_V2',
@@ -239,7 +258,12 @@ export class BlockscoutAPI extends RESTDataSource {
     )
 
     const supportedTokens = new Set(tokenInfoCache.getTokensAddresses())
-
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@")
+    console.log("supportedTokens")
+    console.log(supportedTokens)
+    
     const filteredUnknownTokens = transactions.filter((tx: Transaction) => {
       return tx.transfers.every((transfer: BlockscoutTokenTransfer) => {
         return (

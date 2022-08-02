@@ -8,6 +8,8 @@ import { EventBuilder } from '../helpers/EventBuilder'
 import { Transaction } from '../transaction/Transaction'
 import { TransactionType } from '../transaction/TransactionType'
 import { Contracts } from '../utils'
+import { TokenTransactionTypeV2 } from '../resolvers'
+
 
 export class ExchangeCeloToToken extends TransactionType {
   matches(transaction: Transaction): boolean {
@@ -32,6 +34,7 @@ export class ExchangeCeloToToken extends TransactionType {
 
     return await EventBuilder.exchangeEvent(
       transaction,
+      TokenTransactionTypeV2.EXCHANGE,
       inTransfer,
       outTransfer,
       transaction.fees,

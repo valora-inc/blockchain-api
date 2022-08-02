@@ -47,6 +47,8 @@ import { Transaction } from './transaction/Transaction'
 import { TransactionAggregator } from './transaction/TransactionAggregator'
 import { TransactionClassifier } from './transaction/TransactionClassifier'
 import { ContractAddresses, getContractAddresses } from './utils'
+import { fetchFromFirebase } from './firebase'
+
 export interface BlockscoutTransferTx {
   blockNumber: number
   transactionHash: string
@@ -153,6 +155,11 @@ export class BlockscoutAPI extends RESTDataSource {
       afterCursor,
     )
 
+    // For now, when you create a new transaction type other than TokenTransferV2, TokenExchangeV2
+    // You should do version check to take care of backward compatibility with wallet client.
+    const userInfo = await fetchFromFirebase(`registrations/${userAddress}`)
+    const isNftSupport = (userInfo['appVersion'] === undefined ? false : (userInfo['appVersion'] >= '1.38.0'));
+
     const context = { userAddress }
 
     // Order is important when classifying transactions.
@@ -162,8 +169,8 @@ export class BlockscoutAPI extends RESTDataSource {
       new EscrowContractCall(context),
       new ContractCall(context),
       new EscrowSent(context),
-      new NftReceived(context),
-      new NftSent(context),
+      isNftSupport ? new NftReceived(context) : new TokenSent(context),
+      isNftSupport ? new NftSent(context) : new TokenSent(context),
       new TokenSent(context),
       new EscrowReceived(context),
       new TokenReceived(context),
@@ -238,13 +245,16 @@ export class BlockscoutAPI extends RESTDataSource {
       },
     )
 
+    const userInfo = await fetchFromFirebase(`registrations/${address}`)
+    const isNftSupport = (userInfo['appVersion'] === undefined ? false : (userInfo['appVersion'] >= '1.38.0'));
+
     const supportedTokens = new Set(tokenInfoCache.getTokensAddresses())
 
     const filteredUnknownTokens = transactions.filter((tx: Transaction) => {
       return tx.transfers.every((transfer: BlockscoutTokenTransfer) => {
         return (
           supportedTokens.has(transfer.tokenAddress.toLowerCase()) ||
-          transfer.tokenType === 'ERC-721'
+          (isNftSupport ? transfer.tokenType === 'ERC-721' : false)
         )
       })
     })

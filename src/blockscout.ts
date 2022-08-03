@@ -157,13 +157,13 @@ export class BlockscoutAPI extends RESTDataSource {
 
     // For now, when you create a new transaction type other than TokenTransferV2, TokenExchangeV2
     // You should do version check to take care of backward compatibility with wallet client.
-    const userInfo = await fetchFromFirebase(`registrations/${userAddress}`)
-    const isNftSupport =
-      userInfo === undefined
-        ? false
-        : userInfo['appVersion'] === undefined
-        ? false
-        : userInfo['appVersion'] >= '1.38.0'
+    
+    let shouldIncludeNftTransactions = false;
+
+    if(userAddress != null) {
+      const userInfo = await fetchFromFirebase(`registrations/${userAddress}`)
+      shouldIncludeNftTransactions = (userInfo?.appVersion ?? '0.0.0') >= '1.38.0'
+    }
 
     const context = { userAddress }
 
@@ -174,8 +174,8 @@ export class BlockscoutAPI extends RESTDataSource {
       new EscrowContractCall(context),
       new ContractCall(context),
       new EscrowSent(context),
-      isNftSupport ? new NftReceived(context) : new TokenSent(context),
-      isNftSupport ? new NftSent(context) : new TokenSent(context),
+      shouldIncludeNftTransactions ? new NftReceived(context) : new TokenSent(context),
+      shouldIncludeNftTransactions ? new NftSent(context) : new TokenSent(context),
       new TokenSent(context),
       new EscrowReceived(context),
       new TokenReceived(context),
@@ -250,13 +250,12 @@ export class BlockscoutAPI extends RESTDataSource {
       },
     )
 
-    const userInfo = await fetchFromFirebase(`registrations/${address}`)
-    const isNftSupport =
-      userInfo === undefined
-        ? false
-        : userInfo['appVersion'] === undefined
-        ? false
-        : userInfo['appVersion'] >= '1.38.0'
+    let shouldIncludeNftTransactions = false;
+
+    if(address != null) {
+      const userInfo = await fetchFromFirebase(`registrations/${address}`)
+      shouldIncludeNftTransactions = (userInfo?.appVersion ?? '0.0.0') >= '1.38.0'
+    }
 
     const supportedTokens = new Set(tokenInfoCache.getTokensAddresses())
 
@@ -264,7 +263,7 @@ export class BlockscoutAPI extends RESTDataSource {
       return tx.transfers.every((transfer: BlockscoutTokenTransfer) => {
         return (
           supportedTokens.has(transfer.tokenAddress.toLowerCase()) ||
-          (isNftSupport ? transfer.tokenType === 'ERC-721' : false)
+          (shouldIncludeNftTransactions && transfer.tokenType === 'ERC-721')
         )
       })
     })

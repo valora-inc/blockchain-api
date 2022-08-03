@@ -24,7 +24,7 @@ export class NftSent extends TransactionType {
     }
 
     return (
-      transaction.transfers.length >= 1 &&
+      numNftsSent > 0 &&
       (numNftsSent == numNftsReceived
         ? isNftSent
         : numNftsSent > numNftsReceived)

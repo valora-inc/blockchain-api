@@ -138,10 +138,22 @@ export function popTransferTo(
   )
 }
 
-export function isOneToOneSwap(
+export function isSwap(
   tokenTransfers: BlockscoutTokenTransfer[],
+  userAddress: string,
 ): boolean {
-  return tokenTransfers.length === 2 &&
-  tokenTransfers[0].toAddressHash.toLowerCase() == tokenTransfers[1].fromAddressHash.toLowerCase() &&
-  tokenTransfers[0].fromAddressHash.toLowerCase() == tokenTransfers[1].toAddressHash.toLowerCase()
+  if (tokenTransfers[0].fromAddressHash.toLowerCase() != userAddress)
+    return false
+
+  let toAddress = tokenTransfers[0].toAddressHash.toLowerCase()
+
+  for (let i = 1; i < tokenTransfers.length; i++) {
+    if (tokenTransfers[i].fromAddressHash.toLowerCase() != toAddress)
+      return false
+    toAddress = tokenTransfers[i].toAddressHash.toLowerCase()
+  }
+
+  if (toAddress != userAddress) return false
+
+  return true
 }

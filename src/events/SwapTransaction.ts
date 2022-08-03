@@ -7,6 +7,7 @@ import { TokenTransactionTypeV2 } from '../resolvers'
 export class SwapTransaction extends TransactionType {
   matches(transaction: Transaction): boolean {
     return (
+      transaction.transfers.length >= 2 &&
       isSwap(transaction.transfers, this.context.userAddress) &&
       transaction.transfers.every((transfer) => {
         return transfer.tokenType === 'ERC-20'
@@ -15,7 +16,7 @@ export class SwapTransaction extends TransactionType {
   }
 
   async getEvent(transaction: Transaction) {
-    const inTransfer = transaction.transfers[transaction.transfers.length-1]
+    const inTransfer = transaction.transfers[transaction.transfers.length - 1]
     const outTransfer = transaction.transfers[0]
 
     if (!inTransfer) {

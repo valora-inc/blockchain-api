@@ -137,3 +137,21 @@ export function popTransferTo(
       transfer.toAddressHash.toLowerCase() === recipient,
   )
 }
+
+export function isSwap(
+  tokenTransfers: BlockscoutTokenTransfer[],
+  userAddress: string,
+): boolean {
+  if (tokenTransfers[0].fromAddressHash.toLowerCase() !== userAddress) return false
+
+  let toAddress = tokenTransfers[0].toAddressHash.toLowerCase()
+
+  for (let i = 1; i < tokenTransfers.length; i++) {
+    if (tokenTransfers[i].fromAddressHash.toLowerCase() !== toAddress) return false
+    toAddress = tokenTransfers[i].toAddressHash.toLowerCase()
+  }
+
+  if (toAddress !== userAddress) return false
+
+  return true
+}

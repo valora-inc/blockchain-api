@@ -37,7 +37,7 @@ For the emulator:
 
 ```
 # Check if there are any values you need to complete
-cp emuluator.env .env
+cp emulator.env .env
 ```
 
 or for the account:

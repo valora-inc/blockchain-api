@@ -151,6 +151,9 @@ export enum TokenTransactionTypeV2 {
   INVITE_SENT = 'INVITE_SENT',
   INVITE_RECEIVED = 'INVITE_RECEIVED',
   PAY_REQUEST = 'PAY_REQUEST',
+  NFT_SENT = 'NFT_SENT',
+  NFT_RECEIVED = 'NFT_RECEIVED',
+  SWAP_TRANSACTION = 'SWAP_TRANSACTION',
 }
 
 export interface TokenTransactionV2 {
@@ -291,7 +294,11 @@ export const resolvers = {
     __resolveType(obj: TokenTransactionV2, context: any, info: any) {
       switch (obj.type) {
         case TokenTransactionTypeV2.EXCHANGE:
+        case TokenTransactionTypeV2.SWAP_TRANSACTION:
           return 'TokenExchangeV2'
+        case TokenTransactionTypeV2.NFT_RECEIVED:
+        case TokenTransactionTypeV2.NFT_SENT:
+          return 'NftTransferV2'
         case TokenTransactionTypeV2.RECEIVED:
         case TokenTransactionTypeV2.SENT:
         case TokenTransactionTypeV2.INVITE_RECEIVED:

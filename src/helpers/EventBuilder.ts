@@ -57,6 +57,26 @@ export class EventBuilder {
     }
   }
 
+  static async nftTransferEvent(
+    transaction: Transaction,
+    eventType: TokenTransactionTypeV2,
+    fees?: Fee[],
+  ) {
+    const transactionHash = transaction.transactionHash
+    const block = transaction.blockNumber
+    const timestamp = transaction.timestamp
+
+    return {
+      type: eventType,
+      timestamp,
+      block,
+      transactionHash,
+      ...(fees && {
+        fees: await EventBuilder.formatFees(fees, transaction.timestamp),
+      }),
+    }
+  }
+
   static async exchangeEvent(
     transaction: Transaction,
     inTransfer: BlockscoutTokenTransfer,

@@ -15,6 +15,8 @@ import {
 } from './events'
 import { EscrowContractCall } from './events/EscrowContractCall'
 import { ExchangeContractCall } from './events/ExchangeContractCall'
+import { NftReceived } from './events/NftReceived'
+import { NftSent } from './events/NftSent'
 import { Input } from './helpers/Input'
 import { InputDecoderLegacy } from './helpers/InputDecoderLegacy'
 import tokenInfoCache from './helpers/TokenInfoCache'
@@ -45,6 +47,8 @@ import { Transaction } from './transaction/Transaction'
 import { TransactionAggregator } from './transaction/TransactionAggregator'
 import { TransactionClassifier } from './transaction/TransactionClassifier'
 import { ContractAddresses, getContractAddresses } from './utils'
+import { fetchFromFirebase } from './firebase'
+
 export interface BlockscoutTransferTx {
   blockNumber: number
   transactionHash: string
@@ -87,10 +91,11 @@ export interface BlockscoutTokenTransfer {
   token: string
   tokenAddress: string
   value: string
+  tokenType: string
 }
 
-const MAX_RESULTS_PER_QUERY = 100
-const MAX_TRANSFERS_PER_TRANSACTIONS = 10
+const MAX_RESULTS_PER_QUERY = 10
+const MAX_TRANSFERS_PER_TRANSACTIONS = 100
 
 const BLOCKSCOUT_QUERY = `
 query Transfers($address: AddressHash!, $afterCursor: String) {
@@ -117,6 +122,7 @@ query Transfers($address: AddressHash!, $afterCursor: String) {
               toAccountHash
               value
               tokenAddress
+              tokenType
             }
           }
         }
@@ -149,13 +155,27 @@ export class BlockscoutAPI extends RESTDataSource {
       afterCursor,
     )
 
+    // For now, when you create a new transaction type other than TokenTransferV2, TokenExchangeV2
+    // You should do version check to take care of backward compatibility with wallet client.
+    
+    let shouldIncludeNftTransactions = false;
+
+    if(userAddress != null) {
+      const userInfo = await fetchFromFirebase(`registrations/${userAddress}`)
+      shouldIncludeNftTransactions = (userInfo?.appVersion ?? '0.0.0') >= '1.38.0'
+    }
+
     const context = { userAddress }
 
+    // Order is important when classifying transactions.
+    // Think that below is like case statement.
     const transactionClassifier = new TransactionClassifier([
       new ExchangeContractCall(context),
       new EscrowContractCall(context),
       new ContractCall(context),
       new EscrowSent(context),
+      shouldIncludeNftTransactions ? new NftReceived(context) : new TokenSent(context),
+      shouldIncludeNftTransactions ? new NftSent(context) : new TokenSent(context),
       new TokenSent(context),
       new EscrowReceived(context),
       new TokenReceived(context),
@@ -230,11 +250,21 @@ export class BlockscoutAPI extends RESTDataSource {
       },
     )
 
+    let shouldIncludeNftTransactions = false;
+
+    if(address != null) {
+      const userInfo = await fetchFromFirebase(`registrations/${address}`)
+      shouldIncludeNftTransactions = (userInfo?.appVersion ?? '0.0.0') >= '1.38.0'
+    }
+
     const supportedTokens = new Set(tokenInfoCache.getTokensAddresses())
 
     const filteredUnknownTokens = transactions.filter((tx: Transaction) => {
       return tx.transfers.every((transfer: BlockscoutTokenTransfer) => {
-        return supportedTokens.has(transfer.tokenAddress.toLowerCase())
+        return (
+          supportedTokens.has(transfer.tokenAddress.toLowerCase()) ||
+          (shouldIncludeNftTransactions && transfer.tokenType === 'ERC-721')
+        )
       })
     })
 
